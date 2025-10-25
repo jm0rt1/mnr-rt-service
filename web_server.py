@@ -12,7 +12,8 @@ Usage:
 
 import argparse
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
+import requests
 from flask import Flask, jsonify, request
 from src.mta_gtfs_client import MTAGTFSRealtimeClient
 from src.gtfs_realtime import mta_railroad_pb2
@@ -22,9 +23,9 @@ client = None
 
 
 def timestamp_to_datetime(timestamp):
-    """Convert Unix timestamp to ISO 8601 datetime string."""
+    """Convert Unix timestamp to ISO 8601 datetime string in UTC."""
     if timestamp and timestamp > 0:
-        return datetime.fromtimestamp(timestamp).isoformat()
+        return datetime.fromtimestamp(timestamp, tz=timezone.utc).isoformat()
     return None
 
 
@@ -132,12 +133,13 @@ def get_trains():
         # Fetch the GTFS-RT feed
         feed = client.fetch_feed()
         
-        # Extract trip updates
-        trip_updates = client.get_trip_updates(feed)
+        # Extract trip updates with limit
+        all_trip_updates = client.get_trip_updates(feed)
+        trip_updates = all_trip_updates[:limit]
         
         # Convert to simplified format
         trains = []
-        for trip_update in trip_updates[:limit]:
+        for trip_update in trip_updates:
             train_info = extract_train_info(trip_update)
             trains.append(train_info)
         
@@ -151,10 +153,22 @@ def get_trains():
         
         return jsonify(response)
         
-    except Exception as e:
+    except ValueError as e:
         return jsonify({
-            'error': str(e),
-            'type': type(e).__name__
+            'error': 'Invalid parameter value',
+            'details': str(e)
+        }), 400
+    except requests.RequestException as e:
+        return jsonify({
+            'error': 'Failed to fetch data from MTA API',
+            'details': str(e)
+        }), 503
+    except Exception as e:
+        # Log the actual error for debugging but don't expose details
+        app.logger.error(f"Unexpected error in /trains: {type(e).__name__}: {str(e)}")
+        return jsonify({
+            'error': 'An unexpected error occurred',
+            'type': 'InternalServerError'
         }), 500
 
 
@@ -164,7 +178,7 @@ def health_check():
     return jsonify({
         'status': 'healthy',
         'service': 'MNR Real-Time Relay',
-        'timestamp': datetime.now().isoformat()
+        'timestamp': datetime.now(timezone.utc).isoformat()
     })
 
 
