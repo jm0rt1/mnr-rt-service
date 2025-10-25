@@ -1,107 +1,348 @@
+# MNR Real-Time Service
 
+A simple web server that provides real-time Metro-North Railroad (MNR) train information in easy-to-use JSON format. This service acts as a relay between the MTA's GTFS-RT (General Transit Feed Specification - Real Time) protobuf feed and clients that need simpler data formats.
 
-## Summary:
-This project was developed on M1 (Arm64 based) based Mac, using Microsoft's Visual Studio Code Version: 1.72.0. The intention is to be compatible with any system through Python's multiplatform nature. However, this project will only be tested on Windows 10 amd64 machine and the latest MacOS version on an Arm64 machine. 
+Perfect for Arduino projects, embedded systems, home automation, or any application that needs simple train data without complex protobuf parsing.
 
-This program contains the following directories of interest under src:
-- `./src/` - contains the source code for the program
+## Features
 
+- **Simple JSON API**: Returns train data in easy-to-parse JSON format instead of binary protobuf
+- **Real-time Data**: Fetches live train information from MTA's GTFS-RT feed
+- **Easy to Use**: Single GET request to get upcoming trains with ETA and status
+- **Home Network Ready**: Designed to run on any device with Python (Raspberry Pi, home server, etc.)
+- **Lightweight**: Minimal dependencies, easy to deploy
+- **Arduino-Friendly**: Simple text-based JSON format that's easy to parse in C++
 
+## Quick Start
 
+### Prerequisites
 
-## Scope:
-    1. Definitions
-    2. Prerequisites
-    3. Initializing the Virtual Environment
-    4. Running The Program From a Shell
-    5. Running The Program
-    6. Testing The Code base
-    7. UML
-## **1. Definitions:**
-1) `"./" or "this directory"`- meaning the top level directory of this project, which happens to be the directory that this README.md file has been saved. The README.md is at the top level of this Python project, the project is in a folder named "James_Mortensen_Assignment_1"
-2) `"VSCODE"` - Visual Studio Code
+- Python 3.7 or higher
+- Internet connection to fetch MTA data
 
-## **2. Prerequisites**
-The *.sh scripts in this repository should be runnable on MacOS and Windows, as tested via the following shell programs.
+### Installation
 
-### Shell Programs:
-These shell programs have been integrated with VSCODE using its Integrated Terminal features:
-- Windows: MinGW
-- MacOS: Zsh
+1. Clone the repository:
+```bash
+git clone https://github.com/jm0rt1/mnr-rt-service.git
+cd mnr-rt-service
+```
 
-Set one of these programs as the integrated terminal in VSCODE
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
 
-**NOTE:** It is not in the socpe of this document to show how to connect these terminals with VSCODE, since this is straightforward and documented online with plenty of support.
+### Running the Server
 
+Start the web server:
 
+```bash
+python web_server.py
+```
 
-### Development Enviornment and Interpreter:
-- Visual Studio Code + Extenstions: "Pylance v2022.10.30" and "Python v2022.16.1"
-- Python 3.11.2: https://www.python.org/downloads/release/python-373/
+The server will start on `http://0.0.0.0:5000` by default and will be accessible from other devices on your home network.
 
+#### Command-Line Options
 
-## **4. Initializing The Virtual Environment**
+- `--port PORT`: Specify a different port (default: 5000)
+- `--host HOST`: Specify a different host (default: 0.0.0.0, listens on all interfaces)
+- `--api-key KEY`: Optional MTA API key (if required)
+- `--debug`: Run in debug mode with auto-reload
 
-### Procedure:
-In Visual Studio Code, using a system level install of Python 3.11.2.
+Example with custom port:
+```bash
+python web_server.py --port 8080
+```
 
-1) Give executable rights to the script "./init-venv.sh".
-2) In MinGW or Zsh run:
-    ```
-    ./init-venv.sh
-    ```
-3) A directory titled "./venv" should now be created.
-4) At this time the python extension in VSCODE should show an available interpreter called "venv" located at ./venv.
+## API Usage
 
-4) "./.vscode/settings.json" includes a setting that should automatically activate the selected virtual environment when a new integrated terminal is created (use Ctrl + ` to invoke a new terminal). 
+### Get Train Information
 
-    a) if VSCODE does not automatically activate the virtual environment, then it may be necessary to run the following command manually:
-    ```
-    source ./venv/bin/activate
-    ```
+**Endpoint:** `GET /trains`
 
-"(venv)" should now show at the beginning of each terminal line.
+**Parameters:**
+- `city` (optional): Filter by city/region. Currently supports `mnr`, `metro-north`, or `metronorth`. Default: `mnr`
+- `limit` (optional): Maximum number of trains to return. Default: 20, Max: 100
 
-##  **5. Running The Program**
+**Example Request:**
+```bash
+curl "http://localhost:5000/trains?city=mnr&limit=20"
+```
 
-Bundled with the source code, as stated before, is the ./.vscode folder. This folder contains a "launch.json" file. This file is used to configure the Python extension to debug the program from the program entry point ./run.py.
+**Example Response:**
+```json
+{
+  "timestamp": "2025-10-25T14:30:00",
+  "city": "mnr",
+  "total_trains": 20,
+  "trains": [
+    {
+      "trip_id": "1234567",
+      "route_id": "Hudson",
+      "vehicle_id": "MNR_789",
+      "current_stop": "Grand_Central",
+      "next_stop": "125th_Street",
+      "eta": "2025-10-25T14:45:00",
+      "track": "42",
+      "status": "On Time",
+      "stops": [
+        {
+          "stop_id": "Grand_Central",
+          "arrival_time": "2025-10-25T14:30:00",
+          "departure_time": "2025-10-25T14:32:00",
+          "track": "42",
+          "status": "On Time"
+        },
+        {
+          "stop_id": "125th_Street",
+          "arrival_time": "2025-10-25T14:45:00",
+          "departure_time": "2025-10-25T14:46:00",
+          "track": "42",
+          "status": "On Time"
+        }
+      ]
+    }
+  ]
+}
+```
 
-./run.py is used to tell the interpreter that the top level of the project is the folder ".".
+**Response Fields:**
+- `timestamp`: When the data was fetched from MTA
+- `city`: The transit system (currently only `mnr`)
+- `total_trains`: Number of trains in the response
+- `trains`: Array of train objects with:
+  - `trip_id`: Unique trip identifier
+  - `route_id`: Route name (e.g., "Hudson", "Harlem", "New Haven")
+  - `vehicle_id`: Vehicle identifier
+  - `current_stop`: Current or next upcoming stop ID
+  - `next_stop`: Stop after current stop
+  - `eta`: Estimated time of arrival at current stop (ISO 8601 format)
+  - `track`: Track number at current stop
+  - `status`: Train status (e.g., "On Time", "Delayed")
+  - `stops`: Array of all upcoming stops with times and details
 
-run.py can be invoked one of two ways, either through VSCODE's integrated debug features, or via the virtual environment's interpreter via the shell.
+### Health Check
 
-### Shell and Python Interpreter Run Procedure:
-1) Follow the procedure to initialize and activate the virtual environment.
-2) Run the following command:
-    ```
-    python run.py
-    ```
+**Endpoint:** `GET /health`
 
-### VSCODE Debugging
-1) Change to the debugging sidebar view.
-2) Next to the green arrow at the top of the sidebar, ensure "run.py" is selected as the current configuration.
-3) Place a breakpoint in the program
-4) Click the green arrow 
-5) Program should be running in debug mode at this time.
+Check if the service is running and healthy:
 
+```bash
+curl "http://localhost:5000/health"
+```
 
-### Running the Executables
+**Response:**
+```json
+{
+  "status": "healthy",
+  "service": "MNR Real-Time Relay",
+  "timestamp": "2025-10-25T14:30:00"
+}
+```
 
-Future projects may provide a "frozen" version of the program, providing an executable package to the end user, which will bundle the interpreter with the executable as one set.
+### API Information
 
-This is a placeholder for the procedure.
+**Endpoint:** `GET /`
 
+Get API documentation and available endpoints:
 
+```bash
+curl "http://localhost:5000/"
+```
 
-## **6. Testing Code Base**
+**Response:**
+```json
+{
+  "service": "MNR Real-Time Relay",
+  "description": "Simple JSON API for Metro-North Railroad real-time train data",
+  "endpoints": {
+    "/": "This information page",
+    "/health": "Health check endpoint",
+    "/trains": "Get real-time train information (supports ?city=mnr&limit=20)"
+  },
+  "usage_examples": {
+    "get_trains": "/trains?city=mnr&limit=20",
+    "health_check": "/health"
+  }
+}
+```
 
-Follow the above procedures for initializing the virtual environment, then run:
+## Use Cases
 
-    ./test.sh
+### Arduino/Embedded Systems
+The simple JSON format is easy to parse in C++ using libraries like ArduinoJson:
+```cpp
+// Arduino example
+HTTPClient http;
+http.begin("http://your-server:5000/trains?limit=5");
+int httpCode = http.GET();
+if (httpCode == 200) {
+  String payload = http.getString();
+  // Parse JSON and display on LCD/OLED
+}
+```
 
-## **7. UML**
-The UML Diagrams for this program have been provided in the folder `./docs/UML`.
+### Home Automation
+Display train times on smart home dashboards, trigger notifications when trains are delayed, or integrate with home assistant platforms.
 
-The model was developed using StarUML Educational License. 2 output images were produced in .png and .jpg formats.
+### Mobile Apps
+Simple REST API for quick train information without dealing with protobuf parsing.
 
-Models.mdj is the raw file that can be edited using StarUML.
+### Web Dashboards
+Show real-time train status on web pages using simple JavaScript fetch calls.
+
+## Development
+
+### Running Tests
+
+Run all tests:
+```bash
+python -m unittest discover tests/
+```
+
+Run specific test file:
+```bash
+python -m unittest tests.test_web_server
+python -m unittest tests.test_mta_gtfs_client
+```
+
+### Project Structure
+
+```
+mnr-rt-service/
+├── web_server.py              # Main web server application (Flask-based API)
+├── mnr_gtfs_demo.py           # Demo script showing GTFS-RT usage
+├── run.py                     # Legacy entry point
+├── src/
+│   ├── main.py               # Legacy main module
+│   ├── mta_gtfs_client.py    # MTA GTFS-RT API client
+│   ├── gtfs_realtime/        # GTFS-RT protobuf definitions
+│   │   ├── mta_railroad_pb2.py
+│   │   └── com/google/transit/realtime/
+│   │       └── gtfs_realtime_pb2.py
+│   └── shared/
+│       └── settings.py       # Application settings
+├── tests/                    # Unit tests
+│   ├── test_web_server.py
+│   ├── test_mta_gtfs_client.py
+│   └── test_gtfs_integration.py
+├── proto/                    # Protobuf definition files
+├── requirements.txt          # Python dependencies
+├── README.md                # This file
+└── QUICKSTART.md            # Quick start guide
+```
+
+## Technical Details
+
+### How It Works
+
+1. **Fetches Data**: The service fetches real-time data from MTA's GTFS-RT feed (binary protobuf format)
+2. **Parses Protobuf**: Uses Google's protobuf library to parse the binary data
+3. **Extracts Information**: Pulls out train trip updates, stop times, and MTA-specific extensions (track numbers, train status)
+4. **Converts to JSON**: Transforms the complex protobuf structure into simple, flat JSON
+5. **Serves via REST API**: Provides a Flask-based HTTP server with easy-to-use endpoints
+
+### Technology Stack
+
+- **Python 3.7+**: Core language
+- **Flask 3.0+**: Web framework for REST API
+- **Protobuf 4.21+**: For parsing GTFS-RT feeds
+- **Requests 2.28+**: For HTTP requests to MTA API
+
+### Data Source
+
+This service fetches data from the MTA's official GTFS-RT feed:
+- **Endpoint**: `https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/mnr%2Fgtfs-mnr`
+- **Format**: GTFS-RT (protobuf)
+- **Update Frequency**: Real-time (updates every 30 seconds typically)
+
+The GTFS-RT specification is an open standard developed by Google for real-time public transit data.
+
+## Deployment
+
+### Running as a Service (Linux/systemd)
+
+Create a systemd service file `/etc/systemd/system/mnr-rt-service.service`:
+
+```ini
+[Unit]
+Description=MNR Real-Time Service
+After=network.target
+
+[Service]
+Type=simple
+User=yourusername
+WorkingDirectory=/path/to/mnr-rt-service
+ExecStart=/usr/bin/python3 /path/to/mnr-rt-service/web_server.py --port 5000
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Then:
+```bash
+sudo systemctl enable mnr-rt-service
+sudo systemctl start mnr-rt-service
+```
+
+### Running on Raspberry Pi
+
+This service is perfect for Raspberry Pi home servers:
+
+1. Install Python and dependencies
+2. Clone the repository
+3. Run the server on boot (use systemd or rc.local)
+4. Access from any device on your home network
+
+### Docker (Optional)
+
+You can also containerize this service:
+
+```dockerfile
+FROM python:3.9-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY . .
+EXPOSE 5000
+CMD ["python", "web_server.py", "--host", "0.0.0.0"]
+```
+
+## Troubleshooting
+
+### Connection Refused
+Make sure the server is running and you're using the correct host/port. If accessing from another device, use the server's IP address instead of `localhost`.
+
+### No Data Returned
+Check your internet connection. The service needs to reach `api-endpoint.mta.info` to fetch real-time data.
+
+### MTA API Key
+Some MTA APIs require an API key. If you get authentication errors, sign up for a free API key at the MTA developer portal and use `--api-key YOUR_KEY`.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+See LICENSE file for details.
+
+## Acknowledgments
+
+- MTA for providing the real-time GTFS-RT feed
+- Google for the GTFS-RT specification
+- The open-source community for the excellent Python libraries
+
+## Related Projects
+
+- **GTFS-RT Specification**: https://gtfs.org/realtime/
+- **MTA Developer Portal**: https://new.mta.info/developers
+- **ArduinoJson**: https://arduinojson.org/ (for parsing JSON on Arduino)
