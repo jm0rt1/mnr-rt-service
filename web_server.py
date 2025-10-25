@@ -154,14 +154,16 @@ def get_trains():
         return jsonify(response)
         
     except ValueError as e:
+        # Log the actual error for debugging
+        app.logger.warning(f"Invalid parameter in /trains: {str(e)}")
         return jsonify({
-            'error': 'Invalid parameter value',
-            'details': str(e)
+            'error': 'Invalid parameter value. Please check your query parameters.'
         }), 400
     except requests.RequestException as e:
+        # Log the actual error for debugging
+        app.logger.error(f"MTA API request failed: {str(e)}")
         return jsonify({
-            'error': 'Failed to fetch data from MTA API',
-            'details': str(e)
+            'error': 'Failed to fetch data from MTA API. Please try again later.'
         }), 503
     except Exception as e:
         # Log the actual error for debugging but don't expose details
