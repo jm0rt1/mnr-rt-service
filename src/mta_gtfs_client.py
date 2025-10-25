@@ -153,6 +153,9 @@ class MTAGTFSRealtimeClient:
         """
         Print detailed information about a vehicle position including MTA Railroad extensions.
         
+        Note: This function displays public transit location data from the GTFS-RT feed,
+        including vehicle coordinates which are publicly available transit information.
+        
         Args:
             vehicle_position: VehiclePosition entity to display
         """
