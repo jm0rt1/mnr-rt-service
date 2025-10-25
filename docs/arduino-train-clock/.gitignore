@@ -22,3 +22,11 @@ include/config.h
 
 # Logs
 *.log
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
