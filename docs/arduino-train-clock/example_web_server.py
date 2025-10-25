@@ -98,13 +98,19 @@ def parse_gtfs_to_json(trip_updates, max_trains=10):
                 status = train_status if train_status != "Unknown" else "On Time"
             
             # Map route ID to readable name
+            # Note: This is a simple mapping - adjust based on actual GTFS route IDs
             route_name = route_id
-            if "Hudson" in route_id:
-                route_name = "Hudson Line"
-            elif "Harlem" in route_id:
-                route_name = "Harlem Line"
-            elif "NewHaven" in route_id or "NH" in route_id:
-                route_name = "New Haven Line"
+            route_mapping = {
+                "Hudson": "Hudson Line",
+                "Harlem": "Harlem Line", 
+                "NewHaven": "New Haven Line",
+                "NH": "New Haven Line"
+            }
+            
+            for key, value in route_mapping.items():
+                if key in route_id:
+                    route_name = value
+                    break
             
             # Create train entry
             train = {

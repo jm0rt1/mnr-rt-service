@@ -101,9 +101,10 @@
 2. **Check JSON size**
    - Large responses may exceed buffer
    - Reduce number of trains returned
-   - Increase buffer size in code:
+   - Note: ArduinoJson v6 auto-allocates, but v7 requires explicit size:
    ```cpp
-   JsonDocument doc(4096); // Increase from default
+   // For ArduinoJson v7 (if upgrading):
+   JsonDocument doc(4096); // Specify size
    ```
 
 3. **Server-side issues**
@@ -322,6 +323,7 @@
    ```bash
    pio lib install "bblanchon/ArduinoJson@^6.21.3"
    ```
+   Note: Version must match platformio.ini specification
 
 ---
 
