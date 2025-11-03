@@ -48,7 +48,19 @@ class ServerThread(QThread):
         
     def run(self):
         """Run the web server process"""
-        cmd = [sys.executable, "web_server.py", "--host", self.host, "--port", str(self.port)]
+        # Find web_server.py in the project root
+        project_root = Path(__file__).parent.parent.parent.parent
+        web_server_path = project_root / "web_server.py"
+        
+        if not web_server_path.exists():
+            # Try current working directory as fallback
+            web_server_path = Path.cwd() / "web_server.py"
+            if not web_server_path.exists():
+                self.error_ready.emit("Cannot find web_server.py. Please run from project root.")
+                self.finished.emit(-1)
+                return
+        
+        cmd = [sys.executable, str(web_server_path), "--host", self.host, "--port", str(self.port)]
         
         if self.api_key:
             cmd.extend(["--api-key", self.api_key])
