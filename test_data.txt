@@ -1,0 +1,2361 @@
+{
+    "city": "mnr",
+    "features": {
+        "gpt_5_codex_preview": {
+            "enabled": true,
+            "rollout": "all_clients",
+            "stage": "preview"
+        }
+    },
+    "timestamp": "2025-11-03T01:49:08+00:00",
+    "total_trains": 20,
+    "trains": [
+        {
+            "current_stop": "1",
+            "eta": "2025-11-03T05:25:00+00:00",
+            "next_stop": "4",
+            "route_id": "3",
+            "status": "On-Time",
+            "stops": [
+                {
+                    "arrival_time": "2025-11-03T05:25:00+00:00",
+                    "departure_time": "2025-11-03T05:25:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "1",
+                    "track": null
+                },
+                {
+                    "arrival_time": "2025-11-03T05:35:00+00:00",
+                    "departure_time": "2025-11-03T05:35:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "4",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T05:43:00+00:00",
+                    "departure_time": "2025-11-03T05:43:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "56",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T05:52:00+00:00",
+                    "departure_time": "2025-11-03T05:52:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "105",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T05:55:00+00:00",
+                    "departure_time": "2025-11-03T05:55:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "106",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T05:58:00+00:00",
+                    "departure_time": "2025-11-03T05:58:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "108",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:02:00+00:00",
+                    "departure_time": "2025-11-03T06:02:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "110",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:05:00+00:00",
+                    "departure_time": "2025-11-03T06:05:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "111",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:08:00+00:00",
+                    "departure_time": "2025-11-03T06:08:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "112",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:12:00+00:00",
+                    "departure_time": "2025-11-03T06:12:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "114",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:15:00+00:00",
+                    "departure_time": "2025-11-03T06:15:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "115",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:19:00+00:00",
+                    "departure_time": "2025-11-03T06:19:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "116",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:23:00+00:00",
+                    "departure_time": "2025-11-03T06:23:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "118",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:25:00+00:00",
+                    "departure_time": "2025-11-03T06:25:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "120",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:28:00+00:00",
+                    "departure_time": "2025-11-03T06:28:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "121",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:35:00+00:00",
+                    "departure_time": "2025-11-03T06:35:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "124",
+                    "track": "4"
+                }
+            ],
+            "track": null,
+            "trip_id": "2894412",
+            "vehicle_id": null
+        },
+        {
+            "current_stop": "1",
+            "eta": "2025-11-03T06:15:00+00:00",
+            "next_stop": "4",
+            "route_id": "3",
+            "status": "On-Time",
+            "stops": [
+                {
+                    "arrival_time": "2025-11-03T06:15:00+00:00",
+                    "departure_time": "2025-11-03T06:15:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "1",
+                    "track": null
+                },
+                {
+                    "arrival_time": "2025-11-03T06:25:00+00:00",
+                    "departure_time": "2025-11-03T06:25:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "4",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:33:00+00:00",
+                    "departure_time": "2025-11-03T06:33:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "56",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:42:00+00:00",
+                    "departure_time": "2025-11-03T06:42:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "105",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:45:00+00:00",
+                    "departure_time": "2025-11-03T06:45:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "106",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:48:00+00:00",
+                    "departure_time": "2025-11-03T06:48:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "108",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:52:00+00:00",
+                    "departure_time": "2025-11-03T06:52:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "110",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:55:00+00:00",
+                    "departure_time": "2025-11-03T06:55:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "111",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:58:00+00:00",
+                    "departure_time": "2025-11-03T06:58:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "112",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:02:00+00:00",
+                    "departure_time": "2025-11-03T07:02:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "114",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:05:00+00:00",
+                    "departure_time": "2025-11-03T07:05:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "115",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:09:00+00:00",
+                    "departure_time": "2025-11-03T07:09:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "116",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:13:00+00:00",
+                    "departure_time": "2025-11-03T07:13:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "118",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:15:00+00:00",
+                    "departure_time": "2025-11-03T07:15:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "120",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:18:00+00:00",
+                    "departure_time": "2025-11-03T07:18:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "121",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:33:00+00:00",
+                    "departure_time": "2025-11-03T07:33:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "124",
+                    "track": "4"
+                }
+            ],
+            "track": null,
+            "trip_id": "2894414",
+            "vehicle_id": null
+        },
+        {
+            "current_stop": "1",
+            "eta": "2025-11-03T06:53:00+00:00",
+            "next_stop": "4",
+            "route_id": "3",
+            "status": "On-Time",
+            "stops": [
+                {
+                    "arrival_time": "2025-11-03T06:53:00+00:00",
+                    "departure_time": "2025-11-03T06:53:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "1",
+                    "track": null
+                },
+                {
+                    "arrival_time": "2025-11-03T07:03:00+00:00",
+                    "departure_time": "2025-11-03T07:03:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "4",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:19:00+00:00",
+                    "departure_time": "2025-11-03T07:19:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "105",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:22:00+00:00",
+                    "departure_time": "2025-11-03T07:22:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "106",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:25:00+00:00",
+                    "departure_time": "2025-11-03T07:25:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "108",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:29:00+00:00",
+                    "departure_time": "2025-11-03T07:29:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "110",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:32:00+00:00",
+                    "departure_time": "2025-11-03T07:32:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "111",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:35:00+00:00",
+                    "departure_time": "2025-11-03T07:35:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "112",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:39:00+00:00",
+                    "departure_time": "2025-11-03T07:39:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "114",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:42:00+00:00",
+                    "departure_time": "2025-11-03T07:42:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "115",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:46:00+00:00",
+                    "departure_time": "2025-11-03T07:46:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "116",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:50:00+00:00",
+                    "departure_time": "2025-11-03T07:50:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "118",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:52:00+00:00",
+                    "departure_time": "2025-11-03T07:52:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "120",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:55:00+00:00",
+                    "departure_time": "2025-11-03T07:55:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "121",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T08:02:00+00:00",
+                    "departure_time": "2025-11-03T08:02:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "124",
+                    "track": "4"
+                }
+            ],
+            "track": null,
+            "trip_id": "2894416",
+            "vehicle_id": null
+        },
+        {
+            "current_stop": "124",
+            "eta": "2025-11-03T05:54:00+00:00",
+            "next_stop": "121",
+            "route_id": "3",
+            "status": "On-Time",
+            "stops": [
+                {
+                    "arrival_time": "2025-11-03T05:54:00+00:00",
+                    "departure_time": "2025-11-03T05:54:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "124",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T05:57:00+00:00",
+                    "departure_time": "2025-11-03T05:57:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "121",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T05:59:00+00:00",
+                    "departure_time": "2025-11-03T05:59:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "120",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:01:00+00:00",
+                    "departure_time": "2025-11-03T06:01:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "118",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:05:00+00:00",
+                    "departure_time": "2025-11-03T06:05:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "116",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:09:00+00:00",
+                    "departure_time": "2025-11-03T06:09:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "115",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:12:00+00:00",
+                    "departure_time": "2025-11-03T06:12:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "114",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:17:00+00:00",
+                    "departure_time": "2025-11-03T06:17:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "112",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:20:00+00:00",
+                    "departure_time": "2025-11-03T06:20:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "111",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:23:00+00:00",
+                    "departure_time": "2025-11-03T06:23:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "110",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:28:00+00:00",
+                    "departure_time": "2025-11-03T06:28:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "108",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:32:00+00:00",
+                    "departure_time": "2025-11-03T06:32:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "106",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:35:00+00:00",
+                    "departure_time": "2025-11-03T06:35:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "105",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:43:00+00:00",
+                    "departure_time": "2025-11-03T06:43:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "56",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:05:00+00:00",
+                    "departure_time": "2025-11-03T07:05:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "1",
+                    "track": null
+                }
+            ],
+            "track": "3",
+            "trip_id": "2894494",
+            "vehicle_id": null
+        },
+        {
+            "current_stop": "1",
+            "eta": "2025-11-03T06:07:00+00:00",
+            "next_stop": "4",
+            "route_id": "3",
+            "status": "On-Time",
+            "stops": [
+                {
+                    "arrival_time": "2025-11-03T06:07:00+00:00",
+                    "departure_time": "2025-11-03T06:07:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "1",
+                    "track": null
+                },
+                {
+                    "arrival_time": "2025-11-03T06:17:00+00:00",
+                    "departure_time": "2025-11-03T06:17:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "4",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:56:00+00:00",
+                    "departure_time": "2025-11-03T06:56:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "124",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:01:00+00:00",
+                    "departure_time": "2025-11-03T07:01:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "127",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:04:00+00:00",
+                    "departure_time": "2025-11-03T07:04:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "128",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:07:00+00:00",
+                    "departure_time": "2025-11-03T07:07:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "129",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:11:00+00:00",
+                    "departure_time": "2025-11-03T07:11:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "131",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:14:00+00:00",
+                    "departure_time": "2025-11-03T07:14:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "133",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:18:00+00:00",
+                    "departure_time": "2025-11-03T07:18:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "134",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:22:00+00:00",
+                    "departure_time": "2025-11-03T07:22:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "136",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:26:00+00:00",
+                    "departure_time": "2025-11-03T07:26:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "137",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:29:00+00:00",
+                    "departure_time": "2025-11-03T07:29:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "138",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:32:00+00:00",
+                    "departure_time": "2025-11-03T07:32:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "188",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:38:00+00:00",
+                    "departure_time": "2025-11-03T07:38:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "140",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:45:00+00:00",
+                    "departure_time": "2025-11-03T07:45:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "143",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:51:00+00:00",
+                    "departure_time": "2025-11-03T07:51:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "145",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:58:00+00:00",
+                    "departure_time": "2025-11-03T07:58:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "190",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T08:17:00+00:00",
+                    "departure_time": "2025-11-03T08:17:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "149",
+                    "track": "12"
+                }
+            ],
+            "track": null,
+            "trip_id": "2894520",
+            "vehicle_id": null
+        },
+        {
+            "current_stop": "1",
+            "eta": "2025-11-03T06:47:00+00:00",
+            "next_stop": "4",
+            "route_id": "3",
+            "status": "On-Time",
+            "stops": [
+                {
+                    "arrival_time": "2025-11-03T06:47:00+00:00",
+                    "departure_time": "2025-11-03T06:47:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "1",
+                    "track": null
+                },
+                {
+                    "arrival_time": "2025-11-03T06:57:00+00:00",
+                    "departure_time": "2025-11-03T06:57:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "4",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:36:00+00:00",
+                    "departure_time": "2025-11-03T07:36:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "124",
+                    "track": "2"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:41:00+00:00",
+                    "departure_time": "2025-11-03T07:41:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "127",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:44:00+00:00",
+                    "departure_time": "2025-11-03T07:44:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "128",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:47:00+00:00",
+                    "departure_time": "2025-11-03T07:47:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "129",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:51:00+00:00",
+                    "departure_time": "2025-11-03T07:51:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "131",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:54:00+00:00",
+                    "departure_time": "2025-11-03T07:54:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "133",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:58:00+00:00",
+                    "departure_time": "2025-11-03T07:58:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "134",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T08:02:00+00:00",
+                    "departure_time": "2025-11-03T08:02:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "136",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T08:06:00+00:00",
+                    "departure_time": "2025-11-03T08:06:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "137",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T08:09:00+00:00",
+                    "departure_time": "2025-11-03T08:09:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "138",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T08:12:00+00:00",
+                    "departure_time": "2025-11-03T08:12:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "188",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T08:18:00+00:00",
+                    "departure_time": "2025-11-03T08:18:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "140",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T08:24:00+00:00",
+                    "departure_time": "2025-11-03T08:24:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "143",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T08:30:00+00:00",
+                    "departure_time": "2025-11-03T08:30:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "145",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T08:37:00+00:00",
+                    "departure_time": "2025-11-03T08:37:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "190",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T08:56:00+00:00",
+                    "departure_time": "2025-11-03T08:56:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "149",
+                    "track": "14"
+                }
+            ],
+            "track": null,
+            "trip_id": "2894521",
+            "vehicle_id": null
+        },
+        {
+            "current_stop": "1",
+            "eta": "2025-11-03T05:07:00+00:00",
+            "next_stop": "4",
+            "route_id": "3",
+            "status": "On-Time",
+            "stops": [
+                {
+                    "arrival_time": "2025-11-03T05:07:00+00:00",
+                    "departure_time": "2025-11-03T05:07:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "1",
+                    "track": null
+                },
+                {
+                    "arrival_time": "2025-11-03T05:17:00+00:00",
+                    "departure_time": "2025-11-03T05:17:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "4",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T05:56:00+00:00",
+                    "departure_time": "2025-11-03T05:56:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "124",
+                    "track": "2"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:01:00+00:00",
+                    "departure_time": "2025-11-03T06:01:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "127",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:04:00+00:00",
+                    "departure_time": "2025-11-03T06:04:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "128",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:07:00+00:00",
+                    "departure_time": "2025-11-03T06:07:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "129",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:11:00+00:00",
+                    "departure_time": "2025-11-03T06:11:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "131",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:14:00+00:00",
+                    "departure_time": "2025-11-03T06:14:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "133",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:18:00+00:00",
+                    "departure_time": "2025-11-03T06:18:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "134",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:22:00+00:00",
+                    "departure_time": "2025-11-03T06:22:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "136",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:26:00+00:00",
+                    "departure_time": "2025-11-03T06:26:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "137",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:29:00+00:00",
+                    "departure_time": "2025-11-03T06:29:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "138",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:32:00+00:00",
+                    "departure_time": "2025-11-03T06:32:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "188",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:38:00+00:00",
+                    "departure_time": "2025-11-03T06:38:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "140",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:45:00+00:00",
+                    "departure_time": "2025-11-03T06:45:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "143",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:52:00+00:00",
+                    "departure_time": "2025-11-03T06:52:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "145",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:59:00+00:00",
+                    "departure_time": "2025-11-03T06:59:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "190",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:17:00+00:00",
+                    "departure_time": "2025-11-03T07:17:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "149",
+                    "track": "8"
+                }
+            ],
+            "track": null,
+            "trip_id": "2894600",
+            "vehicle_id": null
+        },
+        {
+            "current_stop": "124",
+            "eta": "2025-11-03T05:20:00+00:00",
+            "next_stop": "153",
+            "route_id": "4",
+            "status": "On-Time",
+            "stops": [
+                {
+                    "arrival_time": "2025-11-03T05:20:00+00:00",
+                    "departure_time": "2025-11-03T05:20:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "124",
+                    "track": "5"
+                },
+                {
+                    "arrival_time": "2025-11-03T05:24:00+00:00",
+                    "departure_time": "2025-11-03T05:24:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "153",
+                    "track": "1"
+                },
+                {
+                    "arrival_time": "2025-11-03T05:27:00+00:00",
+                    "departure_time": "2025-11-03T05:27:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "154",
+                    "track": "1"
+                },
+                {
+                    "arrival_time": "2025-11-03T05:31:00+00:00",
+                    "departure_time": "2025-11-03T05:31:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "155",
+                    "track": "1"
+                },
+                {
+                    "arrival_time": "2025-11-03T05:38:00+00:00",
+                    "departure_time": "2025-11-03T05:38:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "157",
+                    "track": "1"
+                }
+            ],
+            "track": "5",
+            "trip_id": "2894706",
+            "vehicle_id": null
+        },
+        {
+            "current_stop": "124",
+            "eta": "2025-11-03T06:06:00+00:00",
+            "next_stop": "153",
+            "route_id": "4",
+            "status": "On-Time",
+            "stops": [
+                {
+                    "arrival_time": "2025-11-03T06:06:00+00:00",
+                    "departure_time": "2025-11-03T06:06:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "124",
+                    "track": "5"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:10:00+00:00",
+                    "departure_time": "2025-11-03T06:10:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "153",
+                    "track": "1"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:13:00+00:00",
+                    "departure_time": "2025-11-03T06:13:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "154",
+                    "track": "1"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:18:00+00:00",
+                    "departure_time": "2025-11-03T06:18:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "155",
+                    "track": "1"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:26:00+00:00",
+                    "departure_time": "2025-11-03T06:26:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "157",
+                    "track": "1"
+                }
+            ],
+            "track": "5",
+            "trip_id": "2894709",
+            "vehicle_id": null
+        },
+        {
+            "current_stop": "1",
+            "eta": "2025-11-03T05:19:00+00:00",
+            "next_stop": "4",
+            "route_id": "2",
+            "status": "On-Time",
+            "stops": [
+                {
+                    "arrival_time": "2025-11-03T05:19:00+00:00",
+                    "departure_time": "2025-11-03T05:19:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "1",
+                    "track": null
+                },
+                {
+                    "arrival_time": "2025-11-03T05:29:00+00:00",
+                    "departure_time": "2025-11-03T05:29:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "4",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T05:34:00+00:00",
+                    "departure_time": "2025-11-03T05:34:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "54",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T05:36:00+00:00",
+                    "departure_time": "2025-11-03T05:36:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "55",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T05:39:00+00:00",
+                    "departure_time": "2025-11-03T05:39:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "56",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T05:41:00+00:00",
+                    "departure_time": "2025-11-03T05:41:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "57",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T05:44:00+00:00",
+                    "departure_time": "2025-11-03T05:44:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "58",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T05:47:00+00:00",
+                    "departure_time": "2025-11-03T05:47:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "59",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T05:49:00+00:00",
+                    "departure_time": "2025-11-03T05:49:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "61",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T05:51:00+00:00",
+                    "departure_time": "2025-11-03T05:51:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "62",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T05:54:00+00:00",
+                    "departure_time": "2025-11-03T05:54:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "64",
+                    "track": "1"
+                },
+                {
+                    "arrival_time": "2025-11-03T05:56:00+00:00",
+                    "departure_time": "2025-11-03T05:56:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "65",
+                    "track": "1"
+                },
+                {
+                    "arrival_time": "2025-11-03T05:58:00+00:00",
+                    "departure_time": "2025-11-03T05:58:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "66",
+                    "track": "1"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:01:00+00:00",
+                    "departure_time": "2025-11-03T06:01:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "68",
+                    "track": "1"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:05:00+00:00",
+                    "departure_time": "2025-11-03T06:05:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "71",
+                    "track": "1"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:08:00+00:00",
+                    "departure_time": "2025-11-03T06:08:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "72",
+                    "track": "1"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:11:00+00:00",
+                    "departure_time": "2025-11-03T06:11:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "74",
+                    "track": "1"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:22:00+00:00",
+                    "departure_time": "2025-11-03T06:22:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "76",
+                    "track": "1"
+                }
+            ],
+            "track": null,
+            "trip_id": "2895163",
+            "vehicle_id": null
+        },
+        {
+            "current_stop": "1",
+            "eta": "2025-11-03T06:20:00+00:00",
+            "next_stop": "4",
+            "route_id": "2",
+            "status": "On-Time",
+            "stops": [
+                {
+                    "arrival_time": "2025-11-03T06:20:00+00:00",
+                    "departure_time": "2025-11-03T06:20:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "1",
+                    "track": null
+                },
+                {
+                    "arrival_time": "2025-11-03T06:30:00+00:00",
+                    "departure_time": "2025-11-03T06:30:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "4",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:34:00+00:00",
+                    "departure_time": "2025-11-03T06:34:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "54",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:37:00+00:00",
+                    "departure_time": "2025-11-03T06:37:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "55",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:40:00+00:00",
+                    "departure_time": "2025-11-03T06:40:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "56",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:43:00+00:00",
+                    "departure_time": "2025-11-03T06:43:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "57",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:46:00+00:00",
+                    "departure_time": "2025-11-03T06:46:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "58",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:49:00+00:00",
+                    "departure_time": "2025-11-03T06:49:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "59",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:51:00+00:00",
+                    "departure_time": "2025-11-03T06:51:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "61",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:54:00+00:00",
+                    "departure_time": "2025-11-03T06:54:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "62",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T06:57:00+00:00",
+                    "departure_time": "2025-11-03T06:57:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "64",
+                    "track": "1"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:00:00+00:00",
+                    "departure_time": "2025-11-03T07:00:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "65",
+                    "track": "1"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:02:00+00:00",
+                    "departure_time": "2025-11-03T07:02:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "66",
+                    "track": "1"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:05:00+00:00",
+                    "departure_time": "2025-11-03T07:05:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "68",
+                    "track": "1"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:09:00+00:00",
+                    "departure_time": "2025-11-03T07:09:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "71",
+                    "track": "1"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:12:00+00:00",
+                    "departure_time": "2025-11-03T07:12:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "72",
+                    "track": "1"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:16:00+00:00",
+                    "departure_time": "2025-11-03T07:16:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "74",
+                    "track": "1"
+                },
+                {
+                    "arrival_time": "2025-11-03T07:26:00+00:00",
+                    "departure_time": "2025-11-03T07:26:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "76",
+                    "track": "1"
+                }
+            ],
+            "track": null,
+            "trip_id": "2895164",
+            "vehicle_id": null
+        },
+        {
+            "current_stop": "124",
+            "eta": "2025-11-03T01:01:00+00:00",
+            "next_stop": "121",
+            "route_id": "3",
+            "status": "Departed",
+            "stops": [
+                {
+                    "arrival_time": "2025-11-03T01:01:00+00:00",
+                    "departure_time": "2025-11-03T01:01:00+00:00",
+                    "status": "Departed",
+                    "stop_id": "124",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:04:00+00:00",
+                    "departure_time": "2025-11-03T01:04:00+00:00",
+                    "status": "Departed",
+                    "stop_id": "121",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:06:00+00:00",
+                    "departure_time": "2025-11-03T01:06:00+00:00",
+                    "status": "Departed",
+                    "stop_id": "120",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:08:00+00:00",
+                    "departure_time": "2025-11-03T01:08:00+00:00",
+                    "status": "Departed",
+                    "stop_id": "118",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:12:00+00:00",
+                    "departure_time": "2025-11-03T01:12:00+00:00",
+                    "status": "Departed",
+                    "stop_id": "116",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:16:00+00:00",
+                    "departure_time": "2025-11-03T01:16:00+00:00",
+                    "status": "Departed",
+                    "stop_id": "115",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:19:00+00:00",
+                    "departure_time": "2025-11-03T01:19:00+00:00",
+                    "status": "Departed",
+                    "stop_id": "114",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:24:00+00:00",
+                    "departure_time": "2025-11-03T01:24:00+00:00",
+                    "status": "Departed",
+                    "stop_id": "112",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:27:00+00:00",
+                    "departure_time": "2025-11-03T01:27:00+00:00",
+                    "status": "Departed",
+                    "stop_id": "111",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:30:00+00:00",
+                    "departure_time": "2025-11-03T01:30:00+00:00",
+                    "status": "Departed",
+                    "stop_id": "110",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:34:00+00:00",
+                    "departure_time": "2025-11-03T01:34:00+00:00",
+                    "status": "Departed",
+                    "stop_id": "108",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:38:00+00:00",
+                    "departure_time": "2025-11-03T01:38:00+00:00",
+                    "status": "Departed",
+                    "stop_id": "106",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:41:00+00:00",
+                    "departure_time": "2025-11-03T01:41:00+00:00",
+                    "status": "Departed",
+                    "stop_id": "105",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:49:00+00:00",
+                    "departure_time": "2025-11-03T01:49:00+00:00",
+                    "status": "Arrived",
+                    "stop_id": "56",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:12:00+00:00",
+                    "departure_time": "2025-11-03T02:12:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "1",
+                    "track": null
+                }
+            ],
+            "track": "3",
+            "trip_id": "2893904",
+            "vehicle_id": null
+        },
+        {
+            "current_stop": "124",
+            "eta": "2025-11-03T01:33:00+00:00",
+            "next_stop": "121",
+            "route_id": "3",
+            "status": "Departed",
+            "stops": [
+                {
+                    "arrival_time": "2025-11-03T01:33:00+00:00",
+                    "departure_time": "2025-11-03T01:33:00+00:00",
+                    "status": "Departed",
+                    "stop_id": "124",
+                    "track": "5"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:36:00+00:00",
+                    "departure_time": "2025-11-03T01:36:00+00:00",
+                    "status": "Departed",
+                    "stop_id": "121",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:38:00+00:00",
+                    "departure_time": "2025-11-03T01:38:00+00:00",
+                    "status": "Departed",
+                    "stop_id": "120",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:40:00+00:00",
+                    "departure_time": "2025-11-03T01:40:00+00:00",
+                    "status": "Departed",
+                    "stop_id": "118",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:44:00+00:00",
+                    "departure_time": "2025-11-03T01:44:00+00:00",
+                    "status": "Departed",
+                    "stop_id": "116",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:48:00+00:00",
+                    "departure_time": "2025-11-03T01:48:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "115",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:51:00+00:00",
+                    "departure_time": "2025-11-03T01:51:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "114",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:56:00+00:00",
+                    "departure_time": "2025-11-03T01:56:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "112",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:59:00+00:00",
+                    "departure_time": "2025-11-03T01:59:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "111",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:02:00+00:00",
+                    "departure_time": "2025-11-03T02:02:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "110",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:06:00+00:00",
+                    "departure_time": "2025-11-03T02:06:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "108",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:10:00+00:00",
+                    "departure_time": "2025-11-03T02:10:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "106",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:13:00+00:00",
+                    "departure_time": "2025-11-03T02:13:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "105",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:21:00+00:00",
+                    "departure_time": "2025-11-03T02:21:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "56",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:44:00+00:00",
+                    "departure_time": "2025-11-03T02:44:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "1",
+                    "track": null
+                }
+            ],
+            "track": "5",
+            "trip_id": "2893906",
+            "vehicle_id": null
+        },
+        {
+            "current_stop": "1",
+            "eta": "2025-11-03T01:06:00+00:00",
+            "next_stop": "4",
+            "route_id": "3",
+            "status": "Departed",
+            "stops": [
+                {
+                    "arrival_time": "2025-11-03T01:06:00+00:00",
+                    "departure_time": "2025-11-03T01:06:00+00:00",
+                    "status": "Departed",
+                    "stop_id": "1",
+                    "track": "19"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:16:00+00:00",
+                    "departure_time": "2025-11-03T01:16:00+00:00",
+                    "status": "Departed",
+                    "stop_id": "4",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:24:00+00:00",
+                    "departure_time": "2025-11-03T01:24:00+00:00",
+                    "status": "Departed",
+                    "stop_id": "56",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:34:00+00:00",
+                    "departure_time": "2025-11-03T01:34:00+00:00",
+                    "status": "Departed",
+                    "stop_id": "105",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:37:00+00:00",
+                    "departure_time": "2025-11-03T01:37:00+00:00",
+                    "status": "Departed",
+                    "stop_id": "106",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:41:00+00:00",
+                    "departure_time": "2025-11-03T01:41:00+00:00",
+                    "status": "Departed",
+                    "stop_id": "108",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:45:00+00:00",
+                    "departure_time": "2025-11-03T01:45:00+00:00",
+                    "status": "Departed",
+                    "stop_id": "110",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:48:00+00:00",
+                    "departure_time": "2025-11-03T01:48:00+00:00",
+                    "status": "Arrived",
+                    "stop_id": "111",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:51:00+00:00",
+                    "departure_time": "2025-11-03T01:51:00+00:00",
+                    "status": "Arriving",
+                    "stop_id": "112",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:55:00+00:00",
+                    "departure_time": "2025-11-03T01:55:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "114",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:58:00+00:00",
+                    "departure_time": "2025-11-03T01:58:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "115",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:02:00+00:00",
+                    "departure_time": "2025-11-03T02:02:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "116",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:06:00+00:00",
+                    "departure_time": "2025-11-03T02:06:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "118",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:08:00+00:00",
+                    "departure_time": "2025-11-03T02:08:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "120",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:11:00+00:00",
+                    "departure_time": "2025-11-03T02:11:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "121",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:23:00+00:00",
+                    "departure_time": "2025-11-03T02:23:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "124",
+                    "track": "4"
+                }
+            ],
+            "track": "19",
+            "trip_id": "2893907",
+            "vehicle_id": null
+        },
+        {
+            "current_stop": "124",
+            "eta": "2025-11-03T02:01:00+00:00",
+            "next_stop": "121",
+            "route_id": "3",
+            "status": "On-Time",
+            "stops": [
+                {
+                    "arrival_time": "2025-11-03T02:01:00+00:00",
+                    "departure_time": "2025-11-03T02:01:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "124",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:04:00+00:00",
+                    "departure_time": "2025-11-03T02:04:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "121",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:06:00+00:00",
+                    "departure_time": "2025-11-03T02:06:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "120",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:08:00+00:00",
+                    "departure_time": "2025-11-03T02:08:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "118",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:12:00+00:00",
+                    "departure_time": "2025-11-03T02:12:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "116",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:16:00+00:00",
+                    "departure_time": "2025-11-03T02:16:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "115",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:19:00+00:00",
+                    "departure_time": "2025-11-03T02:19:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "114",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:24:00+00:00",
+                    "departure_time": "2025-11-03T02:24:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "112",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:27:00+00:00",
+                    "departure_time": "2025-11-03T02:27:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "111",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:30:00+00:00",
+                    "departure_time": "2025-11-03T02:30:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "110",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:34:00+00:00",
+                    "departure_time": "2025-11-03T02:34:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "108",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:38:00+00:00",
+                    "departure_time": "2025-11-03T02:38:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "106",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:41:00+00:00",
+                    "departure_time": "2025-11-03T02:41:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "105",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:49:00+00:00",
+                    "departure_time": "2025-11-03T02:49:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "56",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T03:12:00+00:00",
+                    "departure_time": "2025-11-03T03:12:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "1",
+                    "track": null
+                }
+            ],
+            "track": "3",
+            "trip_id": "2893908",
+            "vehicle_id": null
+        },
+        {
+            "current_stop": "1",
+            "eta": "2025-11-03T01:36:00+00:00",
+            "next_stop": "4",
+            "route_id": "3",
+            "status": "Departed",
+            "stops": [
+                {
+                    "arrival_time": "2025-11-03T01:36:00+00:00",
+                    "departure_time": "2025-11-03T01:36:00+00:00",
+                    "status": "Departed",
+                    "stop_id": "1",
+                    "track": "20"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:46:00+00:00",
+                    "departure_time": "2025-11-03T01:46:00+00:00",
+                    "status": "Arrived",
+                    "stop_id": "4",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T01:54:00+00:00",
+                    "departure_time": "2025-11-03T01:54:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "56",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:04:00+00:00",
+                    "departure_time": "2025-11-03T02:04:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "105",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:07:00+00:00",
+                    "departure_time": "2025-11-03T02:07:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "106",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:11:00+00:00",
+                    "departure_time": "2025-11-03T02:11:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "108",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:15:00+00:00",
+                    "departure_time": "2025-11-03T02:15:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "110",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:18:00+00:00",
+                    "departure_time": "2025-11-03T02:18:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "111",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:21:00+00:00",
+                    "departure_time": "2025-11-03T02:21:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "112",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:25:00+00:00",
+                    "departure_time": "2025-11-03T02:25:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "114",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:28:00+00:00",
+                    "departure_time": "2025-11-03T02:28:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "115",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:32:00+00:00",
+                    "departure_time": "2025-11-03T02:32:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "116",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:36:00+00:00",
+                    "departure_time": "2025-11-03T02:36:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "118",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:38:00+00:00",
+                    "departure_time": "2025-11-03T02:38:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "120",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:41:00+00:00",
+                    "departure_time": "2025-11-03T02:41:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "121",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:53:00+00:00",
+                    "departure_time": "2025-11-03T02:53:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "124",
+                    "track": "4"
+                }
+            ],
+            "track": "20",
+            "trip_id": "2893909",
+            "vehicle_id": null
+        },
+        {
+            "current_stop": "124",
+            "eta": "2025-11-03T03:03:00+00:00",
+            "next_stop": "121",
+            "route_id": "3",
+            "status": "On-Time",
+            "stops": [
+                {
+                    "arrival_time": "2025-11-03T03:03:00+00:00",
+                    "departure_time": "2025-11-03T03:03:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "124",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T03:06:00+00:00",
+                    "departure_time": "2025-11-03T03:06:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "121",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T03:08:00+00:00",
+                    "departure_time": "2025-11-03T03:08:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "120",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T03:10:00+00:00",
+                    "departure_time": "2025-11-03T03:10:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "118",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T03:14:00+00:00",
+                    "departure_time": "2025-11-03T03:14:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "116",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T03:18:00+00:00",
+                    "departure_time": "2025-11-03T03:18:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "115",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T03:21:00+00:00",
+                    "departure_time": "2025-11-03T03:21:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "114",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T03:26:00+00:00",
+                    "departure_time": "2025-11-03T03:26:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "112",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T03:29:00+00:00",
+                    "departure_time": "2025-11-03T03:29:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "111",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T03:32:00+00:00",
+                    "departure_time": "2025-11-03T03:32:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "110",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T03:36:00+00:00",
+                    "departure_time": "2025-11-03T03:36:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "108",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T03:40:00+00:00",
+                    "departure_time": "2025-11-03T03:40:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "106",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T03:43:00+00:00",
+                    "departure_time": "2025-11-03T03:43:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "105",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T03:51:00+00:00",
+                    "departure_time": "2025-11-03T03:51:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "56",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T04:14:00+00:00",
+                    "departure_time": "2025-11-03T04:14:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "1",
+                    "track": null
+                }
+            ],
+            "track": "3",
+            "trip_id": "2893910",
+            "vehicle_id": null
+        },
+        {
+            "current_stop": "1",
+            "eta": "2025-11-03T02:38:00+00:00",
+            "next_stop": "4",
+            "route_id": "3",
+            "status": "On-Time",
+            "stops": [
+                {
+                    "arrival_time": "2025-11-03T02:38:00+00:00",
+                    "departure_time": "2025-11-03T02:38:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "1",
+                    "track": null
+                },
+                {
+                    "arrival_time": "2025-11-03T02:48:00+00:00",
+                    "departure_time": "2025-11-03T02:48:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "4",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T02:56:00+00:00",
+                    "departure_time": "2025-11-03T02:56:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "56",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T03:06:00+00:00",
+                    "departure_time": "2025-11-03T03:06:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "105",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T03:09:00+00:00",
+                    "departure_time": "2025-11-03T03:09:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "106",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T03:13:00+00:00",
+                    "departure_time": "2025-11-03T03:13:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "108",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T03:17:00+00:00",
+                    "departure_time": "2025-11-03T03:17:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "110",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T03:20:00+00:00",
+                    "departure_time": "2025-11-03T03:20:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "111",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T03:23:00+00:00",
+                    "departure_time": "2025-11-03T03:23:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "112",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T03:27:00+00:00",
+                    "departure_time": "2025-11-03T03:27:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "114",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T03:30:00+00:00",
+                    "departure_time": "2025-11-03T03:30:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "115",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T03:34:00+00:00",
+                    "departure_time": "2025-11-03T03:34:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "116",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T03:38:00+00:00",
+                    "departure_time": "2025-11-03T03:38:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "118",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T03:40:00+00:00",
+                    "departure_time": "2025-11-03T03:40:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "120",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T03:43:00+00:00",
+                    "departure_time": "2025-11-03T03:43:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "121",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T03:55:00+00:00",
+                    "departure_time": "2025-11-03T03:55:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "124",
+                    "track": "4"
+                }
+            ],
+            "track": null,
+            "trip_id": "2893911",
+            "vehicle_id": null
+        },
+        {
+            "current_stop": "124",
+            "eta": "2025-11-03T04:08:00+00:00",
+            "next_stop": "121",
+            "route_id": "3",
+            "status": "On-Time",
+            "stops": [
+                {
+                    "arrival_time": "2025-11-03T04:08:00+00:00",
+                    "departure_time": "2025-11-03T04:08:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "124",
+                    "track": "5"
+                },
+                {
+                    "arrival_time": "2025-11-03T04:11:00+00:00",
+                    "departure_time": "2025-11-03T04:11:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "121",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T04:13:00+00:00",
+                    "departure_time": "2025-11-03T04:13:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "120",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T04:15:00+00:00",
+                    "departure_time": "2025-11-03T04:15:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "118",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T04:19:00+00:00",
+                    "departure_time": "2025-11-03T04:19:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "116",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T04:23:00+00:00",
+                    "departure_time": "2025-11-03T04:23:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "115",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T04:26:00+00:00",
+                    "departure_time": "2025-11-03T04:26:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "114",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T04:31:00+00:00",
+                    "departure_time": "2025-11-03T04:31:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "112",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T04:34:00+00:00",
+                    "departure_time": "2025-11-03T04:34:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "111",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T04:37:00+00:00",
+                    "departure_time": "2025-11-03T04:37:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "110",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T04:41:00+00:00",
+                    "departure_time": "2025-11-03T04:41:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "108",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T04:45:00+00:00",
+                    "departure_time": "2025-11-03T04:45:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "106",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T04:48:00+00:00",
+                    "departure_time": "2025-11-03T04:48:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "105",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T04:56:00+00:00",
+                    "departure_time": "2025-11-03T04:56:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "56",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T05:20:00+00:00",
+                    "departure_time": "2025-11-03T05:20:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "1",
+                    "track": null
+                }
+            ],
+            "track": "5",
+            "trip_id": "2893912",
+            "vehicle_id": null
+        },
+        {
+            "current_stop": "1",
+            "eta": "2025-11-03T03:38:00+00:00",
+            "next_stop": "4",
+            "route_id": "3",
+            "status": "On-Time",
+            "stops": [
+                {
+                    "arrival_time": "2025-11-03T03:38:00+00:00",
+                    "departure_time": "2025-11-03T03:38:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "1",
+                    "track": null
+                },
+                {
+                    "arrival_time": "2025-11-03T03:48:00+00:00",
+                    "departure_time": "2025-11-03T03:48:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "4",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T03:56:00+00:00",
+                    "departure_time": "2025-11-03T03:56:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "56",
+                    "track": "3"
+                },
+                {
+                    "arrival_time": "2025-11-03T04:06:00+00:00",
+                    "departure_time": "2025-11-03T04:06:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "105",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T04:09:00+00:00",
+                    "departure_time": "2025-11-03T04:09:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "106",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T04:13:00+00:00",
+                    "departure_time": "2025-11-03T04:13:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "108",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T04:17:00+00:00",
+                    "departure_time": "2025-11-03T04:17:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "110",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T04:20:00+00:00",
+                    "departure_time": "2025-11-03T04:20:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "111",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T04:23:00+00:00",
+                    "departure_time": "2025-11-03T04:23:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "112",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T04:27:00+00:00",
+                    "departure_time": "2025-11-03T04:27:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "114",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T04:30:00+00:00",
+                    "departure_time": "2025-11-03T04:30:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "115",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T04:34:00+00:00",
+                    "departure_time": "2025-11-03T04:34:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "116",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T04:38:00+00:00",
+                    "departure_time": "2025-11-03T04:38:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "118",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T04:40:00+00:00",
+                    "departure_time": "2025-11-03T04:40:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "120",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T04:43:00+00:00",
+                    "departure_time": "2025-11-03T04:43:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "121",
+                    "track": "4"
+                },
+                {
+                    "arrival_time": "2025-11-03T04:55:00+00:00",
+                    "departure_time": "2025-11-03T04:55:00+00:00",
+                    "status": "On-Time",
+                    "stop_id": "124",
+                    "track": "4"
+                }
+            ],
+            "track": null,
+            "trip_id": "2893913",
+            "vehicle_id": null
+        }
+    ]
+}

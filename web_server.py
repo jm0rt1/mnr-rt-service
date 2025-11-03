@@ -20,6 +20,7 @@ from src.mta_gtfs_client import MTAGTFSRealtimeClient
 from src.gtfs_realtime import mta_railroad_pb2
 from src.shared.settings import GlobalSettings
 from src.gtfs_downloader import GTFSDownloader
+from src.gtfs_static_reader import GTFSStaticReader
 
 # Configure logging
 logging.basicConfig(
@@ -29,6 +30,7 @@ logging.basicConfig(
 
 app = Flask(__name__)
 client = None
+gtfs_reader = None
 FEATURE_FLAGS = GlobalSettings.FeatureFlags.as_dict()
 
 
@@ -153,6 +155,9 @@ def get_trains():
         trains = []
         for trip_update in trip_updates:
             train_info = extract_train_info(trip_update)
+            # Enrich with GTFS static data
+            if gtfs_reader and gtfs_reader.is_loaded():
+                train_info = gtfs_reader.enrich_train_info(train_info)
             trains.append(train_info)
 
         # Build response
@@ -219,7 +224,7 @@ def index():
 
 def main():
     """Main entry point for the web server."""
-    global client
+    global client, gtfs_reader
 
     parser = argparse.ArgumentParser(
         description='MTA Metro-North Railroad Real-Time Web Server'
@@ -283,6 +288,14 @@ def main():
 
     # Initialize the GTFS client
     client = MTAGTFSRealtimeClient(api_key=args.api_key)
+
+    # Load GTFS static data for enrichment
+    print("Loading GTFS static data...")
+    gtfs_reader = GTFSStaticReader(GlobalSettings.GTFS_MNR_DATA_DIR)
+    if gtfs_reader.load():
+        print("✓ GTFS static data loaded successfully")
+    else:
+        print("⚠ GTFS static data loading failed (real-time data will not be enriched)")
 
     print(f"Starting MNR Real-Time Relay Server on {args.host}:{args.port}")
     print(f"Access the API at: http://{args.host}:{args.port}/trains")
