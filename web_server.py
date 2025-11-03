@@ -17,9 +17,11 @@ import requests
 from flask import Flask, jsonify, request
 from src.mta_gtfs_client import MTAGTFSRealtimeClient
 from src.gtfs_realtime import mta_railroad_pb2
+from src.shared.settings import GlobalSettings
 
 app = Flask(__name__)
 client = None
+FEATURE_FLAGS = GlobalSettings.FeatureFlags.as_dict()
 
 
 def timestamp_to_datetime(timestamp):
@@ -148,7 +150,8 @@ def get_trains():
             'timestamp': timestamp_to_datetime(feed.header.timestamp),
             'city': 'mnr',
             'total_trains': len(trains),
-            'trains': trains
+            'trains': trains,
+            'features': FEATURE_FLAGS
         }
         
         return jsonify(response)
@@ -195,6 +198,7 @@ def index():
             '/health': 'Health check endpoint',
             '/trains': 'Get real-time train information (supports ?city=mnr&limit=20)'
         },
+        'features': FEATURE_FLAGS,
         'usage_examples': {
             'get_trains': '/trains?city=mnr&limit=20',
             'health_check': '/health'
