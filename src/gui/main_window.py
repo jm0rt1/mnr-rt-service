@@ -1,3 +1,21 @@
+"""
+DEPRECATED: Legacy simple GUI implementation.
+
+This file contains a simpler, less-featured GUI implementation.
+It is kept for reference but should not be used.
+
+Use the full-featured implementation instead:
+- Entry point: gui_app.py (at project root)
+- Controller: src/gui/controllers/main_window_controller.py
+- UI definition: resources/main_window.ui
+
+The full implementation includes:
+- GTFS data management with rate limiting
+- Enhanced logging with timestamps
+- Auto-refresh functionality
+- Configuration management
+- Proper Qt Designer UI integration
+"""
 import os
 import sys
 import json
