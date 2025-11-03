@@ -403,7 +403,7 @@ class MainWindowController(QMainWindow):
             table.setItem(row, 0, QTableWidgetItem(trip_display))
             
             # Route - show route name if available, otherwise route ID
-            route_display = train.get('route_name') or train.get('route_id', 'N/A')
+            route_display = train.get('route_name') if train.get('route_name') is not None else train.get('route_id', 'N/A')
             table.setItem(row, 1, QTableWidgetItem(route_display))
             
             # Current Stop - show stop name if available, otherwise stop ID
