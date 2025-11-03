@@ -13,6 +13,7 @@ Perfect for Arduino projects, embedded systems, home automation, or any applicat
 - **Home Network Ready**: Designed to run on any device with Python (Raspberry Pi, home server, etc.)
 - **Lightweight**: Minimal dependencies, easy to deploy
 - **Arduino-Friendly**: Simple text-based JSON format that's easy to parse in C++
+- **GUI Management**: Full-featured graphical interface for server control, configuration, and data visualization (see [GUI Documentation](docs/GUI_README.md))
 
 ## Quick Start
 
@@ -43,6 +44,21 @@ python web_server.py
 ```
 
 The server will start on `http://0.0.0.0:5000` by default and will be accessible from other devices on your home network.
+
+**Or, use the GUI:**
+
+```bash
+python gui_app.py
+```
+
+The GUI provides a full-featured interface for:
+- Server control (start/stop/restart)
+- Configuration management
+- GTFS data updates
+- Log monitoring
+- Real-time train data visualization
+
+See [GUI Documentation](docs/GUI_README.md) for detailed information.
 
 #### Command-Line Options
 
@@ -243,6 +259,7 @@ python -m unittest tests.test_gtfs_downloader
 ```
 mnr-rt-service/
 ├── web_server.py              # Main web server application (Flask-based API)
+├── gui_app.py                 # GUI application for server management
 ├── update_gtfs.py             # GTFS data update utility
 ├── mnr_gtfs_demo.py           # Demo script showing GTFS-RT usage
 ├── run.py                     # Legacy entry point
@@ -250,12 +267,19 @@ mnr-rt-service/
 │   ├── main.py               # Legacy main module
 │   ├── mta_gtfs_client.py    # MTA GTFS-RT API client
 │   ├── gtfs_downloader.py    # GTFS static data downloader
+│   ├── gui/                  # GUI application package
+│   │   ├── controllers/      # GUI controllers (main window logic)
+│   │   ├── views/            # GUI views
+│   │   │   └── generated/    # Auto-generated UI files
+│   │   └── models/           # GUI models
 │   ├── gtfs_realtime/        # GTFS-RT protobuf definitions
 │   │   ├── mta_railroad_pb2.py
 │   │   └── com/google/transit/realtime/
 │   │       └── gtfs_realtime_pb2.py
 │   └── shared/
 │       └── settings.py       # Application settings
+├── resources/                # GUI resource files
+│   └── main_window.ui       # Qt Designer UI file
 ├── tests/                    # Unit tests
 │   ├── test_web_server.py
 │   ├── test_mta_gtfs_client.py
@@ -264,6 +288,8 @@ mnr-rt-service/
 ├── gtfs/                     # GTFS static data
 │   └── metro-north-railroad/
 │       └── gtfsmnr/         # Downloaded GTFS files
+├── docs/                     # Documentation
+│   └── GUI_README.md        # GUI documentation
 ├── proto/                    # Protobuf definition files
 ├── requirements.txt          # Python dependencies
 ├── README.md                # This file
