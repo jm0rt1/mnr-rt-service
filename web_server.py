@@ -34,10 +34,10 @@ def timestamp_to_datetime(timestamp):
 def extract_train_info(trip_update):
     """
     Extract simplified train information from a GTFS-RT trip update.
-    
+
     Args:
         trip_update: TripUpdate protobuf message
-        
+
     Returns:
         dict: Simplified train information
     """
@@ -52,7 +52,7 @@ def extract_train_info(trip_update):
         'status': None,
         'stops': []
     }
-    
+
     # Extract trip information
     if trip_update.HasField('trip'):
         trip = trip_update.trip
@@ -60,13 +60,13 @@ def extract_train_info(trip_update):
             train_info['trip_id'] = trip.trip_id
         if trip.HasField('route_id'):
             train_info['route_id'] = trip.route_id
-    
+
     # Extract vehicle information
     if trip_update.HasField('vehicle'):
         vehicle = trip_update.vehicle
         if vehicle.HasField('id'):
             train_info['vehicle_id'] = vehicle.id
-    
+
     # Extract stop time updates
     if trip_update.stop_time_update:
         for i, stu in enumerate(trip_update.stop_time_update):
@@ -77,15 +77,17 @@ def extract_train_info(trip_update):
                 'track': None,
                 'status': None
             }
-            
+
             # Get arrival time
             if stu.HasField('arrival') and stu.arrival.HasField('time'):
-                stop_info['arrival_time'] = timestamp_to_datetime(stu.arrival.time)
-            
+                stop_info['arrival_time'] = timestamp_to_datetime(
+                    stu.arrival.time)
+
             # Get departure time
             if stu.HasField('departure') and stu.departure.HasField('time'):
-                stop_info['departure_time'] = timestamp_to_datetime(stu.departure.time)
-            
+                stop_info['departure_time'] = timestamp_to_datetime(
+                    stu.departure.time)
+
             # Get MTA Railroad extensions (track and train status)
             if stu.HasExtension(mta_railroad_pb2.mta_railroad_stop_time_update):
                 mta_ext = stu.Extensions[mta_railroad_pb2.mta_railroad_stop_time_update]
@@ -93,9 +95,9 @@ def extract_train_info(trip_update):
                     stop_info['track'] = mta_ext.track
                 if mta_ext.HasField('trainStatus'):
                     stop_info['status'] = mta_ext.trainStatus
-            
+
             train_info['stops'].append(stop_info)
-            
+
             # Set next stop info (first stop with future time)
             if i == 0:
                 train_info['current_stop'] = stop_info['stop_id']
@@ -104,7 +106,7 @@ def extract_train_info(trip_update):
                 train_info['status'] = stop_info['status']
             elif i == 1 and not train_info['next_stop']:
                 train_info['next_stop'] = stop_info['stop_id']
-    
+
     return train_info
 
 
@@ -112,11 +114,11 @@ def extract_train_info(trip_update):
 def get_trains():
     """
     Get real-time train information.
-    
+
     Query Parameters:
         city: Filter by city/region (default: 'mnr' for Metro-North Railroad)
         limit: Maximum number of trains to return (default: 20, max: 100)
-        
+
     Returns:
         JSON response with train information
     """
@@ -124,27 +126,27 @@ def get_trains():
         # Get query parameters
         city = request.args.get('city', 'mnr').lower()
         limit = min(int(request.args.get('limit', 20)), 100)
-        
+
         # Currently only supports MNR (Metro-North Railroad)
         if city not in ['mnr', 'metro-north', 'metronorth']:
             return jsonify({
                 'error': 'Unsupported city. Currently only supports "mnr" (Metro-North Railroad)',
                 'supported_cities': ['mnr', 'metro-north', 'metronorth']
             }), 400
-        
+
         # Fetch the GTFS-RT feed
         feed = client.fetch_feed()
-        
+
         # Extract trip updates with limit
         all_trip_updates = client.get_trip_updates(feed)
         trip_updates = all_trip_updates[:limit]
-        
+
         # Convert to simplified format
         trains = []
         for trip_update in trip_updates:
             train_info = extract_train_info(trip_update)
             trains.append(train_info)
-        
+
         # Build response
         response = {
             'timestamp': timestamp_to_datetime(feed.header.timestamp),
@@ -153,9 +155,9 @@ def get_trains():
             'trains': trains,
             'features': FEATURE_FLAGS
         }
-        
+
         return jsonify(response)
-        
+
     except ValueError as e:
         # Log the actual error for debugging
         app.logger.warning(f"Invalid parameter in /trains: {str(e)}")
@@ -170,7 +172,8 @@ def get_trains():
         }), 503
     except Exception as e:
         # Log the actual error for debugging but don't expose details
-        app.logger.error(f"Unexpected error in /trains: {type(e).__name__}: {str(e)}")
+        app.logger.error(
+            f"Unexpected error in /trains: {type(e).__name__}: {str(e)}")
         return jsonify({
             'error': 'An unexpected error occurred',
             'type': 'InternalServerError'
@@ -209,7 +212,7 @@ def index():
 def main():
     """Main entry point for the web server."""
     global client
-    
+
     parser = argparse.ArgumentParser(
         description='MTA Metro-North Railroad Real-Time Web Server'
     )
@@ -236,16 +239,16 @@ def main():
         action='store_true',
         help='Run in debug mode'
     )
-    
+
     args = parser.parse_args()
-    
+
     # Initialize the GTFS client
     client = MTAGTFSRealtimeClient(api_key=args.api_key)
-    
+
     print(f"Starting MNR Real-Time Relay Server on {args.host}:{args.port}")
     print(f"Access the API at: http://{args.host}:{args.port}/trains")
     print(f"View API info at: http://{args.host}:{args.port}/")
-    
+
     # Run the Flask app
     app.run(host=args.host, port=args.port, debug=args.debug)
 
