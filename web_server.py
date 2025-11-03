@@ -13,11 +13,19 @@ Usage:
 import argparse
 import sys
 from datetime import datetime, timezone
+import logging
 import requests
 from flask import Flask, jsonify, request
 from src.mta_gtfs_client import MTAGTFSRealtimeClient
 from src.gtfs_realtime import mta_railroad_pb2
 from src.shared.settings import GlobalSettings
+from src.gtfs_downloader import GTFSDownloader
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 
 app = Flask(__name__)
 client = None
@@ -239,8 +247,39 @@ def main():
         action='store_true',
         help='Run in debug mode'
     )
+    parser.add_argument(
+        '--skip-gtfs-update',
+        action='store_true',
+        help='Skip automatic GTFS data update on startup'
+    )
 
     args = parser.parse_args()
+
+    # Check for GTFS data updates on startup (unless skipped)
+    if not args.skip_gtfs_update:
+        print("Checking for GTFS data updates...")
+        downloader = GTFSDownloader(
+            gtfs_url=GlobalSettings.GTFSDownloadSettings.GTFS_FEED_URL,
+            output_dir=GlobalSettings.GTFS_MNR_DATA_DIR,
+            min_download_interval=GlobalSettings.GTFSDownloadSettings.MIN_DOWNLOAD_INTERVAL
+        )
+        
+        if downloader.should_download():
+            print("Downloading latest GTFS data...")
+            try:
+                success = downloader.download_and_extract()
+                if success:
+                    print("✓ GTFS data updated successfully")
+                else:
+                    print("⚠ GTFS data update failed (will use existing data)")
+            except Exception as e:
+                print(f"⚠ GTFS data update failed: {e} (will use existing data)")
+        else:
+            info = downloader.get_download_info()
+            if info['last_download']:
+                print(f"✓ GTFS data is up to date (last updated: {info['last_download']})")
+            else:
+                print("ℹ GTFS data exists (use update_gtfs.py to refresh)")
 
     # Initialize the GTFS client
     client = MTAGTFSRealtimeClient(api_key=args.api_key)

@@ -8,6 +8,7 @@ Perfect for Arduino projects, embedded systems, home automation, or any applicat
 
 - **Simple JSON API**: Returns train data in easy-to-parse JSON format instead of binary protobuf
 - **Real-time Data**: Fetches live train information from MTA's GTFS-RT feed
+- **Automatic GTFS Updates**: Downloads and updates static schedule data automatically (max once per day)
 - **Easy to Use**: Single GET request to get upcoming trains with ETA and status
 - **Home Network Ready**: Designed to run on any device with Python (Raspberry Pi, home server, etc.)
 - **Lightweight**: Minimal dependencies, easy to deploy
@@ -49,11 +50,40 @@ The server will start on `http://0.0.0.0:5000` by default and will be accessible
 - `--host HOST`: Specify a different host (default: 0.0.0.0, listens on all interfaces)
 - `--api-key KEY`: Optional MTA API key (if required)
 - `--debug`: Run in debug mode with auto-reload
+- `--skip-gtfs-update`: Skip automatic GTFS data update check on startup
 
 Example with custom port:
 ```bash
 python web_server.py --port 8080
 ```
+
+### GTFS Data Management
+
+The service automatically downloads and updates GTFS static schedule data from MTA on startup if the data is older than 24 hours. This ensures you always have the latest schedule information.
+
+#### Manual GTFS Update
+
+You can manually update the GTFS data using the included utility:
+
+```bash
+# Check current status
+python update_gtfs.py --info
+
+# Update GTFS data (respects rate limiting)
+python update_gtfs.py
+
+# Force update (bypass rate limiting)
+python update_gtfs.py --force
+```
+
+The GTFS data is downloaded from `https://rrgtfsfeeds.s3.amazonaws.com/gtfsmnr.zip` and includes:
+- Station information
+- Routes and trips
+- Schedule data (typically updated for the next 7-10 days)
+- Transfer information
+- Geographic shapes
+
+**Rate Limiting**: To prevent excessive downloads, updates are limited to once per 24 hours by default. The last download timestamp is tracked automatically.
 
 ## API Usage
 
@@ -205,6 +235,7 @@ Run specific test file:
 ```bash
 python -m unittest tests.test_web_server
 python -m unittest tests.test_mta_gtfs_client
+python -m unittest tests.test_gtfs_downloader
 ```
 
 ### Project Structure
@@ -212,11 +243,13 @@ python -m unittest tests.test_mta_gtfs_client
 ```
 mnr-rt-service/
 ├── web_server.py              # Main web server application (Flask-based API)
+├── update_gtfs.py             # GTFS data update utility
 ├── mnr_gtfs_demo.py           # Demo script showing GTFS-RT usage
 ├── run.py                     # Legacy entry point
 ├── src/
 │   ├── main.py               # Legacy main module
 │   ├── mta_gtfs_client.py    # MTA GTFS-RT API client
+│   ├── gtfs_downloader.py    # GTFS static data downloader
 │   ├── gtfs_realtime/        # GTFS-RT protobuf definitions
 │   │   ├── mta_railroad_pb2.py
 │   │   └── com/google/transit/realtime/
@@ -226,7 +259,11 @@ mnr-rt-service/
 ├── tests/                    # Unit tests
 │   ├── test_web_server.py
 │   ├── test_mta_gtfs_client.py
+│   ├── test_gtfs_downloader.py
 │   └── test_gtfs_integration.py
+├── gtfs/                     # GTFS static data
+│   └── metro-north-railroad/
+│       └── gtfsmnr/         # Downloaded GTFS files
 ├── proto/                    # Protobuf definition files
 ├── requirements.txt          # Python dependencies
 ├── README.md                # This file
@@ -237,11 +274,12 @@ mnr-rt-service/
 
 ### How It Works
 
-1. **Fetches Data**: The service fetches real-time data from MTA's GTFS-RT feed (binary protobuf format)
-2. **Parses Protobuf**: Uses Google's protobuf library to parse the binary data
-3. **Extracts Information**: Pulls out train trip updates, stop times, and MTA-specific extensions (track numbers, train status)
-4. **Converts to JSON**: Transforms the complex protobuf structure into simple, flat JSON
-5. **Serves via REST API**: Provides a Flask-based HTTP server with easy-to-use endpoints
+1. **Updates Static Data**: On startup, automatically downloads the latest GTFS static schedule data (if needed)
+2. **Fetches Real-Time Data**: The service fetches real-time data from MTA's GTFS-RT feed (binary protobuf format)
+3. **Parses Protobuf**: Uses Google's protobuf library to parse the binary data
+4. **Extracts Information**: Pulls out train trip updates, stop times, and MTA-specific extensions (track numbers, train status)
+5. **Converts to JSON**: Transforms the complex protobuf structure into simple, flat JSON
+6. **Serves via REST API**: Provides a Flask-based HTTP server with easy-to-use endpoints
 
 ### Technology Stack
 
@@ -250,14 +288,24 @@ mnr-rt-service/
 - **Protobuf 4.21+**: For parsing GTFS-RT feeds
 - **Requests 2.28+**: For HTTP requests to MTA API
 
-### Data Source
+### Data Sources
 
-This service fetches data from the MTA's official GTFS-RT feed:
-- **Endpoint**: `https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/mnr%2Fgtfs-mnr`
-- **Format**: GTFS-RT (protobuf)
-- **Update Frequency**: Real-time (updates every 30 seconds typically)
+This service uses two data sources from the MTA:
 
-The GTFS-RT specification is an open standard developed by Google for real-time public transit data.
+1. **Real-Time Feed** (GTFS-RT):
+   - **Endpoint**: `https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/mnr%2Fgtfs-mnr`
+   - **Format**: GTFS-RT (protobuf)
+   - **Update Frequency**: Real-time (updates every 30 seconds typically)
+   - **Contains**: Live train positions, delays, track assignments, and status updates
+
+2. **Static Schedule Data** (GTFS):
+   - **Endpoint**: `https://rrgtfsfeeds.s3.amazonaws.com/gtfsmnr.zip`
+   - **Format**: GTFS ZIP file (CSV files)
+   - **Update Frequency**: Updated frequently to include service changes for the next 7-10 days
+   - **Contains**: Station information, routes, scheduled trips, and shapes
+   - **Auto-Update**: Downloaded automatically by the service (max once per 24 hours)
+
+The GTFS and GTFS-RT specifications are open standards developed by Google for public transit data.
 
 ## Deployment
 
