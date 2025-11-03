@@ -411,7 +411,7 @@ class MainWindowController(QMainWindow):
             table.setItem(row, 2, QTableWidgetItem(current_stop_display))
             
             # Next Stop - show stop name if available, otherwise stop ID
-            next_stop_display = train.get('next_stop_name') or train.get('next_stop', 'N/A')
+            next_stop_display = train.get('next_stop_name') if train.get('next_stop_name') is not None else train.get('next_stop', 'N/A')
             table.setItem(row, 3, QTableWidgetItem(next_stop_display))
             
             # ETA
