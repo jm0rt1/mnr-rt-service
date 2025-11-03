@@ -27,7 +27,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def main() -> int:
+def main():
     """Main entry point - uses the full-featured MainWindowController"""
     logger.info("Starting MNR Real-Time Service Manager GUI (via legacy app.py)")
     

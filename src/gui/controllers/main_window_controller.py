@@ -394,9 +394,12 @@ class MainWindowController(QMainWindow):
             table.insertRow(row)
             
             # Trip ID - show headsign if available for better context
-            trip_display = train.get('trip_id', 'N/A')
-            if train.get('trip_headsign'):
-                trip_display = f"{train.get('trip_headsign')} ({trip_display})"
+            trip_id = train.get('trip_id', 'N/A')
+            trip_headsign = train.get('trip_headsign')
+            if trip_headsign:
+                trip_display = f"{trip_headsign} ({trip_id})"
+            else:
+                trip_display = trip_id
             table.setItem(row, 0, QTableWidgetItem(trip_display))
             
             # Route - show route name if available, otherwise route ID
