@@ -407,7 +407,7 @@ class MainWindowController(QMainWindow):
             table.setItem(row, 1, QTableWidgetItem(route_display))
             
             # Current Stop - show stop name if available, otherwise stop ID
-            current_stop_display = train.get('current_stop_name') or train.get('current_stop', 'N/A')
+            current_stop_display = train.get('current_stop_name') if train.get('current_stop_name') is not None else train.get('current_stop', 'N/A')
             table.setItem(row, 2, QTableWidgetItem(current_stop_display))
             
             # Next Stop - show stop name if available, otherwise stop ID
