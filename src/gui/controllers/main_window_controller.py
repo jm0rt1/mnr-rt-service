@@ -393,17 +393,26 @@ class MainWindowController(QMainWindow):
             row = table.rowCount()
             table.insertRow(row)
             
-            # Trip ID
-            table.setItem(row, 0, QTableWidgetItem(train.get('trip_id', 'N/A')))
+            # Trip ID - show headsign if available for better context
+            trip_id = train.get('trip_id', 'N/A')
+            trip_headsign = train.get('trip_headsign')
+            if trip_headsign:
+                trip_display = f"{trip_headsign} ({trip_id})"
+            else:
+                trip_display = trip_id
+            table.setItem(row, 0, QTableWidgetItem(trip_display))
             
-            # Route
-            table.setItem(row, 1, QTableWidgetItem(train.get('route_id', 'N/A')))
+            # Route - show route name if available, otherwise route ID
+            route_display = train.get('route_name') if train.get('route_name') is not None else train.get('route_id', 'N/A')
+            table.setItem(row, 1, QTableWidgetItem(route_display))
             
-            # Current Stop
-            table.setItem(row, 2, QTableWidgetItem(train.get('current_stop', 'N/A')))
+            # Current Stop - show stop name if available, otherwise stop ID
+            current_stop_display = train.get('current_stop_name') if train.get('current_stop_name') is not None else train.get('current_stop', 'N/A')
+            table.setItem(row, 2, QTableWidgetItem(current_stop_display))
             
-            # Next Stop
-            table.setItem(row, 3, QTableWidgetItem(train.get('next_stop', 'N/A')))
+            # Next Stop - show stop name if available, otherwise stop ID
+            next_stop_display = train.get('next_stop_name') if train.get('next_stop_name') is not None else train.get('next_stop', 'N/A')
+            table.setItem(row, 3, QTableWidgetItem(next_stop_display))
             
             # ETA
             eta = train.get('eta', 'N/A')

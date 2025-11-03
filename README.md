@@ -8,6 +8,7 @@ Perfect for Arduino projects, embedded systems, home automation, or any applicat
 
 - **Simple JSON API**: Returns train data in easy-to-parse JSON format instead of binary protobuf
 - **Real-time Data**: Fetches live train information from MTA's GTFS-RT feed
+- **Enriched Data**: Automatically enriches real-time data with human-readable names, route colors, and destination information from GTFS static schedule data
 - **Automatic GTFS Updates**: Downloads and updates static schedule data automatically (max once per day)
 - **Easy to Use**: Single GET request to get upcoming trains with ETA and status
 - **Home Network Ready**: Designed to run on any device with Python (Raspberry Pi, home server, etc.)
@@ -125,23 +126,31 @@ curl "http://localhost:5000/trains?city=mnr&limit=20"
   "trains": [
     {
       "trip_id": "1234567",
-      "route_id": "Hudson",
+      "route_id": "1",
+      "route_name": "Hudson",
+      "route_color": "009B3A",
+      "trip_headsign": "Poughkeepsie",
+      "direction_id": "0",
       "vehicle_id": "MNR_789",
-      "current_stop": "Grand_Central",
-      "next_stop": "125th_Street",
+      "current_stop": "1",
+      "current_stop_name": "Grand Central",
+      "next_stop": "4",
+      "next_stop_name": "Harlem-125 St",
       "eta": "2025-10-25T14:45:00",
       "track": "42",
       "status": "On Time",
       "stops": [
         {
-          "stop_id": "Grand_Central",
+          "stop_id": "1",
+          "stop_name": "Grand Central",
           "arrival_time": "2025-10-25T14:30:00",
           "departure_time": "2025-10-25T14:32:00",
           "track": "42",
           "status": "On Time"
         },
         {
-          "stop_id": "125th_Street",
+          "stop_id": "4",
+          "stop_name": "Harlem-125 St",
           "arrival_time": "2025-10-25T14:45:00",
           "departure_time": "2025-10-25T14:46:00",
           "track": "42",
@@ -159,14 +168,20 @@ curl "http://localhost:5000/trains?city=mnr&limit=20"
 - `total_trains`: Number of trains in the response
 - `trains`: Array of train objects with:
   - `trip_id`: Unique trip identifier
-  - `route_id`: Route name (e.g., "Hudson", "Harlem", "New Haven")
+  - `route_id`: Route identifier (e.g., "1", "2", "3")
+  - `route_name`: Human-readable route name (e.g., "Hudson", "Harlem", "New Haven") *enriched from GTFS*
+  - `route_color`: Route color hex code *enriched from GTFS*
+  - `trip_headsign`: Trip destination (e.g., "Poughkeepsie", "New Haven") *enriched from GTFS*
+  - `direction_id`: Direction of travel (0 or 1) *enriched from GTFS*
   - `vehicle_id`: Vehicle identifier
   - `current_stop`: Current or next upcoming stop ID
-  - `next_stop`: Stop after current stop
+  - `current_stop_name`: Human-readable stop name *enriched from GTFS*
+  - `next_stop`: Stop ID after current stop
+  - `next_stop_name`: Human-readable next stop name *enriched from GTFS*
   - `eta`: Estimated time of arrival at current stop (ISO 8601 format)
   - `track`: Track number at current stop
   - `status`: Train status (e.g., "On Time", "Delayed")
-  - `stops`: Array of all upcoming stops with times and details
+  - `stops`: Array of all upcoming stops with times and details (each stop also includes enriched `stop_name`, `stop_lat`, `stop_lon`)
 
 ### Health Check
 
@@ -301,11 +316,13 @@ mnr-rt-service/
 ### How It Works
 
 1. **Updates Static Data**: On startup, automatically downloads the latest GTFS static schedule data (if needed)
-2. **Fetches Real-Time Data**: The service fetches real-time data from MTA's GTFS-RT feed (binary protobuf format)
-3. **Parses Protobuf**: Uses Google's protobuf library to parse the binary data
-4. **Extracts Information**: Pulls out train trip updates, stop times, and MTA-specific extensions (track numbers, train status)
-5. **Converts to JSON**: Transforms the complex protobuf structure into simple, flat JSON
-6. **Serves via REST API**: Provides a Flask-based HTTP server with easy-to-use endpoints
+2. **Loads Static Data**: Parses GTFS static files (routes, stops, trips) into an in-memory cache for fast lookups
+3. **Fetches Real-Time Data**: The service fetches real-time data from MTA's GTFS-RT feed (binary protobuf format)
+4. **Parses Protobuf**: Uses Google's protobuf library to parse the binary data
+5. **Extracts Information**: Pulls out train trip updates, stop times, and MTA-specific extensions (track numbers, train status)
+6. **Enriches Data**: Looks up human-readable names, colors, and destination information from the static GTFS cache
+7. **Converts to JSON**: Transforms the complex protobuf structure into simple, enriched JSON
+8. **Serves via REST API**: Provides a Flask-based HTTP server with easy-to-use endpoints
 
 ### Technology Stack
 
