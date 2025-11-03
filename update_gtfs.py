@@ -73,7 +73,7 @@ def main():
     try:
         logger.info("Starting GTFS data update...")
         
-        if not downloader.should_download(force=args.force) and not args.force:
+        if not downloader.should_download(force=args.force):
             time_remaining = downloader.get_time_until_next_download()
             hours = time_remaining / 3600
             logger.info(

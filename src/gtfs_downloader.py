@@ -6,13 +6,12 @@ from the MTA Metro-North Railroad feed. The downloader enforces rate limiting
 to prevent excessive downloads.
 """
 
-import os
 import zipfile
 import shutil
 import time
 import logging
 from pathlib import Path
-from datetime import datetime, timedelta
+from datetime import datetime
 import requests
 from typing import Optional
 
