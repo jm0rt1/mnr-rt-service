@@ -16,3 +16,7 @@ build/
 *.swo
 *~
 *.old
+
+# GTFS download tracking
+.last_download
+.gtfs_temp/
