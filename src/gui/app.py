@@ -6,7 +6,6 @@ Kept for backwards compatibility with older code.
 """
 import sys
 import logging
-from pathlib import Path
 from PySide6.QtWidgets import QApplication
 from PySide6.QtCore import Qt
 
