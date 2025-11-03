@@ -187,6 +187,55 @@ class TestWebServer(unittest.TestCase):
         self.assertEqual(len(data['trains']), 30)
         self.assertTrue(data['features']['gpt_5_codex_preview']['enabled'])
 
+    @patch('web_server.client')
+    @patch('web_server.gtfs_reader')
+    def test_trains_endpoint_with_enrichment(self, mock_gtfs_reader, mock_client):
+        """Test /trains endpoint with GTFS static data enrichment"""
+        # Create mock feed
+        mock_feed = gtfs_realtime_pb2.FeedMessage()
+        mock_feed.header.timestamp = 1234567890
+
+        # Add a trip update
+        entity = mock_feed.entity.add()
+        entity.id = "trip_1"
+        entity.trip_update.trip.trip_id = "TEST_TRIP"
+        entity.trip_update.trip.route_id = "1"
+
+        # Add stop
+        stu = entity.trip_update.stop_time_update.add()
+        stu.stop_id = "STOP_1"
+        stu.arrival.time = 1234567890
+
+        # Mock client methods
+        mock_client.fetch_feed.return_value = mock_feed
+        mock_client.get_trip_updates.return_value = [entity.trip_update]
+
+        # Mock GTFS reader enrichment
+        mock_gtfs_reader.is_loaded.return_value = True
+        
+        def mock_enrich(train_info):
+            enriched = train_info.copy()
+            enriched['route_name'] = 'Hudson Line'
+            enriched['route_color'] = '0039A6'
+            enriched['trip_headsign'] = 'Poughkeepsie'
+            enriched['current_stop_name'] = 'Grand Central'
+            return enriched
+        
+        mock_gtfs_reader.enrich_train_info = mock_enrich
+
+        response = self.app.get('/trains?city=mnr&limit=10')
+        self.assertEqual(response.status_code, 200)
+
+        data = json.loads(response.data)
+        self.assertEqual(len(data['trains']), 1)
+        
+        # Verify enriched data is present
+        train = data['trains'][0]
+        self.assertEqual(train['route_name'], 'Hudson Line')
+        self.assertEqual(train['route_color'], '0039A6')
+        self.assertEqual(train['trip_headsign'], 'Poughkeepsie')
+        self.assertEqual(train['current_stop_name'], 'Grand Central')
+
 
 if __name__ == '__main__':
     unittest.main()
