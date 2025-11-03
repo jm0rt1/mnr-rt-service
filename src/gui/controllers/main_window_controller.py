@@ -400,7 +400,8 @@ class MainWindowController(QMainWindow):
                 try:
                     dt = datetime.fromisoformat(eta.replace('Z', '+00:00'))
                     eta = dt.strftime('%H:%M:%S')
-                except:
+                except (ValueError, AttributeError):
+                    # Keep original value if parsing fails
                     pass
             table.setItem(row, 4, QTableWidgetItem(str(eta)))
             
