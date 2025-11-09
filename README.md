@@ -15,6 +15,7 @@ Perfect for Arduino projects, embedded systems, home automation, or any applicat
 - **Lightweight**: Minimal dependencies, easy to deploy
 - **Arduino-Friendly**: Simple text-based JSON format that's easy to parse in C++
 - **GUI Management**: Full-featured graphical interface for server control, configuration, and data visualization (see [GUI Documentation](docs/GUI_README.md))
+- **🆕 Travel Assistance**: Intelligent travel planning with network location detection, walking distance calculations, and optimal departure time suggestions (see [Travel Assistance Documentation](docs/TRAVEL_ASSIST.md))
 
 ## Quick Start
 
@@ -327,6 +328,29 @@ curl "http://localhost:5000/health"
   "service": "MNR Real-Time Relay",
   "timestamp": "2025-10-25T14:30:00"
 }
+```
+
+### Travel Assistance (Optional)
+
+**NEW**: Intelligent travel planning with network location detection and optimal departure suggestions.
+
+See [Travel Assistance Documentation](docs/TRAVEL_ASSIST.md) for complete details.
+
+**Quick Start:**
+1. Copy `config/travel_assist.example.yml` to `config/travel_assist.yml`
+2. Configure your home station and API keys
+3. Restart the server
+
+**Available Endpoints:**
+- `GET /travel/location` - Get current network location
+- `GET /travel/distance` - Calculate walking distance to station
+- `GET /travel/next-train` - Get optimal train to catch
+- `GET /travel/arduino-device` - Find Arduino on network
+
+**Example:**
+```bash
+# Get next train based on your current location
+curl "http://localhost:5000/travel/next-train"
 ```
 
 ### API Information

@@ -1,0 +1,101 @@
+# Travel Assistance Configuration
+# Copy this file to travel_assist.yml and configure with your settings
+
+# Home Station Configuration
+home_station:
+  # Station ID from GTFS data (e.g., "1" for Grand Central)
+  station_id: "1"
+  
+  # Station coordinates (latitude, longitude)
+  # Example: Grand Central Terminal
+  latitude: 40.752998
+  longitude: -73.977056
+  
+  # Human-readable name
+  name: "Grand Central Terminal"
+
+# API Keys
+api_keys:
+  # MTA API key (optional, but recommended for better rate limits)
+  # Get your key from: https://new.mta.info/developers
+  mta_api_key: null
+  
+  # OpenRouteService API key (optional, for routing)
+  # Get your key from: https://openrouteservice.org/dev/#/signup
+  # Free tier: 2000 requests/day
+  ors_api_key: null
+
+# Travel Preferences
+preferences:
+  # Walking speed: 'slow' (3 km/h), 'normal' (5 km/h), 'fast' (6.5 km/h)
+  walking_speed: "normal"
+  
+  # Safety buffer added to walking time (minutes)
+  safety_buffer_minutes: 2
+  
+  # Minimum buffer time at station before train departure (minutes)
+  min_station_buffer_minutes: 3
+  
+  # Maximum number of train suggestions to show
+  max_train_suggestions: 3
+  
+  # Preferred departure strategy: 'earliest' or 'most_time'
+  departure_preference: "earliest"
+
+# Cache Settings
+cache:
+  # Directory for caching location data
+  cache_dir: "./cache"
+  
+  # Time-to-live for cached location data (hours)
+  cache_ttl_hours: 24
+  
+  # Whether to use cached data by default
+  use_cache: true
+
+# Network Settings
+network:
+  # API request timeout (seconds)
+  api_timeout: 10
+  
+  # Device discovery timeout (seconds)
+  device_discovery_timeout: 0.5
+  
+  # Ports to check for Arduino webserver
+  arduino_ports: [80, 8080, 5000, 3000]
+
+# Notifications (future feature)
+notifications:
+  # Enable notifications
+  enabled: false
+  
+  # Minutes before departure to send notification
+  notification_lead_time_minutes: 5
+  
+  # Notification method: 'console', 'pushbullet', 'telegram'
+  method: "console"
+
+# Display Settings
+display:
+  # Use metric system (true) or imperial (false)
+  use_metric: true
+  
+  # Verbose output
+  verbose: false
+  
+  # Include countdown timers
+  show_countdown: true
+
+# Feature Flags
+features:
+  # Enable Arduino device detection
+  arduino_detection: true
+  
+  # Enable routing API (vs. direct distance)
+  use_routing_api: true
+  
+  # Enable async operations
+  async_mode: true
+  
+  # Enable weather considerations (future feature)
+  weather_integration: false
