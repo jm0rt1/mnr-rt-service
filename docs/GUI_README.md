@@ -41,6 +41,33 @@ A comprehensive graphical user interface for managing the Metro-North Railroad r
 - **Save logs** - export logs to a text file
 - **Timestamped entries** - all log entries include timestamp and severity level
 
+### 5. Stations Viewer
+- **View all stations** - browse complete list of Metro-North stations
+- **Station details** - see station IDs, names, codes, and coordinates
+- **Wheelchair accessibility** - check which stations are accessible
+- **Refresh on demand** - update station list at any time
+
+### 6. Routes Viewer
+- **View all routes** - see all Metro-North lines and routes
+- **Visual colors** - route colors displayed with background
+- **Route details** - route IDs, names, and identifiers
+- **Refresh on demand** - update route list at any time
+
+### 7. Travel Assistance (if configured)
+- **Network location** - see current network location detection
+- **Distance calculation** - view walking distance to station
+- **Next train recommendation** - get optimal train suggestions
+- **Arduino device discovery** - find Arduino devices on network
+- **Refresh on demand** - update all travel data at once
+
+### 8. API Information
+- **View API metadata** - see all available endpoints
+- **Usage examples** - get example API calls
+- **Feature flags** - see which features are enabled
+- **Documentation** - built-in API reference
+
+For detailed information about viewing all API endpoints in the GUI, see [GUI All Endpoints Documentation](GUI_ALL_ENDPOINTS.md).
+
 ## Installation
 
 ### Prerequisites
