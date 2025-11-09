@@ -16,7 +16,9 @@ import json
 from datetime import datetime
 from pathlib import Path
 from PySide6.QtWidgets import (
-    QMainWindow, QMessageBox, QFileDialog, QTableWidgetItem
+    QMainWindow, QMessageBox, QFileDialog, QTableWidgetItem, QWidget, 
+    QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QTableWidget, 
+    QHeaderView, QTextEdit, QGroupBox
 )
 from PySide6.QtCore import QTimer, QThread, Signal, Qt
 from PySide6.QtGui import QColor
@@ -154,6 +156,9 @@ class MainWindowController(QMainWindow):
         # Update GTFS info
         self.update_gtfs_info()
         
+        # Add new tabs for all endpoints
+        self._setup_additional_tabs()
+        
         # Log initial message
         self.log_message("GUI initialized. Ready to start server.", "INFO")
     
@@ -182,6 +187,141 @@ class MainWindowController(QMainWindow):
         # Menu actions
         self.ui.actionExit.triggered.connect(self.close)
         self.ui.actionAbout.triggered.connect(self.show_about)
+    
+    def _setup_additional_tabs(self):
+        """Setup additional tabs for viewing all API endpoints"""
+        # Stations Tab
+        self.stationsTab = QWidget()
+        self.stationsTabLayout = QVBoxLayout(self.stationsTab)
+        
+        # Stations controls
+        stationsControlLayout = QHBoxLayout()
+        self.refreshStationsButton = QPushButton("Refresh Stations")
+        self.refreshStationsButton.clicked.connect(self.refresh_stations_data)
+        stationsControlLayout.addWidget(self.refreshStationsButton)
+        stationsControlLayout.addStretch()
+        self.stationsStatusLabel = QLabel("Click 'Refresh Stations' to load data")
+        stationsControlLayout.addWidget(self.stationsStatusLabel)
+        self.stationsTabLayout.addLayout(stationsControlLayout)
+        
+        # Stations table
+        self.stationsTable = QTableWidget()
+        self.stationsTable.setColumnCount(6)
+        self.stationsTable.setHorizontalHeaderLabels([
+            "Stop ID", "Stop Name", "Stop Code", "Latitude", "Longitude", "Wheelchair Boarding"
+        ])
+        self.stationsTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.stationsTable.setEditTriggers(QTableWidget.NoEditTriggers)
+        self.stationsTable.setSelectionBehavior(QTableWidget.SelectRows)
+        self.stationsTable.setAlternatingRowColors(True)
+        self.stationsTabLayout.addWidget(self.stationsTable)
+        
+        self.ui.tabWidget.addTab(self.stationsTab, "Stations")
+        
+        # Routes Tab
+        self.routesTab = QWidget()
+        self.routesTabLayout = QVBoxLayout(self.routesTab)
+        
+        # Routes controls
+        routesControlLayout = QHBoxLayout()
+        self.refreshRoutesButton = QPushButton("Refresh Routes")
+        self.refreshRoutesButton.clicked.connect(self.refresh_routes_data)
+        routesControlLayout.addWidget(self.refreshRoutesButton)
+        routesControlLayout.addStretch()
+        self.routesStatusLabel = QLabel("Click 'Refresh Routes' to load data")
+        routesControlLayout.addWidget(self.routesStatusLabel)
+        self.routesTabLayout.addLayout(routesControlLayout)
+        
+        # Routes table
+        self.routesTable = QTableWidget()
+        self.routesTable.setColumnCount(5)
+        self.routesTable.setHorizontalHeaderLabels([
+            "Route ID", "Route Name", "Short Name", "Color", "Text Color"
+        ])
+        self.routesTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.routesTable.setEditTriggers(QTableWidget.NoEditTriggers)
+        self.routesTable.setSelectionBehavior(QTableWidget.SelectRows)
+        self.routesTable.setAlternatingRowColors(True)
+        self.routesTabLayout.addWidget(self.routesTable)
+        
+        self.ui.tabWidget.addTab(self.routesTab, "Routes")
+        
+        # Travel Assistance Tab
+        self.travelTab = QWidget()
+        self.travelTabLayout = QVBoxLayout(self.travelTab)
+        
+        # Travel controls
+        travelControlLayout = QHBoxLayout()
+        self.refreshTravelButton = QPushButton("Refresh All Travel Data")
+        self.refreshTravelButton.clicked.connect(self.refresh_travel_data)
+        travelControlLayout.addWidget(self.refreshTravelButton)
+        travelControlLayout.addStretch()
+        self.travelStatusLabel = QLabel("Click 'Refresh' to load travel assistance data")
+        travelControlLayout.addWidget(self.travelStatusLabel)
+        self.travelTabLayout.addLayout(travelControlLayout)
+        
+        # Travel data groups
+        # Location
+        locationGroup = QGroupBox("Network Location")
+        locationLayout = QVBoxLayout()
+        self.locationText = QTextEdit()
+        self.locationText.setReadOnly(True)
+        self.locationText.setMaximumHeight(100)
+        locationLayout.addWidget(self.locationText)
+        locationGroup.setLayout(locationLayout)
+        self.travelTabLayout.addWidget(locationGroup)
+        
+        # Distance
+        distanceGroup = QGroupBox("Distance to Station")
+        distanceLayout = QVBoxLayout()
+        self.distanceText = QTextEdit()
+        self.distanceText.setReadOnly(True)
+        self.distanceText.setMaximumHeight(100)
+        distanceLayout.addWidget(self.distanceText)
+        distanceGroup.setLayout(distanceLayout)
+        self.travelTabLayout.addWidget(distanceGroup)
+        
+        # Next Train
+        nextTrainGroup = QGroupBox("Next Train Recommendation")
+        nextTrainLayout = QVBoxLayout()
+        self.nextTrainText = QTextEdit()
+        self.nextTrainText.setReadOnly(True)
+        nextTrainLayout.addWidget(self.nextTrainText)
+        nextTrainGroup.setLayout(nextTrainLayout)
+        self.travelTabLayout.addWidget(nextTrainGroup)
+        
+        # Arduino Device
+        arduinoGroup = QGroupBox("Arduino Device")
+        arduinoLayout = QVBoxLayout()
+        self.arduinoText = QTextEdit()
+        self.arduinoText.setReadOnly(True)
+        self.arduinoText.setMaximumHeight(80)
+        arduinoLayout.addWidget(self.arduinoText)
+        arduinoGroup.setLayout(arduinoLayout)
+        self.travelTabLayout.addWidget(arduinoGroup)
+        
+        self.ui.tabWidget.addTab(self.travelTab, "Travel Assistance")
+        
+        # API Info Tab
+        self.apiInfoTab = QWidget()
+        self.apiInfoTabLayout = QVBoxLayout(self.apiInfoTab)
+        
+        # API info controls
+        apiInfoControlLayout = QHBoxLayout()
+        self.refreshApiInfoButton = QPushButton("Refresh API Info")
+        self.refreshApiInfoButton.clicked.connect(self.refresh_api_info)
+        apiInfoControlLayout.addWidget(self.refreshApiInfoButton)
+        apiInfoControlLayout.addStretch()
+        self.apiInfoStatusLabel = QLabel("Click 'Refresh' to load API information")
+        apiInfoControlLayout.addWidget(self.apiInfoStatusLabel)
+        self.apiInfoTabLayout.addLayout(apiInfoControlLayout)
+        
+        # API info display
+        self.apiInfoText = QTextEdit()
+        self.apiInfoText.setReadOnly(True)
+        self.apiInfoTabLayout.addWidget(self.apiInfoText)
+        
+        self.ui.tabWidget.addTab(self.apiInfoTab, "API Information")
     
     def log_message(self, message, level="INFO"):
         """Add a message to the log display"""
@@ -597,6 +737,235 @@ class MainWindowController(QMainWindow):
             self.auto_refresh_timer.stop()
             self.log_message("Auto-refresh disabled", "INFO")
     
+    def refresh_stations_data(self):
+        """Refresh stations data from the API"""
+        port = self.ui.portSpinBox.value()
+        
+        # Check if server is running
+        if not self.server_thread or not self.server_thread.isRunning():
+            self.log_message("Cannot fetch stations data: Server is not running", "WARNING")
+            self.stationsStatusLabel.setText("Server is not running")
+            return
+        
+        try:
+            # Fetch data from the API
+            url = f"http://localhost:{port}/stations"
+            response = requests.get(url, timeout=10)
+            response.raise_for_status()
+            
+            data = response.json()
+            stations = data.get('stations', [])
+            
+            # Update the table
+            self.stationsTable.setRowCount(0)
+            for station in stations:
+                row = self.stationsTable.rowCount()
+                self.stationsTable.insertRow(row)
+                
+                self.stationsTable.setItem(row, 0, QTableWidgetItem(station.get('stop_id', 'N/A')))
+                self.stationsTable.setItem(row, 1, QTableWidgetItem(station.get('stop_name', 'N/A')))
+                self.stationsTable.setItem(row, 2, QTableWidgetItem(station.get('stop_code', 'N/A')))
+                self.stationsTable.setItem(row, 3, QTableWidgetItem(station.get('stop_lat', 'N/A')))
+                self.stationsTable.setItem(row, 4, QTableWidgetItem(station.get('stop_lon', 'N/A')))
+                self.stationsTable.setItem(row, 5, QTableWidgetItem(station.get('wheelchair_boarding', 'N/A')))
+            
+            # Update status label
+            timestamp = data.get('timestamp', 'Unknown')
+            self.stationsStatusLabel.setText(f"Last updated: {timestamp} - Total: {len(stations)} stations")
+            self.log_message(f"Fetched {len(stations)} stations", "INFO")
+            
+        except requests.ConnectionError:
+            self.log_message("Cannot connect to server. Is it running?", "ERROR")
+            self.stationsStatusLabel.setText("Connection error")
+        except requests.Timeout:
+            self.log_message("Request timed out while fetching stations data", "ERROR")
+            self.stationsStatusLabel.setText("Request timed out")
+        except Exception as e:
+            self.log_message(f"Failed to fetch stations data: {str(e)}", "ERROR")
+            self.stationsStatusLabel.setText("Error fetching data")
+    
+    def refresh_routes_data(self):
+        """Refresh routes data from the API"""
+        port = self.ui.portSpinBox.value()
+        
+        # Check if server is running
+        if not self.server_thread or not self.server_thread.isRunning():
+            self.log_message("Cannot fetch routes data: Server is not running", "WARNING")
+            self.routesStatusLabel.setText("Server is not running")
+            return
+        
+        try:
+            # Fetch data from the API
+            url = f"http://localhost:{port}/routes"
+            response = requests.get(url, timeout=10)
+            response.raise_for_status()
+            
+            data = response.json()
+            routes = data.get('routes', [])
+            
+            # Update the table
+            self.routesTable.setRowCount(0)
+            for route in routes:
+                row = self.routesTable.rowCount()
+                self.routesTable.insertRow(row)
+                
+                self.routesTable.setItem(row, 0, QTableWidgetItem(route.get('route_id', 'N/A')))
+                route_name = route.get('route_long_name', route.get('route_short_name', 'N/A'))
+                self.routesTable.setItem(row, 1, QTableWidgetItem(route_name))
+                self.routesTable.setItem(row, 2, QTableWidgetItem(route.get('route_short_name', 'N/A')))
+                
+                # Color display with background
+                color_hex = route.get('route_color', 'FFFFFF')
+                color_item = QTableWidgetItem(f"#{color_hex}")
+                try:
+                    color_item.setBackground(QColor(f"#{color_hex}"))
+                except:
+                    pass
+                self.routesTable.setItem(row, 3, color_item)
+                
+                # Text color
+                text_color_hex = route.get('route_text_color', '000000')
+                text_color_item = QTableWidgetItem(f"#{text_color_hex}")
+                try:
+                    text_color_item.setBackground(QColor(f"#{text_color_hex}"))
+                except:
+                    pass
+                self.routesTable.setItem(row, 4, text_color_item)
+            
+            # Update status label
+            timestamp = data.get('timestamp', 'Unknown')
+            self.routesStatusLabel.setText(f"Last updated: {timestamp} - Total: {len(routes)} routes")
+            self.log_message(f"Fetched {len(routes)} routes", "INFO")
+            
+        except requests.ConnectionError:
+            self.log_message("Cannot connect to server. Is it running?", "ERROR")
+            self.routesStatusLabel.setText("Connection error")
+        except requests.Timeout:
+            self.log_message("Request timed out while fetching routes data", "ERROR")
+            self.routesStatusLabel.setText("Request timed out")
+        except Exception as e:
+            self.log_message(f"Failed to fetch routes data: {str(e)}", "ERROR")
+            self.routesStatusLabel.setText("Error fetching data")
+    
+    def refresh_travel_data(self):
+        """Refresh travel assistance data from all travel endpoints"""
+        port = self.ui.portSpinBox.value()
+        
+        # Check if server is running
+        if not self.server_thread or not self.server_thread.isRunning():
+            self.log_message("Cannot fetch travel data: Server is not running", "WARNING")
+            self.travelStatusLabel.setText("Server is not running")
+            return
+        
+        try:
+            # Fetch location data
+            try:
+                url = f"http://localhost:{port}/travel/location"
+                response = requests.get(url, timeout=10)
+                if response.status_code == 200:
+                    data = response.json()
+                    location_text = json.dumps(data, indent=2)
+                    self.locationText.setPlainText(location_text)
+                elif response.status_code == 503:
+                    data = response.json()
+                    self.locationText.setPlainText(f"Not configured: {data.get('error', 'Unknown error')}")
+                else:
+                    self.locationText.setPlainText(f"Error: HTTP {response.status_code}")
+            except Exception as e:
+                self.locationText.setPlainText(f"Error: {str(e)}")
+            
+            # Fetch distance data
+            try:
+                url = f"http://localhost:{port}/travel/distance"
+                response = requests.get(url, timeout=10)
+                if response.status_code == 200:
+                    data = response.json()
+                    distance_text = json.dumps(data, indent=2)
+                    self.distanceText.setPlainText(distance_text)
+                elif response.status_code == 503:
+                    data = response.json()
+                    self.distanceText.setPlainText(f"Not configured: {data.get('error', 'Unknown error')}")
+                else:
+                    self.distanceText.setPlainText(f"Error: HTTP {response.status_code}")
+            except Exception as e:
+                self.distanceText.setPlainText(f"Error: {str(e)}")
+            
+            # Fetch next train data
+            try:
+                url = f"http://localhost:{port}/travel/next-train"
+                response = requests.get(url, timeout=10)
+                if response.status_code == 200:
+                    data = response.json()
+                    next_train_text = json.dumps(data, indent=2)
+                    self.nextTrainText.setPlainText(next_train_text)
+                elif response.status_code == 503:
+                    data = response.json()
+                    self.nextTrainText.setPlainText(f"Not configured: {data.get('error', 'Unknown error')}")
+                else:
+                    self.nextTrainText.setPlainText(f"Error: HTTP {response.status_code}")
+            except Exception as e:
+                self.nextTrainText.setPlainText(f"Error: {str(e)}")
+            
+            # Fetch Arduino device data
+            try:
+                url = f"http://localhost:{port}/travel/arduino-device"
+                response = requests.get(url, timeout=10)
+                if response.status_code == 200:
+                    data = response.json()
+                    arduino_text = json.dumps(data, indent=2)
+                    self.arduinoText.setPlainText(arduino_text)
+                elif response.status_code == 503:
+                    data = response.json()
+                    self.arduinoText.setPlainText(f"Not configured: {data.get('error', 'Unknown error')}")
+                else:
+                    self.arduinoText.setPlainText(f"Error: HTTP {response.status_code}")
+            except Exception as e:
+                self.arduinoText.setPlainText(f"Error: {str(e)}")
+            
+            # Update status label
+            self.travelStatusLabel.setText(f"Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+            self.log_message("Fetched travel assistance data", "INFO")
+            
+        except Exception as e:
+            self.log_message(f"Failed to fetch travel data: {str(e)}", "ERROR")
+            self.travelStatusLabel.setText("Error fetching data")
+    
+    def refresh_api_info(self):
+        """Refresh API information from the root endpoint"""
+        port = self.ui.portSpinBox.value()
+        
+        # Check if server is running
+        if not self.server_thread or not self.server_thread.isRunning():
+            self.log_message("Cannot fetch API info: Server is not running", "WARNING")
+            self.apiInfoStatusLabel.setText("Server is not running")
+            return
+        
+        try:
+            # Fetch data from the API
+            url = f"http://localhost:{port}/"
+            response = requests.get(url, timeout=10)
+            response.raise_for_status()
+            
+            data = response.json()
+            
+            # Format the data nicely
+            api_info_text = json.dumps(data, indent=2)
+            self.apiInfoText.setPlainText(api_info_text)
+            
+            # Update status label
+            self.apiInfoStatusLabel.setText(f"Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+            self.log_message("Fetched API information", "INFO")
+            
+        except requests.ConnectionError:
+            self.log_message("Cannot connect to server. Is it running?", "ERROR")
+            self.apiInfoStatusLabel.setText("Connection error")
+        except requests.Timeout:
+            self.log_message("Request timed out while fetching API info", "ERROR")
+            self.apiInfoStatusLabel.setText("Request timed out")
+        except Exception as e:
+            self.log_message(f"Failed to fetch API info: {str(e)}", "ERROR")
+            self.apiInfoStatusLabel.setText("Error fetching data")
+    
     def show_about(self):
         """Show about dialog"""
         QMessageBox.about(
@@ -609,6 +978,9 @@ class MainWindowController(QMainWindow):
             "<li>Server control and configuration</li>"
             "<li>GTFS data management</li>"
             "<li>Real-time train data visualization</li>"
+            "<li>Stations and routes viewing</li>"
+            "<li>Travel assistance (if configured)</li>"
+            "<li>API information</li>"
             "<li>Log monitoring</li>"
             "</ul>"
             "<p>Version 1.0.0</p>"
