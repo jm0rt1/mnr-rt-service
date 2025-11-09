@@ -225,8 +225,10 @@ class MainWindowController(QMainWindow):
                 # Cap the estimate to a maximum of 60 seconds to avoid unrealistic values
                 estimated_remaining = min(estimated_remaining, 60)
                 # Update progress bar format to show estimate
-                if estimated_remaining > 0:
+                if estimated_remaining >= 1:
                     self.ui.startupProgressBar.setFormat(f"%p% (~{estimated_remaining:.0f}s remaining)")
+                else:
+                    self.ui.startupProgressBar.setFormat("%p% (Almost done...)")
             else:
                 self.ui.startupProgressBar.setFormat("%p%")
         
