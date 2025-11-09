@@ -18,7 +18,7 @@ import socket
 import subprocess
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 import requests
 
 logger = logging.getLogger(__name__)
