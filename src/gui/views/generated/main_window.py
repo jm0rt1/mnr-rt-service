@@ -19,9 +19,10 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
 from PySide6.QtWidgets import (QAbstractItemView, QApplication, QCheckBox, QFormLayout,
     QGridLayout, QGroupBox, QHBoxLayout, QHeaderView,
     QLabel, QLineEdit, QMainWindow, QMenu,
-    QMenuBar, QPushButton, QSizePolicy, QSpacerItem,
-    QSpinBox, QStatusBar, QTabWidget, QTableWidget,
-    QTableWidgetItem, QTextEdit, QVBoxLayout, QWidget)
+    QMenuBar, QProgressBar, QPushButton, QSizePolicy,
+    QSpacerItem, QSpinBox, QStatusBar, QTabWidget,
+    QTableWidget, QTableWidgetItem, QTextEdit, QVBoxLayout,
+    QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -57,6 +58,24 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.serverStatusValue, 0, 1, 1, 1)
 
+        self.startupPhaseLabel = QLabel(self.serverControlGroup)
+        self.startupPhaseLabel.setObjectName(u"startupPhaseLabel")
+
+        self.gridLayout.addWidget(self.startupPhaseLabel, 1, 0, 1, 1)
+
+        self.startupPhaseValue = QLabel(self.serverControlGroup)
+        self.startupPhaseValue.setObjectName(u"startupPhaseValue")
+
+        self.gridLayout.addWidget(self.startupPhaseValue, 1, 1, 1, 1)
+
+        self.startupProgressBar = QProgressBar(self.serverControlGroup)
+        self.startupProgressBar.setObjectName(u"startupProgressBar")
+        self.startupProgressBar.setValue(0)
+        self.startupProgressBar.setTextVisible(True)
+        self.startupProgressBar.setVisible(False)
+
+        self.gridLayout.addWidget(self.startupProgressBar, 2, 0, 1, 2)
+
         self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.startButton = QPushButton(self.serverControlGroup)
@@ -77,7 +96,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.restartButton)
 
 
-        self.gridLayout.addLayout(self.horizontalLayout, 1, 0, 1, 2)
+        self.gridLayout.addLayout(self.horizontalLayout, 3, 0, 1, 2)
 
 
         self.verticalLayout_2.addWidget(self.serverControlGroup)
@@ -319,6 +338,8 @@ class Ui_MainWindow(object):
         self.serverControlGroup.setTitle(QCoreApplication.translate("MainWindow", u"Server Control", None))
         self.serverStatusLabel.setText(QCoreApplication.translate("MainWindow", u"Server Status:", None))
         self.serverStatusValue.setText(QCoreApplication.translate("MainWindow", u"Stopped", None))
+        self.startupPhaseLabel.setText(QCoreApplication.translate("MainWindow", u"Startup Phase:", None))
+        self.startupPhaseValue.setText(QCoreApplication.translate("MainWindow", u"N/A", None))
         self.startButton.setText(QCoreApplication.translate("MainWindow", u"Start Server", None))
         self.stopButton.setText(QCoreApplication.translate("MainWindow", u"Stop Server", None))
         self.restartButton.setText(QCoreApplication.translate("MainWindow", u"Restart Server", None))

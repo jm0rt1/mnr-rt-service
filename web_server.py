@@ -260,8 +260,12 @@ def main():
 
     args = parser.parse_args()
 
+    print("STARTUP_PHASE: INITIALIZING")
+    print("Initializing MNR Real-Time Relay Server...")
+
     # Check for GTFS data updates on startup (unless skipped)
     if not args.skip_gtfs_update:
+        print("STARTUP_PHASE: GTFS_CHECK")
         print("Checking for GTFS data updates...")
         downloader = GTFSDownloader(
             gtfs_url=GlobalSettings.GTFSDownloadSettings.GTFS_FEED_URL,
@@ -270,6 +274,7 @@ def main():
         )
         
         if downloader.should_download():
+            print("STARTUP_PHASE: GTFS_DOWNLOAD")
             print("Downloading latest GTFS data...")
             try:
                 success = downloader.download_and_extract()
@@ -285,11 +290,18 @@ def main():
                 print(f"✓ GTFS data is up to date (last updated: {info['last_download']})")
             else:
                 print("ℹ GTFS data exists (use update_gtfs.py to refresh)")
+        print("STARTUP_PHASE: GTFS_CHECK_COMPLETE")
+    else:
+        print("STARTUP_PHASE: GTFS_CHECK_SKIPPED")
 
     # Initialize the GTFS client
+    print("STARTUP_PHASE: CLIENT_INIT")
+    print("Initializing GTFS real-time client...")
     client = MTAGTFSRealtimeClient(api_key=args.api_key)
+    print("✓ GTFS real-time client initialized")
 
     # Load GTFS static data for enrichment
+    print("STARTUP_PHASE: GTFS_LOAD")
     print("Loading GTFS static data...")
     gtfs_reader = GTFSStaticReader(GlobalSettings.GTFS_MNR_DATA_DIR)
     if gtfs_reader.load():
@@ -297,11 +309,14 @@ def main():
     else:
         print("⚠ GTFS static data loading failed (real-time data will not be enriched)")
 
+    print("STARTUP_PHASE: SERVER_START")
     print(f"Starting MNR Real-Time Relay Server on {args.host}:{args.port}")
     print(f"Access the API at: http://{args.host}:{args.port}/trains")
     print(f"View API info at: http://{args.host}:{args.port}/")
 
     # Run the Flask app
+    print("STARTUP_PHASE: READY")
+    print("✓ Server is ready and accepting connections")
     app.run(host=args.host, port=args.port, debug=args.debug)
 
 
