@@ -12,7 +12,6 @@ import unittest
 from unittest.mock import Mock, patch
 from datetime import datetime, timedelta
 from pathlib import Path
-import json
 import tempfile
 import shutil
 
