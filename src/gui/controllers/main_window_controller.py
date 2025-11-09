@@ -36,6 +36,7 @@ class ServerThread(QThread):
     output_ready = Signal(str)
     error_ready = Signal(str)
     finished = Signal(int)
+    startup_phase = Signal(str)  # Signal for startup phase updates
     
     def __init__(self, host, port, api_key, debug, skip_gtfs):
         super().__init__()
@@ -81,7 +82,12 @@ class ServerThread(QThread):
             # Read output line by line
             for line in iter(self.process.stdout.readline, ''):
                 if line:
-                    self.output_ready.emit(line.rstrip())
+                    stripped_line = line.rstrip()
+                    self.output_ready.emit(stripped_line)
+                    # Detect startup phase markers
+                    if "STARTUP_PHASE:" in stripped_line:
+                        phase = stripped_line.split("STARTUP_PHASE:")[-1].strip()
+                        self.startup_phase.emit(phase)
                     
             exit_code = self.process.wait()
             self.finished.emit(exit_code)
@@ -112,6 +118,28 @@ class MainWindowController(QMainWindow):
         self.server_thread = None
         self.auto_refresh_timer = QTimer(self)
         self.auto_refresh_timer.timeout.connect(self.refresh_train_data)
+        
+        # Startup tracking
+        self.startup_phases = {
+            'INITIALIZING': {'order': 0, 'display': 'Initializing...', 'progress': 0},
+            'GTFS_CHECK': {'order': 1, 'display': 'Checking GTFS data...', 'progress': 20},
+            'GTFS_DOWNLOAD': {'order': 2, 'display': 'Downloading GTFS data...', 'progress': 30},
+            'GTFS_CHECK_COMPLETE': {'order': 3, 'display': 'GTFS check complete', 'progress': 40},
+            'GTFS_CHECK_SKIPPED': {'order': 3, 'display': 'GTFS check skipped', 'progress': 40},
+            'CLIENT_INIT': {'order': 4, 'display': 'Initializing client...', 'progress': 60},
+            'GTFS_LOAD': {'order': 5, 'display': 'Loading GTFS data...', 'progress': 75},
+            'SERVER_START': {'order': 6, 'display': 'Starting server...', 'progress': 90},
+            'READY': {'order': 7, 'display': 'Ready', 'progress': 100}
+        }
+        self.current_startup_phase = None
+        self.startup_start_time = None
+        self.phase_times = {}  # Track time spent in each phase
+        
+        # Health check timer
+        self.health_check_timer = QTimer(self)
+        self.health_check_timer.timeout.connect(self.check_server_health)
+        self.health_check_attempts = 0
+        self.max_health_check_attempts = 20
         
         # Connect signals
         self._connect_signals()
@@ -168,6 +196,98 @@ class MainWindowController(QMainWindow):
             scrollbar = self.ui.logsTextEdit.verticalScrollBar()
             scrollbar.setValue(scrollbar.maximum())
     
+    def update_startup_phase(self, phase):
+        """Update the startup phase display and progress bar"""
+        if phase not in self.startup_phases:
+            return
+        
+        phase_info = self.startup_phases[phase]
+        self.current_startup_phase = phase
+        
+        # Update phase label
+        self.ui.startupPhaseValue.setText(phase_info['display'])
+        
+        # Update progress bar
+        self.ui.startupProgressBar.setValue(phase_info['progress'])
+        
+        # Track timing for estimation
+        current_time = datetime.now()
+        if self.startup_start_time:
+            elapsed = (current_time - self.startup_start_time).total_seconds()
+            self.phase_times[phase] = elapsed
+            
+            # Estimate remaining time for phases < 100%
+            if phase_info['progress'] < 100:
+                # Simple estimation: assume remaining phases take similar time
+                avg_time_per_percent = elapsed / phase_info['progress'] if phase_info['progress'] > 0 else 0
+                remaining_percent = 100 - phase_info['progress']
+                estimated_remaining = avg_time_per_percent * remaining_percent
+                # Cap the estimate to a maximum of 60 seconds to avoid unrealistic values
+                estimated_remaining = min(estimated_remaining, 60)
+                # Update progress bar format to show estimate
+                if estimated_remaining >= 1:
+                    self.ui.startupProgressBar.setFormat(f"%p% (~{estimated_remaining:.0f}s remaining)")
+                else:
+                    self.ui.startupProgressBar.setFormat("%p% (Almost done...)")
+            else:
+                self.ui.startupProgressBar.setFormat("%p%")
+        
+        # If server is ready, start health checks
+        if phase == 'READY':
+            self.log_message("Server reports ready, verifying health...", "INFO")
+            self.health_check_attempts = 0
+            self.health_check_timer.start(500)  # Check every 500ms
+    
+    def check_server_health(self):
+        """Check if the server is actually responding to requests"""
+        self.health_check_attempts += 1
+        
+        # Get the server host and port
+        host = self.ui.hostLineEdit.text()
+        if host == "0.0.0.0":
+            host = "localhost"
+        port = self.ui.portSpinBox.value()
+        
+        try:
+            # Try to hit the health endpoint
+            response = requests.get(f"http://{host}:{port}/health", timeout=2)
+            
+            if response.status_code == 200:
+                # Server is healthy!
+                self.health_check_timer.stop()
+                self.on_server_ready()
+                self.log_message("✓ Server health check passed - server is running", "INFO")
+            else:
+                self.log_message(f"Server responded with status {response.status_code}", "WARNING")
+                if self.health_check_attempts >= self.max_health_check_attempts:
+                    self.health_check_timer.stop()
+                    self.log_message("Health check timeout - server may not be responding correctly", "WARNING")
+                    self.on_server_ready()  # Continue anyway
+                    
+        except requests.ConnectionError:
+            if self.health_check_attempts >= self.max_health_check_attempts:
+                self.health_check_timer.stop()
+                self.log_message("Health check timeout - could not connect to server", "WARNING")
+                # Don't mark as ready since we couldn't connect
+        except Exception as e:
+            self.log_message(f"Health check error: {str(e)}", "WARNING")
+            if self.health_check_attempts >= self.max_health_check_attempts:
+                self.health_check_timer.stop()
+    
+    def on_server_ready(self):
+        """Called when server is confirmed to be ready and responding"""
+        # Update UI to show server is truly running
+        self.ui.serverStatusValue.setText("Running")
+        self.ui.serverStatusValue.setStyleSheet("color: green; font-weight: bold;")
+        
+        # Hide progress bar and show final status
+        self.ui.startupProgressBar.setVisible(False)
+        self.ui.startupPhaseValue.setText("Running")
+        
+        # Reset startup tracking
+        self.startup_start_time = None
+        self.current_startup_phase = None
+    
     def start_server(self):
         """Start the web server"""
         if self.server_thread and self.server_thread.isRunning():
@@ -183,21 +303,30 @@ class MainWindowController(QMainWindow):
         
         self.log_message(f"Starting server on {host}:{port}...", "INFO")
         
+        # Initialize startup tracking
+        self.startup_start_time = datetime.now()
+        self.phase_times = {}
+        
+        # Show and reset progress bar
+        self.ui.startupProgressBar.setVisible(True)
+        self.ui.startupProgressBar.setValue(0)
+        self.ui.startupProgressBar.setFormat("%p%")
+        self.ui.startupPhaseValue.setText("Initializing...")
+        
         # Create and start server thread
         self.server_thread = ServerThread(host, port, api_key, debug, skip_gtfs)
         self.server_thread.output_ready.connect(self.log_message)
         self.server_thread.error_ready.connect(lambda msg: self.log_message(msg, "ERROR"))
         self.server_thread.finished.connect(self.on_server_finished)
+        self.server_thread.startup_phase.connect(self.update_startup_phase)
         self.server_thread.start()
         
-        # Update UI
-        self.ui.serverStatusValue.setText("Running")
-        self.ui.serverStatusValue.setStyleSheet("color: green; font-weight: bold;")
+        # Update UI to show starting
+        self.ui.serverStatusValue.setText("Starting...")
+        self.ui.serverStatusValue.setStyleSheet("color: orange; font-weight: bold;")
         self.ui.startButton.setEnabled(False)
         self.ui.stopButton.setEnabled(True)
         self.ui.restartButton.setEnabled(True)
-        
-        self.log_message(f"Server started successfully on {host}:{port}", "INFO")
     
     def stop_server(self):
         """Stop the web server"""
@@ -206,12 +335,19 @@ class MainWindowController(QMainWindow):
             return
         
         self.log_message("Stopping server...", "INFO")
+        
+        # Stop health check timer if running
+        if self.health_check_timer.isActive():
+            self.health_check_timer.stop()
+        
         self.server_thread.stop()
         self.server_thread.wait()
         
         # Update UI
         self.ui.serverStatusValue.setText("Stopped")
         self.ui.serverStatusValue.setStyleSheet("color: red; font-weight: bold;")
+        self.ui.startupPhaseValue.setText("N/A")
+        self.ui.startupProgressBar.setVisible(False)
         self.ui.startButton.setEnabled(True)
         self.ui.stopButton.setEnabled(False)
         self.ui.restartButton.setEnabled(False)
@@ -226,6 +362,10 @@ class MainWindowController(QMainWindow):
     
     def on_server_finished(self, exit_code):
         """Handle server process finishing"""
+        # Stop health check timer if running
+        if self.health_check_timer.isActive():
+            self.health_check_timer.stop()
+        
         if exit_code != 0:
             self.log_message(f"Server exited with code {exit_code}", "ERROR")
         else:
@@ -234,6 +374,8 @@ class MainWindowController(QMainWindow):
         # Update UI
         self.ui.serverStatusValue.setText("Stopped")
         self.ui.serverStatusValue.setStyleSheet("color: red; font-weight: bold;")
+        self.ui.startupPhaseValue.setText("N/A")
+        self.ui.startupProgressBar.setVisible(False)
         self.ui.startButton.setEnabled(True)
         self.ui.stopButton.setEnabled(False)
         self.ui.restartButton.setEnabled(False)
