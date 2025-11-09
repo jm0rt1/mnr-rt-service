@@ -222,7 +222,8 @@ class MainWindowController(QMainWindow):
                 avg_time_per_percent = elapsed / phase_info['progress'] if phase_info['progress'] > 0 else 0
                 remaining_percent = 100 - phase_info['progress']
                 estimated_remaining = avg_time_per_percent * remaining_percent
-                
+                # Cap the estimate to a maximum of 60 seconds to avoid unrealistic values
+                estimated_remaining = min(estimated_remaining, 60)
                 # Update progress bar format to show estimate
                 if estimated_remaining > 0:
                     self.ui.startupProgressBar.setFormat(f"%p% (~{estimated_remaining:.0f}s remaining)")
