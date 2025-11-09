@@ -216,14 +216,17 @@ class TravelAssistant:
             logger.error(f"Failed to get travel status (async): {e}")
             raise
     
-    def get_current_location(self) -> Dict[str, any]:
+    def get_current_location(self, use_cache: bool = True) -> Dict[str, any]:
         """
         Get current network location only.
+        
+        Args:
+            use_cache: Whether to use cached location data (default: True)
         
         Returns:
             Location information dictionary
         """
-        return self.network_locator.get_network_location()
+        return self.network_locator.get_network_location(use_cache=use_cache)
     
     def calculate_distance_to_station(
         self,
