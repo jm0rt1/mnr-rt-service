@@ -64,6 +64,8 @@ def extract_train_info(trip_update):
         'eta': None,
         'track': None,
         'status': None,
+        'timestamp': None,  # NEW: When vehicle's real-time progress was measured
+        'delay': None,  # NEW: Overall trip delay in seconds
         'stops': []
     }
 
@@ -80,27 +82,68 @@ def extract_train_info(trip_update):
         vehicle = trip_update.vehicle
         if vehicle.HasField('id'):
             train_info['vehicle_id'] = vehicle.id
+    
+    # NEW: Extract trip-level timestamp (when position was last measured)
+    if trip_update.HasField('timestamp'):
+        train_info['timestamp'] = timestamp_to_datetime(trip_update.timestamp)
+    
+    # NEW: Extract trip-level delay (overall schedule deviation)
+    if trip_update.HasField('delay'):
+        train_info['delay'] = trip_update.delay
 
     # Extract stop time updates
     if trip_update.stop_time_update:
         for i, stu in enumerate(trip_update.stop_time_update):
             stop_info = {
                 'stop_id': stu.stop_id if stu.HasField('stop_id') else None,
+                'stop_sequence': None,  # NEW: Stop sequence number
                 'arrival_time': None,
+                'arrival_delay': None,  # NEW: Arrival delay in seconds
+                'arrival_uncertainty': None,  # NEW: Arrival prediction uncertainty
                 'departure_time': None,
+                'departure_delay': None,  # NEW: Departure delay in seconds
+                'departure_uncertainty': None,  # NEW: Departure prediction uncertainty
                 'track': None,
-                'status': None
+                'status': None,
+                'schedule_relationship': None  # NEW: SCHEDULED, SKIPPED, NO_DATA, UNSCHEDULED
             }
 
-            # Get arrival time
-            if stu.HasField('arrival') and stu.arrival.HasField('time'):
-                stop_info['arrival_time'] = timestamp_to_datetime(
-                    stu.arrival.time)
+            # NEW: Get stop sequence
+            if stu.HasField('stop_sequence'):
+                stop_info['stop_sequence'] = stu.stop_sequence
 
-            # Get departure time
-            if stu.HasField('departure') and stu.departure.HasField('time'):
-                stop_info['departure_time'] = timestamp_to_datetime(
-                    stu.departure.time)
+            # Get arrival time and NEW: delay and uncertainty
+            if stu.HasField('arrival'):
+                if stu.arrival.HasField('time'):
+                    stop_info['arrival_time'] = timestamp_to_datetime(
+                        stu.arrival.time)
+                if stu.arrival.HasField('delay'):
+                    stop_info['arrival_delay'] = stu.arrival.delay
+                if stu.arrival.HasField('uncertainty'):
+                    stop_info['arrival_uncertainty'] = stu.arrival.uncertainty
+
+            # Get departure time and NEW: delay and uncertainty
+            if stu.HasField('departure'):
+                if stu.departure.HasField('time'):
+                    stop_info['departure_time'] = timestamp_to_datetime(
+                        stu.departure.time)
+                if stu.departure.HasField('delay'):
+                    stop_info['departure_delay'] = stu.departure.delay
+                if stu.departure.HasField('uncertainty'):
+                    stop_info['departure_uncertainty'] = stu.departure.uncertainty
+
+            # NEW: Get schedule relationship
+            if stu.HasField('schedule_relationship'):
+                relationship = stu.schedule_relationship
+                # Convert enum to string
+                if relationship == 0:
+                    stop_info['schedule_relationship'] = 'SCHEDULED'
+                elif relationship == 1:
+                    stop_info['schedule_relationship'] = 'SKIPPED'
+                elif relationship == 2:
+                    stop_info['schedule_relationship'] = 'NO_DATA'
+                elif relationship == 3:
+                    stop_info['schedule_relationship'] = 'UNSCHEDULED'
 
             # Get MTA Railroad extensions (track and train status)
             if stu.HasExtension(mta_railroad_pb2.mta_railroad_stop_time_update):
@@ -122,6 +165,302 @@ def extract_train_info(trip_update):
                 train_info['next_stop'] = stop_info['stop_id']
 
     return train_info
+
+
+def extract_vehicle_position_info(vehicle_position):
+    """
+    Extract vehicle position information from a GTFS-RT vehicle position update.
+    
+    Args:
+        vehicle_position: VehiclePosition protobuf message
+        
+    Returns:
+        dict: Vehicle position information
+    """
+    position_info = {
+        'trip_id': None,
+        'route_id': None,
+        'vehicle_id': None,
+        'latitude': None,
+        'longitude': None,
+        'bearing': None,
+        'speed': None,
+        'current_stop_sequence': None,
+        'stop_id': None,
+        'current_status': None,
+        'timestamp': None,
+        'congestion_level': None,
+        'occupancy_status': None,
+        'occupancy_percentage': None,
+        'carriages': []
+    }
+    
+    # Extract trip information
+    if vehicle_position.HasField('trip'):
+        trip = vehicle_position.trip
+        if trip.HasField('trip_id'):
+            position_info['trip_id'] = trip.trip_id
+        if trip.HasField('route_id'):
+            position_info['route_id'] = trip.route_id
+    
+    # Extract vehicle information
+    if vehicle_position.HasField('vehicle'):
+        vehicle = vehicle_position.vehicle
+        if vehicle.HasField('id'):
+            position_info['vehicle_id'] = vehicle.id
+    
+    # Extract position information
+    if vehicle_position.HasField('position'):
+        pos = vehicle_position.position
+        if pos.HasField('latitude'):
+            position_info['latitude'] = pos.latitude
+        if pos.HasField('longitude'):
+            position_info['longitude'] = pos.longitude
+        if pos.HasField('bearing'):
+            position_info['bearing'] = pos.bearing
+        if pos.HasField('speed'):
+            position_info['speed'] = pos.speed
+    
+    # Extract current stop information
+    if vehicle_position.HasField('current_stop_sequence'):
+        position_info['current_stop_sequence'] = vehicle_position.current_stop_sequence
+    if vehicle_position.HasField('stop_id'):
+        position_info['stop_id'] = vehicle_position.stop_id
+    
+    # Extract current status
+    if vehicle_position.HasField('current_status'):
+        status = vehicle_position.current_status
+        if status == 0:
+            position_info['current_status'] = 'INCOMING_AT'
+        elif status == 1:
+            position_info['current_status'] = 'STOPPED_AT'
+        elif status == 2:
+            position_info['current_status'] = 'IN_TRANSIT_TO'
+    
+    # Extract timestamp
+    if vehicle_position.HasField('timestamp'):
+        position_info['timestamp'] = timestamp_to_datetime(vehicle_position.timestamp)
+    
+    # Extract congestion level
+    if vehicle_position.HasField('congestion_level'):
+        congestion = vehicle_position.congestion_level
+        if congestion == 0:
+            position_info['congestion_level'] = 'UNKNOWN_CONGESTION_LEVEL'
+        elif congestion == 1:
+            position_info['congestion_level'] = 'RUNNING_SMOOTHLY'
+        elif congestion == 2:
+            position_info['congestion_level'] = 'STOP_AND_GO'
+        elif congestion == 3:
+            position_info['congestion_level'] = 'CONGESTION'
+        elif congestion == 4:
+            position_info['congestion_level'] = 'SEVERE_CONGESTION'
+    
+    # Extract occupancy status
+    if vehicle_position.HasField('occupancy_status'):
+        occupancy = vehicle_position.occupancy_status
+        occupancy_map = {
+            0: 'EMPTY',
+            1: 'MANY_SEATS_AVAILABLE',
+            2: 'FEW_SEATS_AVAILABLE',
+            3: 'STANDING_ROOM_ONLY',
+            4: 'CRUSHED_STANDING_ROOM_ONLY',
+            5: 'FULL',
+            6: 'NOT_ACCEPTING_PASSENGERS',
+            7: 'NO_DATA_AVAILABLE',
+            8: 'NOT_BOARDABLE'
+        }
+        position_info['occupancy_status'] = occupancy_map.get(occupancy, 'NO_DATA_AVAILABLE')
+    
+    # Extract occupancy percentage
+    if vehicle_position.HasField('occupancy_percentage'):
+        position_info['occupancy_percentage'] = vehicle_position.occupancy_percentage
+    
+    # Extract carriage details
+    for carriage in vehicle_position.multi_carriage_details:
+        carriage_info = {
+            'id': None,
+            'label': None,
+            'sequence': None,
+            'occupancy_status': None,
+            'occupancy_percentage': None,
+            'bicycles_allowed': None,
+            'carriage_class': None,
+            'quiet_carriage': None,
+            'toilet_facilities': None
+        }
+        
+        if carriage.HasField('id'):
+            carriage_info['id'] = carriage.id
+        if carriage.HasField('label'):
+            carriage_info['label'] = carriage.label
+        if carriage.HasField('carriage_sequence'):
+            carriage_info['sequence'] = carriage.carriage_sequence
+        
+        # Carriage occupancy status
+        if carriage.HasField('occupancy_status'):
+            occupancy = carriage.occupancy_status
+            occupancy_map = {
+                0: 'EMPTY',
+                1: 'MANY_SEATS_AVAILABLE',
+                2: 'FEW_SEATS_AVAILABLE',
+                3: 'STANDING_ROOM_ONLY',
+                4: 'CRUSHED_STANDING_ROOM_ONLY',
+                5: 'FULL',
+                6: 'NOT_ACCEPTING_PASSENGERS',
+                7: 'NO_DATA_AVAILABLE',
+                8: 'NOT_BOARDABLE'
+            }
+            carriage_info['occupancy_status'] = occupancy_map.get(occupancy, 'NO_DATA_AVAILABLE')
+        
+        # Carriage occupancy percentage
+        if carriage.HasField('occupancy_percentage'):
+            occ_pct = carriage.occupancy_percentage
+            if occ_pct >= 0:  # -1 means no data
+                carriage_info['occupancy_percentage'] = occ_pct
+        
+        # MTA Railroad carriage extensions
+        if carriage.HasExtension(mta_railroad_pb2.mta_railroad_carriage_details):
+            mta_ext = carriage.Extensions[mta_railroad_pb2.mta_railroad_carriage_details]
+            
+            if mta_ext.HasField('bicycles_allowed'):
+                bikes = mta_ext.bicycles_allowed
+                if bikes == -1:
+                    carriage_info['bicycles_allowed'] = 'unlimited'
+                elif bikes == 0:
+                    carriage_info['bicycles_allowed'] = 'prohibited'
+                else:
+                    carriage_info['bicycles_allowed'] = bikes
+            
+            if mta_ext.HasField('carriage_class'):
+                carriage_info['carriage_class'] = mta_ext.carriage_class
+            
+            if mta_ext.HasField('quiet_carriage'):
+                quiet = mta_ext.quiet_carriage
+                if quiet == 1:
+                    carriage_info['quiet_carriage'] = True
+                elif quiet == 2:
+                    carriage_info['quiet_carriage'] = False
+            
+            if mta_ext.HasField('toilet_facilities'):
+                toilet = mta_ext.toilet_facilities
+                if toilet == 1:
+                    carriage_info['toilet_facilities'] = True
+                elif toilet == 2:
+                    carriage_info['toilet_facilities'] = False
+        
+        position_info['carriages'].append(carriage_info)
+    
+    return position_info
+
+
+def extract_alert_info(alert):
+    """
+    Extract service alert information from a GTFS-RT alert.
+    
+    Args:
+        alert: Alert protobuf message
+        
+    Returns:
+        dict: Alert information
+    """
+    alert_info = {
+        'active_periods': [],
+        'informed_entities': [],
+        'cause': None,
+        'effect': None,
+        'header_text': None,
+        'description_text': None,
+        'url': None,
+        'severity_level': None
+    }
+    
+    # Extract active periods
+    for period in alert.active_period:
+        period_info = {}
+        if period.HasField('start'):
+            period_info['start'] = timestamp_to_datetime(period.start)
+        if period.HasField('end'):
+            period_info['end'] = timestamp_to_datetime(period.end)
+        alert_info['active_periods'].append(period_info)
+    
+    # Extract informed entities
+    for entity in alert.informed_entity:
+        entity_info = {}
+        if entity.HasField('agency_id'):
+            entity_info['agency_id'] = entity.agency_id
+        if entity.HasField('route_id'):
+            entity_info['route_id'] = entity.route_id
+        if entity.HasField('route_type'):
+            entity_info['route_type'] = entity.route_type
+        if entity.HasField('trip'):
+            trip_desc = {}
+            if entity.trip.HasField('trip_id'):
+                trip_desc['trip_id'] = entity.trip.trip_id
+            if entity.trip.HasField('route_id'):
+                trip_desc['route_id'] = entity.trip.route_id
+            entity_info['trip'] = trip_desc
+        if entity.HasField('stop_id'):
+            entity_info['stop_id'] = entity.stop_id
+        alert_info['informed_entities'].append(entity_info)
+    
+    # Extract cause
+    if alert.HasField('cause'):
+        cause_map = {
+            1: 'UNKNOWN_CAUSE',
+            2: 'OTHER_CAUSE',
+            3: 'TECHNICAL_PROBLEM',
+            4: 'STRIKE',
+            5: 'DEMONSTRATION',
+            6: 'ACCIDENT',
+            7: 'HOLIDAY',
+            8: 'WEATHER',
+            9: 'MAINTENANCE',
+            10: 'CONSTRUCTION',
+            11: 'POLICE_ACTIVITY',
+            12: 'MEDICAL_EMERGENCY'
+        }
+        alert_info['cause'] = cause_map.get(alert.cause, 'UNKNOWN_CAUSE')
+    
+    # Extract effect
+    if alert.HasField('effect'):
+        effect_map = {
+            1: 'NO_SERVICE',
+            2: 'REDUCED_SERVICE',
+            3: 'SIGNIFICANT_DELAYS',
+            4: 'DETOUR',
+            5: 'ADDITIONAL_SERVICE',
+            6: 'MODIFIED_SERVICE',
+            7: 'OTHER_EFFECT',
+            8: 'UNKNOWN_EFFECT',
+            9: 'STOP_MOVED',
+            10: 'NO_EFFECT',
+            11: 'ACCESSIBILITY_ISSUE'
+        }
+        alert_info['effect'] = effect_map.get(alert.effect, 'UNKNOWN_EFFECT')
+    
+    # Extract header text
+    if alert.HasField('header_text') and len(alert.header_text.translation) > 0:
+        alert_info['header_text'] = alert.header_text.translation[0].text
+    
+    # Extract description text
+    if alert.HasField('description_text') and len(alert.description_text.translation) > 0:
+        alert_info['description_text'] = alert.description_text.translation[0].text
+    
+    # Extract URL
+    if alert.HasField('url') and len(alert.url.translation) > 0:
+        alert_info['url'] = alert.url.translation[0].text
+    
+    # Extract severity level (if available)
+    if alert.HasField('severity_level'):
+        severity_map = {
+            1: 'UNKNOWN',
+            2: 'INFO',
+            3: 'WARNING',
+            4: 'SEVERE'
+        }
+        alert_info['severity_level'] = severity_map.get(alert.severity_level, 'UNKNOWN')
+    
+    return alert_info
 
 
 @app.route('/trains', methods=['GET'])
@@ -448,6 +787,189 @@ def health_check():
     })
 
 
+@app.route('/vehicle-positions', methods=['GET'])
+def get_vehicle_positions():
+    """
+    Get real-time vehicle position information.
+    
+    Query Parameters:
+        limit: Maximum number of vehicles to return (default: 20, max: 100)
+        route: Filter by route/line ID
+        trip_id: Filter by specific trip ID
+        
+    Returns:
+        JSON response with vehicle position information
+    """
+    try:
+        # Get query parameters
+        limit_param = request.args.get('limit', 20)
+        try:
+            limit = int(limit_param)
+        except (ValueError, TypeError):
+            return jsonify({
+                'error': f'Invalid value for "limit": {limit_param}. Must be an integer between 1 and 100.'
+            }), 400
+        if not (1 <= limit <= 100):
+            return jsonify({
+                'error': f'Invalid value for "limit": {limit}. Must be an integer between 1 and 100.'
+            }), 400
+        limit = min(limit, 100)
+        route_filter = request.args.get('route')
+        trip_id_filter = request.args.get('trip_id')
+        
+        # Fetch the GTFS-RT feed
+        feed = client.fetch_feed()
+        
+        # Extract vehicle positions
+        all_vehicle_positions = client.get_vehicle_positions(feed)
+        
+        # Convert to simplified format and apply filters
+        vehicles = []
+        for vehicle_pos in all_vehicle_positions:
+            position_info = extract_vehicle_position_info(vehicle_pos)
+            
+            # Enrich with GTFS static data
+            if gtfs_reader and gtfs_reader.is_loaded():
+                # Enrich route information
+                route_id = position_info.get('route_id')
+                if route_id:
+                    route_info = gtfs_reader.get_route_info(route_id)
+                    if route_info:
+                        position_info['route_name'] = route_info.get('route_long_name', '')
+                        position_info['route_color'] = route_info.get('route_color', '')
+                
+                # Enrich stop information
+                stop_id = position_info.get('stop_id')
+                if stop_id:
+                    stop_info = gtfs_reader.get_stop_info(stop_id)
+                    if stop_info:
+                        position_info['stop_name'] = stop_info.get('stop_name', '')
+            
+            # Apply filters
+            if route_filter and position_info.get('route_id') != route_filter:
+                continue
+            
+            if trip_id_filter and position_info.get('trip_id') != trip_id_filter:
+                continue
+            
+            vehicles.append(position_info)
+            
+            # Apply limit after filtering
+            if len(vehicles) >= limit:
+                break
+        
+        # Build response
+        response = {
+            'timestamp': timestamp_to_datetime(feed.header.timestamp),
+            'total_vehicles': len(vehicles),
+            'vehicles': vehicles,
+            'filters_applied': {
+                'route': route_filter,
+                'trip_id': trip_id_filter
+            }
+        }
+        
+        return jsonify(response)
+    
+    except requests.RequestException as e:
+        app.logger.error(f"MTA API request failed: {str(e)}")
+        return jsonify({
+            'error': 'Failed to fetch data from MTA API. Please try again later.'
+        }), 503
+    except Exception as e:
+        app.logger.error(f"Unexpected error in /vehicle-positions: {type(e).__name__}: {str(e)}")
+        return jsonify({
+            'error': 'An unexpected error occurred',
+            'type': 'InternalServerError'
+        }), 500
+
+
+@app.route('/alerts', methods=['GET'])
+def get_alerts():
+    """
+    Get service alerts.
+    
+    Query Parameters:
+        route: Filter by route/line ID
+        stop: Filter by stop ID
+        
+    Returns:
+        JSON response with service alert information
+    """
+    try:
+        # Get query parameters
+        route_filter = request.args.get('route')
+        stop_filter = request.args.get('stop')
+        
+        # Fetch the GTFS-RT feed
+        feed = client.fetch_feed()
+        
+        # Extract service alerts
+        all_alerts = client.get_service_alerts(feed)
+        
+        # Convert to simplified format and apply filters
+        alerts = []
+        for alert in all_alerts:
+            alert_info = extract_alert_info(alert)
+            
+            # Enrich with GTFS static data
+            if gtfs_reader and gtfs_reader.is_loaded():
+                for entity in alert_info.get('informed_entities', []):
+                    # Enrich route information
+                    route_id = entity.get('route_id')
+                    if route_id:
+                        route_info = gtfs_reader.get_route_info(route_id)
+                        if route_info:
+                            entity['route_name'] = route_info.get('route_long_name', '')
+                    
+                    # Enrich stop information
+                    stop_id = entity.get('stop_id')
+                    if stop_id:
+                        stop_info = gtfs_reader.get_stop_info(stop_id)
+                        if stop_info:
+                            entity['stop_name'] = stop_info.get('stop_name', '')
+            
+            # Apply filters
+            if route_filter or stop_filter:
+                matches = False
+                for entity in alert_info.get('informed_entities', []):
+                    if route_filter and entity.get('route_id') == route_filter:
+                        matches = True
+                        break
+                    if stop_filter and entity.get('stop_id') == stop_filter:
+                        matches = True
+                        break
+                if not matches:
+                    continue
+            
+            alerts.append(alert_info)
+        
+        # Build response
+        response = {
+            'timestamp': timestamp_to_datetime(feed.header.timestamp),
+            'total_alerts': len(alerts),
+            'alerts': alerts,
+            'filters_applied': {
+                'route': route_filter,
+                'stop': stop_filter
+            }
+        }
+        
+        return jsonify(response)
+    
+    except requests.RequestException as e:
+        app.logger.error(f"MTA API request failed: {str(e)}")
+        return jsonify({
+            'error': 'Failed to fetch data from MTA API. Please try again later.'
+        }), 503
+    except Exception as e:
+        app.logger.error(f"Unexpected error in /alerts: {type(e).__name__}: {str(e)}")
+        return jsonify({
+            'error': 'An unexpected error occurred',
+            'type': 'InternalServerError'
+        }), 500
+
+
 @app.route('/travel/location', methods=['GET'])
 def get_network_location():
     """Get current network location."""
@@ -581,7 +1103,9 @@ def index():
         '/trains': 'Get real-time train information with filtering options',
         '/stations': 'Get list of all available stations',
         '/routes': 'Get list of all available routes/lines',
-        '/train/<trip_id>': 'Get detailed information about a specific train'
+        '/train/<trip_id>': 'Get detailed information about a specific train',
+        '/vehicle-positions': 'Get real-time vehicle positions with location and occupancy data',
+        '/alerts': 'Get service alerts for routes and stops'
     }
     
     usage_examples = {
@@ -592,6 +1116,10 @@ def index():
         'get_stations': '/stations',
         'get_routes': '/routes',
         'get_train_details': '/train/1234567',
+        'get_vehicle_positions': '/vehicle-positions?limit=20',
+        'filter_vehicles_by_route': '/vehicle-positions?route=1&limit=10',
+        'get_alerts': '/alerts',
+        'filter_alerts_by_route': '/alerts?route=1',
         'health_check': '/health'
     }
     

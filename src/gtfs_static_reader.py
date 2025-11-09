@@ -72,6 +72,8 @@ class GTFSStaticReader:
                         'route_color': row.get('route_color', ''),
                         'route_text_color': row.get('route_text_color', ''),
                         'route_type': row.get('route_type', ''),
+                        'route_desc': row.get('route_desc', ''),  # NEW: Route description
+                        'route_url': row.get('route_url', ''),  # NEW: Route URL
                     }
     
     def _load_stops(self):
@@ -92,6 +94,12 @@ class GTFSStaticReader:
                         'stop_lat': row.get('stop_lat', ''),
                         'stop_lon': row.get('stop_lon', ''),
                         'wheelchair_boarding': row.get('wheelchair_boarding', ''),
+                        'stop_desc': row.get('stop_desc', ''),  # NEW: Stop description
+                        'stop_url': row.get('stop_url', ''),  # NEW: Stop URL
+                        'zone_id': row.get('zone_id', ''),  # NEW: Fare zone
+                        'location_type': row.get('location_type', ''),  # NEW: Location type
+                        'parent_station': row.get('parent_station', ''),  # NEW: Parent station
+                        'platform_code': row.get('platform_code', ''),  # NEW: Platform code
                     }
     
     def _load_trips(self):
@@ -111,6 +119,10 @@ class GTFSStaticReader:
                         'trip_short_name': row.get('trip_short_name', ''),
                         'direction_id': row.get('direction_id', ''),
                         'route_id': row.get('route_id', ''),
+                        'block_id': row.get('block_id', ''),  # NEW: Block identifier
+                        'shape_id': row.get('shape_id', ''),  # NEW: Shape for trip path
+                        'wheelchair_accessible': row.get('wheelchair_accessible', ''),  # NEW: Wheelchair accessibility
+                        'bikes_allowed': row.get('bikes_allowed', ''),  # NEW: Bike allowance
                     }
     
     def get_route_info(self, route_id: str) -> Optional[dict]:
@@ -223,6 +235,11 @@ class GTFSStaticReader:
             if route_info:
                 train_info['route_name'] = route_info.get('route_long_name', '')
                 train_info['route_color'] = route_info.get('route_color', '')
+                # NEW: Add additional route fields if available
+                if route_info.get('route_desc'):
+                    train_info['route_desc'] = route_info.get('route_desc', '')
+                if route_info.get('route_url'):
+                    train_info['route_url'] = route_info.get('route_url', '')
         
         # Enrich trip information
         trip_id = train_info.get('trip_id')
@@ -231,6 +248,11 @@ class GTFSStaticReader:
             if trip_info:
                 train_info['trip_headsign'] = trip_info.get('trip_headsign', '')
                 train_info['direction_id'] = trip_info.get('direction_id', '')
+                # NEW: Add additional trip fields if available
+                if trip_info.get('wheelchair_accessible'):
+                    train_info['wheelchair_accessible'] = trip_info.get('wheelchair_accessible', '')
+                if trip_info.get('bikes_allowed'):
+                    train_info['bikes_allowed'] = trip_info.get('bikes_allowed', '')
         
         # Enrich current stop
         current_stop = train_info.get('current_stop')
@@ -238,6 +260,9 @@ class GTFSStaticReader:
             stop_info = self.get_stop_info(current_stop)
             if stop_info:
                 train_info['current_stop_name'] = stop_info.get('stop_name', '')
+                # NEW: Add platform code if available
+                if stop_info.get('platform_code'):
+                    train_info['current_platform_code'] = stop_info.get('platform_code', '')
         
         # Enrich next stop
         next_stop = train_info.get('next_stop')
@@ -245,6 +270,9 @@ class GTFSStaticReader:
             stop_info = self.get_stop_info(next_stop)
             if stop_info:
                 train_info['next_stop_name'] = stop_info.get('stop_name', '')
+                # NEW: Add platform code if available
+                if stop_info.get('platform_code'):
+                    train_info['next_platform_code'] = stop_info.get('platform_code', '')
         
         # Enrich all stops in the stops list
         if 'stops' in train_info:
