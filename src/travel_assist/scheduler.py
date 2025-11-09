@@ -17,7 +17,7 @@ Features:
 import asyncio
 import logging
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 from src.mta_gtfs_client import MTAGTFSRealtimeClient
 
 logger = logging.getLogger(__name__)
