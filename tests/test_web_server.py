@@ -180,12 +180,18 @@ class TestWebServer(unittest.TestCase):
         self.assertEqual(len(data['trains']), 20)
         self.assertTrue(data['features']['gpt_5_codex_preview']['enabled'])
 
-        # Test that limit is capped at 100
-        response = self.app.get('/trains?limit=200')
+        # Test with maximum valid limit (100)
+        response = self.app.get('/trains?limit=100')
         data = json.loads(response.data)
-        # Should return 30 trains (all available), capped by actual data not limit
+        # Should return 30 trains (all available), since we only have 30 in test data
         self.assertEqual(len(data['trains']), 30)
         self.assertTrue(data['features']['gpt_5_codex_preview']['enabled'])
+        
+        # Test that invalid limit returns error
+        response = self.app.get('/trains?limit=200')
+        self.assertEqual(response.status_code, 400)
+        data = json.loads(response.data)
+        self.assertIn('error', data)
 
     @patch('web_server.client')
     @patch('web_server.gtfs_reader')

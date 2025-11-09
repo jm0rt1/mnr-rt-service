@@ -158,22 +158,36 @@ curl "http://localhost:5000/trains?origin_station=1&route=1&time_from=14:00&limi
       "eta": "2025-10-25T14:45:00",
       "track": "42",
       "status": "On Time",
+      "timestamp": "2025-10-25T14:29:30",
+      "delay": 0,
+      "wheelchair_accessible": "1",
+      "bikes_allowed": "1",
       "stops": [
         {
           "stop_id": "1",
+          "stop_sequence": 1,
           "stop_name": "Grand Central",
           "arrival_time": "2025-10-25T14:30:00",
+          "arrival_delay": 0,
+          "arrival_uncertainty": 0,
           "departure_time": "2025-10-25T14:32:00",
+          "departure_delay": 0,
+          "departure_uncertainty": 30,
           "track": "42",
-          "status": "On Time"
+          "status": "On Time",
+          "schedule_relationship": "SCHEDULED"
         },
         {
           "stop_id": "4",
+          "stop_sequence": 2,
           "stop_name": "Harlem-125 St",
           "arrival_time": "2025-10-25T14:45:00",
+          "arrival_delay": 0,
           "departure_time": "2025-10-25T14:46:00",
+          "departure_delay": 0,
           "track": "42",
-          "status": "On Time"
+          "status": "On Time",
+          "schedule_relationship": "SCHEDULED"
         }
       ]
     }
@@ -200,7 +214,24 @@ curl "http://localhost:5000/trains?origin_station=1&route=1&time_from=14:00&limi
   - `eta`: Estimated time of arrival at current stop (ISO 8601 format)
   - `track`: Track number at current stop
   - `status`: Train status (e.g., "On Time", "Delayed")
-  - `stops`: Array of all upcoming stops with times and details (each stop also includes enriched `stop_name`, `stop_lat`, `stop_lon`)
+  - `timestamp`: **NEW** - When the vehicle's real-time progress was last measured
+  - `delay`: **NEW** - Overall trip delay in seconds (positive = late, negative = early, 0 = on time)
+  - `wheelchair_accessible`: **NEW** - Wheelchair accessibility (0 = no info, 1 = accessible, 2 = not accessible) *enriched from GTFS*
+  - `bikes_allowed`: **NEW** - Bike allowance (0 = no info, 1 = allowed, 2 = not allowed) *enriched from GTFS*
+  - `stops`: Array of all upcoming stops with enhanced information:
+    - `stop_id`: Stop identifier
+    - `stop_sequence`: **NEW** - Sequence number in the trip
+    - `stop_name`: Human-readable stop name *enriched from GTFS*
+    - `stop_lat`, `stop_lon`: GPS coordinates *enriched from GTFS*
+    - `arrival_time`: Predicted arrival time
+    - `arrival_delay`: **NEW** - Arrival delay in seconds
+    - `arrival_uncertainty`: **NEW** - Prediction uncertainty in seconds
+    - `departure_time`: Predicted departure time
+    - `departure_delay`: **NEW** - Departure delay in seconds
+    - `departure_uncertainty`: **NEW** - Prediction uncertainty in seconds
+    - `track`: Track number at this stop
+    - `status`: Status at this stop
+    - `schedule_relationship`: **NEW** - `SCHEDULED`, `SKIPPED`, `NO_DATA`, or `UNSCHEDULED`
 
 ### Get All Stations
 
@@ -311,6 +342,159 @@ curl "http://localhost:5000/train/1234567"
 }
 ```
 
+### Get Vehicle Positions
+
+**Endpoint:** `GET /vehicle-positions`
+
+Get real-time vehicle positions with location, occupancy, and carriage information.
+
+**Parameters:**
+- `limit` (optional): Maximum number of vehicles to return. Default: 20, Max: 100
+- `route` (optional): Filter by route/line ID
+- `trip_id` (optional): Filter by specific trip ID
+
+**Example Requests:**
+```bash
+# Get all vehicle positions
+curl "http://localhost:5000/vehicle-positions?limit=20"
+
+# Filter by route
+curl "http://localhost:5000/vehicle-positions?route=1&limit=10"
+```
+
+**Example Response:**
+```json
+{
+  "timestamp": "2025-10-25T14:30:00",
+  "total_vehicles": 10,
+  "vehicles": [
+    {
+      "trip_id": "1234567",
+      "route_id": "1",
+      "route_name": "Hudson",
+      "route_color": "009B3A",
+      "vehicle_id": "MNR_789",
+      "latitude": 40.7589,
+      "longitude": -73.9851,
+      "bearing": 180.0,
+      "speed": 25.5,
+      "current_stop_sequence": 5,
+      "stop_id": "4",
+      "stop_name": "Harlem-125 St",
+      "current_status": "IN_TRANSIT_TO",
+      "timestamp": "2025-10-25T14:30:00",
+      "congestion_level": "RUNNING_SMOOTHLY",
+      "occupancy_status": "FEW_SEATS_AVAILABLE",
+      "occupancy_percentage": 65,
+      "carriages": [
+        {
+          "id": "CAR_1",
+          "label": "Car 1234",
+          "sequence": 1,
+          "occupancy_status": "MANY_SEATS_AVAILABLE",
+          "occupancy_percentage": 45,
+          "bicycles_allowed": 2,
+          "carriage_class": "M8",
+          "quiet_carriage": false,
+          "toilet_facilities": true
+        }
+      ]
+    }
+  ]
+}
+```
+
+**Response Fields:**
+- **Vehicle Information:**
+  - `trip_id`, `route_id`, `route_name`, `route_color`: Trip and route identifiers
+  - `vehicle_id`: Unique vehicle identifier
+  - `timestamp`: When the position was last measured
+
+- **Location Data:**
+  - `latitude`, `longitude`: Real-time GPS coordinates
+  - `bearing`: Direction of travel in degrees (0-359)
+  - `speed`: Current speed in meters/second
+
+- **Stop Information:**
+  - `current_stop_sequence`: Sequence number of current/next stop
+  - `stop_id`, `stop_name`: Stop identifiers
+  - `current_status`: Vehicle status - `INCOMING_AT`, `STOPPED_AT`, or `IN_TRANSIT_TO`
+
+- **Operational Data:**
+  - `congestion_level`: Traffic conditions - `RUNNING_SMOOTHLY`, `STOP_AND_GO`, `CONGESTION`, `SEVERE_CONGESTION`
+  - `occupancy_status`: Overall occupancy - `EMPTY`, `MANY_SEATS_AVAILABLE`, `FEW_SEATS_AVAILABLE`, `STANDING_ROOM_ONLY`, `CRUSHED_STANDING_ROOM_ONLY`, `FULL`
+  - `occupancy_percentage`: Passenger capacity percentage (0-100+)
+
+- **Carriage Details** (per carriage):
+  - `id`, `label`: Carriage identifiers
+  - `sequence`: Position in train (1 = first carriage)
+  - `occupancy_status`, `occupancy_percentage`: Per-carriage occupancy
+  - `bicycles_allowed`: Number of bikes permitted (or "unlimited"/"prohibited")
+  - `carriage_class`: Type/model (e.g., "M8")
+  - `quiet_carriage`: Boolean indicating quiet car designation
+  - `toilet_facilities`: Boolean indicating onboard restrooms
+
+### Get Service Alerts
+
+**Endpoint:** `GET /alerts`
+
+Get service alerts for routes and stops.
+
+**Parameters:**
+- `route` (optional): Filter by route/line ID
+- `stop` (optional): Filter by stop ID
+
+**Example Requests:**
+```bash
+# Get all alerts
+curl "http://localhost:5000/alerts"
+
+# Filter by route
+curl "http://localhost:5000/alerts?route=1"
+```
+
+**Example Response:**
+```json
+{
+  "timestamp": "2025-10-25T14:30:00",
+  "total_alerts": 2,
+  "alerts": [
+    {
+      "active_periods": [
+        {
+          "start": "2025-10-25T12:00:00",
+          "end": "2025-10-25T18:00:00"
+        }
+      ],
+      "informed_entities": [
+        {
+          "route_id": "1",
+          "route_name": "Hudson",
+          "stop_id": "4",
+          "stop_name": "Harlem-125 St"
+        }
+      ],
+      "cause": "WEATHER",
+      "effect": "SIGNIFICANT_DELAYS",
+      "severity_level": "WARNING",
+      "header_text": "Weather Delays on Hudson Line",
+      "description_text": "Heavy rain causing delays of 10-15 minutes on the Hudson Line. Please allow extra travel time.",
+      "url": "https://new.mta.info/alerts"
+    }
+  ]
+}
+```
+
+**Response Fields:**
+- `active_periods`: Time ranges when the alert is active (start and end timestamps)
+- `informed_entities`: Affected routes, stops, and trips with enriched names
+- `cause`: Reason for alert - `WEATHER`, `MAINTENANCE`, `ACCIDENT`, `CONSTRUCTION`, `TECHNICAL_PROBLEM`, `STRIKE`, `POLICE_ACTIVITY`, `MEDICAL_EMERGENCY`, etc.
+- `effect`: Impact on service - `SIGNIFICANT_DELAYS`, `DELAYS`, `DETOUR`, `NO_SERVICE`, `REDUCED_SERVICE`, `MODIFIED_SERVICE`, `STOP_MOVED`, etc.
+- `severity_level`: Alert importance - `INFO`, `WARNING`, or `SEVERE`
+- `header_text`: Short alert summary
+- `description_text`: Detailed alert description
+- `url`: Link to more information
+
 ### Health Check
 
 **Endpoint:** `GET /health`
@@ -374,7 +558,9 @@ curl "http://localhost:5000/"
     "/trains": "Get real-time train information with filtering options",
     "/stations": "Get list of all available stations",
     "/routes": "Get list of all available routes/lines",
-    "/train/<trip_id>": "Get detailed information about a specific train"
+    "/train/<trip_id>": "Get detailed information about a specific train",
+    "/vehicle-positions": "Get real-time vehicle positions with location and occupancy data",
+    "/alerts": "Get service alerts for routes and stops"
   },
   "usage_examples": {
     "get_trains": "/trains?city=mnr&limit=20",
@@ -384,6 +570,10 @@ curl "http://localhost:5000/"
     "get_stations": "/stations",
     "get_routes": "/routes",
     "get_train_details": "/train/1234567",
+    "get_vehicle_positions": "/vehicle-positions?limit=20",
+    "filter_vehicles_by_route": "/vehicle-positions?route=1",
+    "get_alerts": "/alerts",
+    "filter_alerts_by_route": "/alerts?route=1",
     "health_check": "/health"
   }
 }
