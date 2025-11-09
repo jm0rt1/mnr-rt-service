@@ -470,7 +470,7 @@ def get_network_location():
         app.logger.error(f"Failed to get network location: {e}")
         return jsonify({
             'error': 'Failed to determine network location',
-            'details': str(e)
+            'message': 'Please check server logs for details'
         }), 500
 
 
@@ -498,7 +498,7 @@ def get_walking_distance():
         app.logger.error(f"Failed to calculate walking distance: {e}")
         return jsonify({
             'error': 'Failed to calculate walking distance',
-            'details': str(e)
+            'message': 'Please check server logs for details'
         }), 500
 
 
@@ -536,7 +536,7 @@ def get_next_train():
         app.logger.error(f"Failed to get next train: {e}")
         return jsonify({
             'error': 'Failed to get next train',
-            'details': str(e)
+            'message': 'Please check server logs for details'
         }), 500
 
 
@@ -569,7 +569,7 @@ def find_arduino():
         app.logger.error(f"Failed to find Arduino device: {e}")
         return jsonify({
             'error': 'Failed to find Arduino device',
-            'details': str(e)
+            'message': 'Please check server logs for details'
         }), 500
 
 

@@ -160,9 +160,9 @@ class NetworkLocator:
             location['source'] = api_config['name']
             location['timestamp'] = datetime.now().isoformat()
             
+            # Log success without potentially sensitive location data
             logger.info(
-                f"Successfully fetched location from {api_config['name']}: "
-                f"{location['city']}, {location['country']}"
+                f"Successfully fetched location from {api_config['name']}"
             )
             return location
             
