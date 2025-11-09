@@ -458,7 +458,6 @@ def get_network_location():
         }), 503
     
     try:
-        use_cache = request.args.get('use_cache', 'true').lower() == 'true'
         location = travel_assistant.get_current_location()
         
         return jsonify({
