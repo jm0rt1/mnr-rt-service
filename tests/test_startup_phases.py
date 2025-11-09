@@ -6,7 +6,6 @@ Tests for server startup phase detection and progress tracking.
 import unittest
 import subprocess
 import sys
-import time
 from pathlib import Path
 
 
