@@ -12,7 +12,6 @@ Features:
 - Async API calls for performance
 """
 
-import asyncio
 import logging
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Tuple
