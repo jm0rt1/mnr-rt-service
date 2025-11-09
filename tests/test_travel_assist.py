@@ -9,7 +9,7 @@ Tests all components of the travel assistance system:
 """
 
 import unittest
-from unittest.mock import Mock, MagicMock, patch, mock_open
+from unittest.mock import Mock, patch
 from datetime import datetime, timedelta
 from pathlib import Path
 import json
