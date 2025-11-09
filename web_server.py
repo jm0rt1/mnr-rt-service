@@ -313,7 +313,10 @@ def _train_in_time_range(train_info, time_from, time_to):
                 return False
         
         return True
-    except (ValueError, IndexError):
+    except (ValueError, IndexError) as e:
+        logging.warning(
+            f"Invalid time format in _train_in_time_range: eta='{eta}', time_from='{time_from}', time_to='{time_to}'. Error: {e}"
+        )
         # If time parsing fails, exclude the train to be safe
         return False
 
