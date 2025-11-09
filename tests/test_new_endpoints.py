@@ -3,7 +3,7 @@ Unit tests for new API endpoints: /stations, /routes, /train/<trip_id>, and enha
 """
 
 import unittest
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import patch
 import sys
 import os
 
