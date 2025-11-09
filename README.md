@@ -111,10 +111,28 @@ The GTFS data is downloaded from `https://rrgtfsfeeds.s3.amazonaws.com/gtfsmnr.z
 **Parameters:**
 - `city` (optional): Filter by city/region. Currently supports `mnr`, `metro-north`, or `metronorth`. Default: `mnr`
 - `limit` (optional): Maximum number of trains to return. Default: 20, Max: 100
+- `origin_station` (optional): Filter trains passing through this station (use station ID from `/stations` endpoint)
+- `destination_station` (optional): Filter trains going to this destination (use station ID from `/stations` endpoint)
+- `route` (optional): Filter by route/line ID (use route ID from `/routes` endpoint)
+- `time_from` (optional): Filter trains arriving after this time (HH:MM format, e.g., "14:00")
+- `time_to` (optional): Filter trains arriving before this time (HH:MM format, e.g., "16:00")
 
-**Example Request:**
+**Example Requests:**
 ```bash
+# Get all trains (up to 20)
 curl "http://localhost:5000/trains?city=mnr&limit=20"
+
+# Filter by origin station (e.g., Grand Central)
+curl "http://localhost:5000/trains?origin_station=1&limit=10"
+
+# Filter by route (e.g., Hudson Line)
+curl "http://localhost:5000/trains?route=1&limit=10"
+
+# Filter by time range
+curl "http://localhost:5000/trains?time_from=14:00&time_to=16:00&limit=10"
+
+# Combine filters
+curl "http://localhost:5000/trains?origin_station=1&route=1&time_from=14:00&limit=5"
 ```
 
 **Example Response:**
@@ -183,6 +201,115 @@ curl "http://localhost:5000/trains?city=mnr&limit=20"
   - `status`: Train status (e.g., "On Time", "Delayed")
   - `stops`: Array of all upcoming stops with times and details (each stop also includes enriched `stop_name`, `stop_lat`, `stop_lon`)
 
+### Get All Stations
+
+**Endpoint:** `GET /stations`
+
+Get a list of all available stations with IDs and names. Use these station IDs for filtering trains.
+
+**Example Request:**
+```bash
+curl "http://localhost:5000/stations"
+```
+
+**Example Response:**
+```json
+{
+  "timestamp": "2025-10-25T14:30:00",
+  "total_stations": 114,
+  "stations": [
+    {
+      "stop_id": "1",
+      "stop_name": "Grand Central Terminal",
+      "stop_code": "GCT",
+      "stop_lat": "40.752998",
+      "stop_lon": "-73.977056",
+      "wheelchair_boarding": "1"
+    },
+    {
+      "stop_id": "4",
+      "stop_name": "Harlem-125 St",
+      "stop_code": "HRL",
+      "stop_lat": "40.805157",
+      "stop_lon": "-73.939149",
+      "wheelchair_boarding": "1"
+    }
+  ]
+}
+```
+
+### Get All Routes
+
+**Endpoint:** `GET /routes`
+
+Get a list of all available routes/lines with IDs and colors. Use these route IDs for filtering trains.
+
+**Example Request:**
+```bash
+curl "http://localhost:5000/routes"
+```
+
+**Example Response:**
+```json
+{
+  "timestamp": "2025-10-25T14:30:00",
+  "total_routes": 6,
+  "routes": [
+    {
+      "route_id": "1",
+      "route_long_name": "Hudson",
+      "route_short_name": "",
+      "route_color": "009B3A",
+      "route_text_color": "FFFFFF",
+      "route_type": "2"
+    },
+    {
+      "route_id": "2",
+      "route_long_name": "Harlem",
+      "route_short_name": "",
+      "route_color": "0039A6",
+      "route_text_color": "FFFFFF",
+      "route_type": "2"
+    }
+  ]
+}
+```
+
+### Get Specific Train Details
+
+**Endpoint:** `GET /train/<trip_id>`
+
+Get detailed information about a specific train by its trip ID.
+
+**Example Request:**
+```bash
+curl "http://localhost:5000/train/1234567"
+```
+
+**Example Response:**
+```json
+{
+  "timestamp": "2025-10-25T14:30:00",
+  "train": {
+    "trip_id": "1234567",
+    "route_id": "1",
+    "route_name": "Hudson",
+    "route_color": "009B3A",
+    "trip_headsign": "Poughkeepsie",
+    "direction_id": "0",
+    "vehicle_id": "MNR_789",
+    "current_stop": "1",
+    "current_stop_name": "Grand Central",
+    "next_stop": "4",
+    "next_stop_name": "Harlem-125 St",
+    "eta": "2025-10-25T14:45:00",
+    "track": "42",
+    "status": "On Time",
+    "stops": [...]
+  }
+}
+```
+
 ### Health Check
 
 **Endpoint:** `GET /health`
@@ -220,10 +347,19 @@ curl "http://localhost:5000/"
   "endpoints": {
     "/": "This information page",
     "/health": "Health check endpoint",
-    "/trains": "Get real-time train information (supports ?city=mnr&limit=20)"
+    "/trains": "Get real-time train information with filtering options",
+    "/stations": "Get list of all available stations",
+    "/routes": "Get list of all available routes/lines",
+    "/train/<trip_id>": "Get detailed information about a specific train"
   },
   "usage_examples": {
     "get_trains": "/trains?city=mnr&limit=20",
+    "filter_by_station": "/trains?origin_station=1&limit=10",
+    "filter_by_route": "/trains?route=1&limit=10",
+    "filter_by_time": "/trains?time_from=14:00&time_to=16:00",
+    "get_stations": "/stations",
+    "get_routes": "/routes",
+    "get_train_details": "/train/1234567",
     "health_check": "/health"
   }
 }
@@ -232,15 +368,44 @@ curl "http://localhost:5000/"
 ## Use Cases
 
 ### Arduino/Embedded Systems
-The simple JSON format is easy to parse in C++ using libraries like ArduinoJson:
+The simple JSON format is easy to parse in C++ using libraries like ArduinoJson. The new filtering capabilities make it perfect for Arduino projects that need to:
+
+- **Select a specific station** to monitor incoming trains
+- **Filter by destination** to only show trains going to a specific location
+- **Filter by time range** to show trains arriving within a certain window
+- **Select specific trains** by trip ID to track their progress
+
+Example Arduino workflow:
+1. Call `/stations` to get list of available stations (show on LCD/OLED)
+2. Let user select home station and destination
+3. Call `/trains?origin_station=<home>&destination_station=<dest>&limit=5`
+4. Display matching trains with ETAs
+5. Call `/train/<trip_id>` for detailed information on selected train
+
 ```cpp
-// Arduino example
+// Arduino example - Get trains for specific station and time range
 HTTPClient http;
-http.begin("http://your-server:5000/trains?limit=5");
+http.begin("http://your-server:5000/trains?origin_station=1&time_from=14:00&time_to=16:00&limit=5");
 int httpCode = http.GET();
 if (httpCode == 200) {
   String payload = http.getString();
-  // Parse JSON and display on LCD/OLED
+  // Parse JSON with ArduinoJson and display on LCD/OLED
+}
+
+// Arduino example - Get list of stations for user selection
+http.begin("http://your-server:5000/stations");
+httpCode = http.GET();
+if (httpCode == 200) {
+  String payload = http.getString();
+  // Parse and display station list for user to select
+}
+
+// Arduino example - Get details of specific train
+http.begin("http://your-server:5000/train/1234567");
+httpCode = http.GET();
+if (httpCode == 200) {
+  String payload = http.getString();
+  // Parse and display detailed train information with all stops
 }
 ```
 

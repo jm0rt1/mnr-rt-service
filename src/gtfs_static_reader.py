@@ -153,6 +153,56 @@ class GTFSStaticReader:
         """Check if GTFS data has been loaded."""
         return self._loaded
     
+    def get_all_stops(self) -> list:
+        """
+        Get all available stops/stations.
+        
+        Returns:
+            List of dictionaries with stop information
+        """
+        if not self._loaded:
+            return []
+        
+        stops_list = []
+        for stop_id, stop_info in self._stops.items():
+            stops_list.append({
+                'stop_id': stop_id,
+                'stop_name': stop_info.get('stop_name', ''),
+                'stop_code': stop_info.get('stop_code', ''),
+                'stop_lat': stop_info.get('stop_lat', ''),
+                'stop_lon': stop_info.get('stop_lon', ''),
+                'wheelchair_boarding': stop_info.get('wheelchair_boarding', '')
+            })
+        
+        # Sort by stop name for easier browsing
+        stops_list.sort(key=lambda x: x['stop_name'])
+        return stops_list
+    
+    def get_all_routes(self) -> list:
+        """
+        Get all available routes/lines.
+        
+        Returns:
+            List of dictionaries with route information
+        """
+        if not self._loaded:
+            return []
+        
+        routes_list = []
+        for route_id, route_info in self._routes.items():
+            routes_list.append({
+                'route_id': route_id,
+                'route_long_name': route_info.get('route_long_name', ''),
+                'route_short_name': route_info.get('route_short_name', ''),
+                'route_color': route_info.get('route_color', ''),
+                'route_text_color': route_info.get('route_text_color', ''),
+                'route_type': route_info.get('route_type', '')
+            })
+        
+        # Sort by route ID for consistency
+        routes_list.sort(key=lambda x: x['route_id'])
+        return routes_list
+    
     def enrich_train_info(self, train_info: dict) -> dict:
         """
         Enrich train information with GTFS static data.
