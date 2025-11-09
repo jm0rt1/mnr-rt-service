@@ -284,7 +284,6 @@ def _train_in_time_range(train_info, time_from, time_to):
     
     try:
         # Parse ETA (ISO format)
-        from datetime import datetime
         eta_dt = datetime.fromisoformat(eta.replace('Z', '+00:00'))
         eta_time = eta_dt.time()
         
