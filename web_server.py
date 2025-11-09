@@ -16,11 +16,14 @@ from datetime import datetime, timezone
 import logging
 import requests
 from flask import Flask, jsonify, request
+from pathlib import Path
+import yaml
 from src.mta_gtfs_client import MTAGTFSRealtimeClient
 from src.gtfs_realtime import mta_railroad_pb2
 from src.shared.settings import GlobalSettings
 from src.gtfs_downloader import GTFSDownloader
 from src.gtfs_static_reader import GTFSStaticReader
+from src.travel_assist import TravelAssistant
 
 # Configure logging
 logging.basicConfig(
@@ -31,6 +34,7 @@ logging.basicConfig(
 app = Flask(__name__)
 client = None
 gtfs_reader = None
+travel_assistant = None
 FEATURE_FLAGS = GlobalSettings.FeatureFlags.as_dict()
 
 
@@ -444,37 +448,182 @@ def health_check():
     })
 
 
+@app.route('/travel/location', methods=['GET'])
+def get_network_location():
+    """Get current network location."""
+    if travel_assistant is None:
+        return jsonify({
+            'error': 'Travel assistance not configured',
+            'suggestion': 'Configure travel_assist.yml to enable this feature'
+        }), 503
+    
+    try:
+        use_cache = request.args.get('use_cache', 'true').lower() == 'true'
+        location = travel_assistant.get_current_location()
+        
+        return jsonify({
+            'timestamp': datetime.now(timezone.utc).isoformat(),
+            'location': location
+        })
+    
+    except Exception as e:
+        app.logger.error(f"Failed to get network location: {e}")
+        return jsonify({
+            'error': 'Failed to determine network location',
+            'details': str(e)
+        }), 500
+
+
+@app.route('/travel/distance', methods=['GET'])
+def get_walking_distance():
+    """Calculate walking distance to home station."""
+    if travel_assistant is None:
+        return jsonify({
+            'error': 'Travel assistance not configured',
+            'suggestion': 'Configure travel_assist.yml to enable this feature'
+        }), 503
+    
+    try:
+        distance_info = travel_assistant.calculate_distance_to_station()
+        
+        return jsonify({
+            'timestamp': datetime.now(timezone.utc).isoformat(),
+            'distance': distance_info,
+            'formatted': travel_assistant.travel_calculator.format_distance_display(
+                distance_info
+            )
+        })
+    
+    except Exception as e:
+        app.logger.error(f"Failed to calculate walking distance: {e}")
+        return jsonify({
+            'error': 'Failed to calculate walking distance',
+            'details': str(e)
+        }), 500
+
+
+@app.route('/travel/next-train', methods=['GET'])
+def get_next_train():
+    """Get next optimal train based on current location."""
+    if travel_assistant is None:
+        return jsonify({
+            'error': 'Travel assistance not configured',
+            'suggestion': 'Configure travel_assist.yml to enable this feature'
+        }), 503
+    
+    try:
+        # Get optional parameters
+        destination_id = request.args.get('destination')
+        route_id = request.args.get('route')
+        
+        # Get complete travel status
+        status = travel_assistant.get_travel_status(
+            destination_station_id=destination_id,
+            route_id=route_id
+        )
+        
+        return jsonify({
+            'timestamp': status['timestamp'],
+            'location': status['location'],
+            'distance': status['distance'],
+            'recommended_train': status['recommended_train'],
+            'other_trains': status['trains'][1:] if len(status['trains']) > 1 else [],
+            'arduino_device': status.get('arduino_device'),
+            'formatted_summary': travel_assistant.format_travel_summary(status)
+        })
+    
+    except Exception as e:
+        app.logger.error(f"Failed to get next train: {e}")
+        return jsonify({
+            'error': 'Failed to get next train',
+            'details': str(e)
+        }), 500
+
+
+@app.route('/travel/arduino-device', methods=['GET'])
+def find_arduino():
+    """Find Arduino webserver on the network."""
+    if travel_assistant is None:
+        return jsonify({
+            'error': 'Travel assistance not configured',
+            'suggestion': 'Configure travel_assist.yml to enable this feature'
+        }), 503
+    
+    try:
+        device = travel_assistant.find_arduino_device()
+        
+        if device:
+            return jsonify({
+                'timestamp': datetime.now(timezone.utc).isoformat(),
+                'found': True,
+                'device': device
+            })
+        else:
+            return jsonify({
+                'timestamp': datetime.now(timezone.utc).isoformat(),
+                'found': False,
+                'message': 'No Arduino webserver found on network'
+            })
+    
+    except Exception as e:
+        app.logger.error(f"Failed to find Arduino device: {e}")
+        return jsonify({
+            'error': 'Failed to find Arduino device',
+            'details': str(e)
+        }), 500
+
+
 @app.route('/', methods=['GET'])
 def index():
     """API information endpoint."""
+    endpoints = {
+        '/': 'This information page',
+        '/health': 'Health check endpoint',
+        '/trains': 'Get real-time train information with filtering options',
+        '/stations': 'Get list of all available stations',
+        '/routes': 'Get list of all available routes/lines',
+        '/train/<trip_id>': 'Get detailed information about a specific train'
+    }
+    
+    usage_examples = {
+        'get_trains': '/trains?city=mnr&limit=20',
+        'filter_by_station': '/trains?origin_station=1&limit=10',
+        'filter_by_route': '/trains?route=1&limit=10',
+        'filter_by_time': '/trains?time_from=14:00&time_to=16:00',
+        'get_stations': '/stations',
+        'get_routes': '/routes',
+        'get_train_details': '/train/1234567',
+        'health_check': '/health'
+    }
+    
+    # Add travel assistance endpoints if configured
+    if travel_assistant is not None:
+        endpoints.update({
+            '/travel/location': 'Get current network location',
+            '/travel/distance': 'Calculate walking distance to home station',
+            '/travel/next-train': 'Get next optimal train based on location',
+            '/travel/arduino-device': 'Find Arduino webserver on network'
+        })
+        usage_examples.update({
+            'get_location': '/travel/location',
+            'get_distance': '/travel/distance',
+            'get_next_train': '/travel/next-train?destination=<station_id>&route=<route_id>',
+            'find_arduino': '/travel/arduino-device'
+        })
+    
     return jsonify({
         'service': 'MNR Real-Time Relay',
         'description': 'Simple JSON API for Metro-North Railroad real-time train data',
-        'endpoints': {
-            '/': 'This information page',
-            '/health': 'Health check endpoint',
-            '/trains': 'Get real-time train information with filtering options',
-            '/stations': 'Get list of all available stations',
-            '/routes': 'Get list of all available routes/lines',
-            '/train/<trip_id>': 'Get detailed information about a specific train'
-        },
+        'endpoints': endpoints,
         'features': FEATURE_FLAGS,
-        'usage_examples': {
-            'get_trains': '/trains?city=mnr&limit=20',
-            'filter_by_station': '/trains?origin_station=1&limit=10',
-            'filter_by_route': '/trains?route=1&limit=10',
-            'filter_by_time': '/trains?time_from=14:00&time_to=16:00',
-            'get_stations': '/stations',
-            'get_routes': '/routes',
-            'get_train_details': '/train/1234567',
-            'health_check': '/health'
-        }
+        'usage_examples': usage_examples,
+        'travel_assistance': travel_assistant is not None
     })
 
 
 def main():
     """Main entry point for the web server."""
-    global client, gtfs_reader
+    global client, gtfs_reader, travel_assistant
 
     parser = argparse.ArgumentParser(
         description='MTA Metro-North Railroad Real-Time Web Server'
@@ -549,6 +698,33 @@ def main():
     print("Initializing GTFS real-time client...")
     client = MTAGTFSRealtimeClient(api_key=args.api_key)
     print("✓ GTFS real-time client initialized")
+    
+    # Initialize travel assistant if configured
+    travel_config_path = Path(__file__).parent / 'config' / 'travel_assist.yml'
+    if travel_config_path.exists():
+        try:
+            print("Initializing travel assistance...")
+            with open(travel_config_path, 'r') as f:
+                travel_config = yaml.safe_load(f)
+            
+            home_station = travel_config.get('home_station', {})
+            api_keys = travel_config.get('api_keys', {})
+            
+            if home_station.get('station_id') and home_station.get('latitude') and home_station.get('longitude'):
+                travel_assistant = TravelAssistant(
+                    home_station_id=home_station['station_id'],
+                    home_station_coords=(
+                        home_station['latitude'],
+                        home_station['longitude']
+                    ),
+                    mta_api_key=args.api_key or api_keys.get('mta_api_key'),
+                    ors_api_key=api_keys.get('ors_api_key')
+                )
+                print("✓ Travel assistance initialized")
+            else:
+                print("⚠ Travel assistance config incomplete (skipping)")
+        except Exception as e:
+            print(f"⚠ Failed to initialize travel assistance: {e}")
 
     # Load GTFS static data for enrichment
     print("STARTUP_PHASE: GTFS_LOAD")
