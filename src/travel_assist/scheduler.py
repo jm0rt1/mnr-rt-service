@@ -212,8 +212,9 @@ class DepartureScheduler:
                         ext = stu.Extensions[mta_railroad_pb2.nyct_stop_time_update]
                         if ext.HasField('track'):
                             track = ext.track
-                    except Exception:
-                        pass
+                    except Exception as e:
+                        # Could not access MTA extension for track info; log and continue
+                        logger.debug(f"Failed to get track info from MTA extension: {e}", exc_info=True)
                 
                 # Get train status
                 status = "On Time"
