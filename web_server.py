@@ -140,7 +140,18 @@ def get_trains():
     try:
         # Get query parameters
         city = request.args.get('city', 'mnr').lower()
-        limit = min(int(request.args.get('limit', 20)), 100)
+        limit_param = request.args.get('limit', 20)
+        try:
+            limit = int(limit_param)
+        except (ValueError, TypeError):
+            return jsonify({
+                'error': f'Invalid value for "limit": {limit_param}. Must be an integer between 1 and 100.'
+            }), 400
+        if not (1 <= limit <= 100):
+            return jsonify({
+                'error': f'Invalid value for "limit": {limit}. Must be an integer between 1 and 100.'
+            }), 400
+        limit = min(limit, 100)
         origin_station = request.args.get('origin_station')
         destination_station = request.args.get('destination_station')
         route_filter = request.args.get('route')
