@@ -242,12 +242,15 @@ class MainWindowController(QMainWindow):
         """Check if the server is actually responding to requests"""
         self.health_check_attempts += 1
         
-        # Get the server port
+        # Get the server host and port
+        host = self.ui.hostLineEdit.text()
+        if host == "0.0.0.0":
+            host = "localhost"
         port = self.ui.portSpinBox.value()
         
         try:
             # Try to hit the health endpoint
-            response = requests.get(f"http://localhost:{port}/health", timeout=2)
+            response = requests.get(f"http://{host}:{port}/health", timeout=2)
             
             if response.status_code == 200:
                 # Server is healthy!
