@@ -251,7 +251,7 @@ class TestNewEndpoints(unittest.TestCase):
         data = response.get_json()
         self.assertIn('trains', data)
         # Should only return trains passing through station 1
-        self.assertTrue(len(data['trains']) >= 1)
+        self.assertGreaterEqual(len(data['trains']), 1)
         self.assertEqual(data['trains'][0]['trip_id'], 'TRIP_1')
 
 
