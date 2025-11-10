@@ -15,7 +15,7 @@ class GlobalSettings():
     GLOBAL_LOGS_DIR = LOGS_DIR/"global"
     UI_LOGS_DIR = LOGS_DIR/"ui"
     # GTFS Data Paths
-    GTFS_DIR = APP_DIR/"gtfs"
+    GTFS_DIR = APP_DIR/".gtfs-temp"
     GTFS_MNR_DIR = GTFS_DIR/"metro-north-railroad"
     GTFS_MNR_DATA_DIR = GTFS_MNR_DIR/"gtfsmnr"
     # Paths ---------
