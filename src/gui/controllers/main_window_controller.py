@@ -159,6 +159,9 @@ class MainWindowController(QMainWindow):
         # Add new tabs for all endpoints
         self._setup_additional_tabs()
         
+        # Enhance the trains tab with additional filters
+        self._enhance_trains_tab()
+        
         # Log initial message
         self.log_message("GUI initialized. Ready to start server.", "INFO")
     
@@ -250,15 +253,45 @@ class MainWindowController(QMainWindow):
         self.travelTab = QWidget()
         self.travelTabLayout = QVBoxLayout(self.travelTab)
         
-        # Travel controls
+        # Travel controls and filters
         travelControlLayout = QHBoxLayout()
-        self.refreshTravelButton = QPushButton("Refresh All Travel Data")
+        
+        # Next train parameters
+        destLabel = QLabel("Destination:")
+        travelControlLayout.addWidget(destLabel)
+        self.travelDestEdit = QLineEdit()
+        self.travelDestEdit.setPlaceholderText("Optional destination station ID")
+        self.travelDestEdit.setMaximumWidth(180)
+        travelControlLayout.addWidget(self.travelDestEdit)
+        
+        routeLabel = QLabel("Route:")
+        travelControlLayout.addWidget(routeLabel)
+        self.travelRouteEdit = QLineEdit()
+        self.travelRouteEdit.setPlaceholderText("Optional route filter")
+        self.travelRouteEdit.setMaximumWidth(120)
+        travelControlLayout.addWidget(self.travelRouteEdit)
+        
+        self.refreshTravelButton = QPushButton("Refresh All")
         self.refreshTravelButton.clicked.connect(self.refresh_travel_data)
         travelControlLayout.addWidget(self.refreshTravelButton)
+        
+        clearTravelButton = QPushButton("Clear Filters")
+        clearTravelButton.clicked.connect(self.clear_travel_filters)
+        travelControlLayout.addWidget(clearTravelButton)
+        
         travelControlLayout.addStretch()
         self.travelStatusLabel = QLabel("Click 'Refresh' to load travel assistance data")
         travelControlLayout.addWidget(self.travelStatusLabel)
         self.travelTabLayout.addLayout(travelControlLayout)
+        
+        # Configuration info label
+        configInfoLabel = QLabel(
+            "<i>Note: Travel assistance requires config/travel_assist.yml to be configured. "
+            "See config/travel_assist.example.yml for reference.</i>"
+        )
+        configInfoLabel.setWordWrap(True)
+        configInfoLabel.setStyleSheet("color: #666; padding: 5px;")
+        self.travelTabLayout.addWidget(configInfoLabel)
         
         # Travel data groups
         # Location
@@ -302,6 +335,107 @@ class MainWindowController(QMainWindow):
         
         self.ui.tabWidget.addTab(self.travelTab, "Travel Assistance")
         
+        # Vehicle Positions Tab
+        self.vehiclePositionsTab = QWidget()
+        self.vehiclePositionsTabLayout = QVBoxLayout(self.vehiclePositionsTab)
+        
+        # Vehicle positions controls
+        vehiclePositionsControlLayout = QHBoxLayout()
+        
+        # Limit control
+        limitLabel = QLabel("Limit:")
+        vehiclePositionsControlLayout.addWidget(limitLabel)
+        self.vehicleLimitSpinBox = QSpinBox()
+        self.vehicleLimitSpinBox.setMinimum(1)
+        self.vehicleLimitSpinBox.setMaximum(100)
+        self.vehicleLimitSpinBox.setValue(20)
+        vehiclePositionsControlLayout.addWidget(self.vehicleLimitSpinBox)
+        
+        # Route filter
+        routeLabel = QLabel("Route:")
+        vehiclePositionsControlLayout.addWidget(routeLabel)
+        self.vehicleRouteEdit = QLineEdit()
+        self.vehicleRouteEdit.setPlaceholderText("Optional route filter")
+        self.vehicleRouteEdit.setMaximumWidth(150)
+        vehiclePositionsControlLayout.addWidget(self.vehicleRouteEdit)
+        
+        # Trip ID filter
+        tripIdLabel = QLabel("Trip ID:")
+        vehiclePositionsControlLayout.addWidget(tripIdLabel)
+        self.vehicleTripIdEdit = QLineEdit()
+        self.vehicleTripIdEdit.setPlaceholderText("Optional trip ID filter")
+        self.vehicleTripIdEdit.setMaximumWidth(150)
+        vehiclePositionsControlLayout.addWidget(self.vehicleTripIdEdit)
+        
+        self.refreshVehiclePositionsButton = QPushButton("Refresh")
+        self.refreshVehiclePositionsButton.clicked.connect(self.refresh_vehicle_positions_data)
+        vehiclePositionsControlLayout.addWidget(self.refreshVehiclePositionsButton)
+        vehiclePositionsControlLayout.addStretch()
+        self.vehiclePositionsStatusLabel = QLabel("Click 'Refresh' to load vehicle positions")
+        vehiclePositionsControlLayout.addWidget(self.vehiclePositionsStatusLabel)
+        self.vehiclePositionsTabLayout.addLayout(vehiclePositionsControlLayout)
+        
+        # Vehicle positions table
+        self.vehiclePositionsTable = QTableWidget()
+        self.vehiclePositionsTable.setColumnCount(9)
+        self.vehiclePositionsTable.setHorizontalHeaderLabels([
+            "Vehicle ID", "Trip ID", "Route", "Latitude", "Longitude", 
+            "Bearing", "Speed", "Stop ID", "Status"
+        ])
+        self.vehiclePositionsTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.vehiclePositionsTable.setEditTriggers(QTableWidget.NoEditTriggers)
+        self.vehiclePositionsTable.setSelectionBehavior(QTableWidget.SelectRows)
+        self.vehiclePositionsTable.setAlternatingRowColors(True)
+        self.vehiclePositionsTabLayout.addWidget(self.vehiclePositionsTable)
+        
+        self.ui.tabWidget.addTab(self.vehiclePositionsTab, "Vehicle Positions")
+        
+        # Alerts Tab
+        self.alertsTab = QWidget()
+        self.alertsTabLayout = QVBoxLayout(self.alertsTab)
+        
+        # Alerts controls
+        alertsControlLayout = QHBoxLayout()
+        
+        # Route filter
+        alertRouteLabel = QLabel("Route:")
+        alertsControlLayout.addWidget(alertRouteLabel)
+        self.alertRouteEdit = QLineEdit()
+        self.alertRouteEdit.setPlaceholderText("Optional route filter")
+        self.alertRouteEdit.setMaximumWidth(150)
+        alertsControlLayout.addWidget(self.alertRouteEdit)
+        
+        # Stop filter
+        alertStopLabel = QLabel("Stop:")
+        alertsControlLayout.addWidget(alertStopLabel)
+        self.alertStopEdit = QLineEdit()
+        self.alertStopEdit.setPlaceholderText("Optional stop filter")
+        self.alertStopEdit.setMaximumWidth(150)
+        alertsControlLayout.addWidget(self.alertStopEdit)
+        
+        self.refreshAlertsButton = QPushButton("Refresh")
+        self.refreshAlertsButton.clicked.connect(self.refresh_alerts_data)
+        alertsControlLayout.addWidget(self.refreshAlertsButton)
+        alertsControlLayout.addStretch()
+        self.alertsStatusLabel = QLabel("Click 'Refresh' to load service alerts")
+        alertsControlLayout.addWidget(self.alertsStatusLabel)
+        self.alertsTabLayout.addLayout(alertsControlLayout)
+        
+        # Alerts table
+        self.alertsTable = QTableWidget()
+        self.alertsTable.setColumnCount(5)
+        self.alertsTable.setHorizontalHeaderLabels([
+            "Alert ID", "Header", "Description", "Effect", "Informed Entities"
+        ])
+        self.alertsTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.alertsTable.setEditTriggers(QTableWidget.NoEditTriggers)
+        self.alertsTable.setSelectionBehavior(QTableWidget.SelectRows)
+        self.alertsTable.setAlternatingRowColors(True)
+        self.alertsTable.verticalHeader().setVisible(True)
+        self.alertsTabLayout.addWidget(self.alertsTable)
+        
+        self.ui.tabWidget.addTab(self.alertsTab, "Alerts")
+        
         # API Info Tab
         self.apiInfoTab = QWidget()
         self.apiInfoTabLayout = QVBoxLayout(self.apiInfoTab)
@@ -322,6 +456,63 @@ class MainWindowController(QMainWindow):
         self.apiInfoTabLayout.addWidget(self.apiInfoText)
         
         self.ui.tabWidget.addTab(self.apiInfoTab, "API Information")
+    
+    def _enhance_trains_tab(self):
+        """Add additional filter controls to the trains/data tab"""
+        # Create a filter controls group
+        filtersGroup = QGroupBox("Filters (Optional)")
+        filtersLayout = QHBoxLayout()
+        
+        # Route filter
+        routeLabel = QLabel("Route:")
+        filtersLayout.addWidget(routeLabel)
+        self.trainRouteEdit = QLineEdit()
+        self.trainRouteEdit.setPlaceholderText("e.g., 1, 2, Hudson")
+        self.trainRouteEdit.setMaximumWidth(120)
+        filtersLayout.addWidget(self.trainRouteEdit)
+        
+        # Origin station filter
+        originLabel = QLabel("Origin:")
+        filtersLayout.addWidget(originLabel)
+        self.trainOriginEdit = QLineEdit()
+        self.trainOriginEdit.setPlaceholderText("Station ID")
+        self.trainOriginEdit.setMaximumWidth(120)
+        filtersLayout.addWidget(self.trainOriginEdit)
+        
+        # Destination station filter
+        destLabel = QLabel("Destination:")
+        filtersLayout.addWidget(destLabel)
+        self.trainDestEdit = QLineEdit()
+        self.trainDestEdit.setPlaceholderText("Station ID")
+        self.trainDestEdit.setMaximumWidth(120)
+        filtersLayout.addWidget(self.trainDestEdit)
+        
+        # Clear filters button
+        clearFiltersButton = QPushButton("Clear Filters")
+        clearFiltersButton.clicked.connect(self.clear_train_filters)
+        filtersLayout.addWidget(clearFiltersButton)
+        
+        filtersLayout.addStretch()
+        filtersGroup.setLayout(filtersLayout)
+        
+        # Insert the filters group into the data tab layout
+        # Insert after the first control row (limit/refresh) but before the status label
+        self.ui.dataTab.layout().insertWidget(1, filtersGroup)
+    
+    def clear_train_filters(self):
+        """Clear all train filter fields"""
+        self.trainRouteEdit.clear()
+        self.trainOriginEdit.clear()
+        self.trainDestEdit.clear()
+        self.log_message("Cleared train filters", "INFO")
+    
+    def clear_travel_filters(self):
+        """Clear all travel filter fields"""
+        if hasattr(self, 'travelDestEdit'):
+            self.travelDestEdit.clear()
+        if hasattr(self, 'travelRouteEdit'):
+            self.travelRouteEdit.clear()
+        self.log_message("Cleared travel filters", "INFO")
     
     def log_message(self, message, level="INFO"):
         """Add a message to the log display"""
@@ -634,15 +825,29 @@ class MainWindowController(QMainWindow):
         port = self.ui.portSpinBox.value()
         limit = self.ui.trainLimitSpinBox.value()
         
+        # Get filter values if they exist
+        route_filter = self.trainRouteEdit.text().strip() if hasattr(self, 'trainRouteEdit') else ""
+        origin_filter = self.trainOriginEdit.text().strip() if hasattr(self, 'trainOriginEdit') else ""
+        dest_filter = self.trainDestEdit.text().strip() if hasattr(self, 'trainDestEdit') else ""
+        
         # Check if server is running
         if not self.server_thread or not self.server_thread.isRunning():
             self.log_message("Cannot fetch train data: Server is not running", "WARNING")
             return
         
         try:
+            # Build query parameters
+            params = {'limit': limit}
+            if route_filter:
+                params['route'] = route_filter
+            if origin_filter:
+                params['origin_station'] = origin_filter
+            if dest_filter:
+                params['destination_station'] = dest_filter
+            
             # Fetch data from the API
-            url = f"http://localhost:{port}/trains?limit={limit}"
-            response = requests.get(url, timeout=10)
+            url = f"http://localhost:{port}/trains"
+            response = requests.get(url, params=params, timeout=10)
             response.raise_for_status()
             
             data = response.json()
@@ -650,9 +855,17 @@ class MainWindowController(QMainWindow):
             # Update the table
             self.update_train_table(data['trains'])
             
-            # Update status label
+            # Update status label with filter info
             timestamp = data.get('timestamp', 'Unknown')
-            self.ui.dataStatusLabel.setText(f"Last updated: {timestamp}")
+            filters_text = []
+            if route_filter:
+                filters_text.append(f"route={route_filter}")
+            if origin_filter:
+                filters_text.append(f"origin={origin_filter}")
+            if dest_filter:
+                filters_text.append(f"dest={dest_filter}")
+            filters_str = f" ({', '.join(filters_text)})" if filters_text else ""
+            self.ui.dataStatusLabel.setText(f"Last updated: {timestamp}{filters_str}")
             
             self.log_message(f"Fetched {len(data['trains'])} trains", "INFO")
             
@@ -892,8 +1105,19 @@ class MainWindowController(QMainWindow):
             
             # Fetch next train data
             try:
+                # Build query parameters
+                params = {}
+                if hasattr(self, 'travelDestEdit'):
+                    dest_filter = self.travelDestEdit.text().strip()
+                    if dest_filter:
+                        params['destination'] = dest_filter
+                if hasattr(self, 'travelRouteEdit'):
+                    route_filter = self.travelRouteEdit.text().strip()
+                    if route_filter:
+                        params['route'] = route_filter
+                
                 url = f"http://localhost:{port}/travel/next-train"
-                response = requests.get(url, timeout=10)
+                response = requests.get(url, params=params, timeout=10)
                 if response.status_code == 200:
                     data = response.json()
                     next_train_text = json.dumps(data, indent=2)
@@ -966,6 +1190,208 @@ class MainWindowController(QMainWindow):
             self.log_message(f"Failed to fetch API info: {str(e)}", "ERROR")
             self.apiInfoStatusLabel.setText("Error fetching data")
     
+    def refresh_vehicle_positions_data(self):
+        """Refresh vehicle positions data from the API"""
+        port = self.ui.portSpinBox.value()
+        limit = self.vehicleLimitSpinBox.value()
+        route_filter = self.vehicleRouteEdit.text().strip()
+        trip_id_filter = self.vehicleTripIdEdit.text().strip()
+        
+        # Check if server is running
+        if not self.server_thread or not self.server_thread.isRunning():
+            self.log_message("Cannot fetch vehicle positions: Server is not running", "WARNING")
+            self.vehiclePositionsStatusLabel.setText("Server is not running")
+            return
+        
+        try:
+            # Build query parameters
+            params = {'limit': limit}
+            if route_filter:
+                params['route'] = route_filter
+            if trip_id_filter:
+                params['trip_id'] = trip_id_filter
+            
+            # Fetch data from the API
+            url = f"http://localhost:{port}/vehicle-positions"
+            response = requests.get(url, params=params, timeout=10)
+            response.raise_for_status()
+            
+            data = response.json()
+            vehicles = data.get('vehicles', [])
+            
+            # Clear existing data
+            self.vehiclePositionsTable.setRowCount(0)
+            
+            # Add new data
+            for vehicle in vehicles:
+                row = self.vehiclePositionsTable.rowCount()
+                self.vehiclePositionsTable.insertRow(row)
+                
+                # Vehicle ID
+                vehicle_id = vehicle.get('vehicle_id', 'N/A')
+                self.vehiclePositionsTable.setItem(row, 0, QTableWidgetItem(str(vehicle_id)))
+                
+                # Trip ID
+                trip_id = vehicle.get('trip_id', 'N/A')
+                self.vehiclePositionsTable.setItem(row, 1, QTableWidgetItem(str(trip_id)))
+                
+                # Route - show route name if available
+                route_display = vehicle.get('route_name') if vehicle.get('route_name') else vehicle.get('route_id', 'N/A')
+                self.vehiclePositionsTable.setItem(row, 2, QTableWidgetItem(str(route_display)))
+                
+                # Latitude
+                latitude = vehicle.get('latitude', 'N/A')
+                self.vehiclePositionsTable.setItem(row, 3, QTableWidgetItem(str(latitude)))
+                
+                # Longitude
+                longitude = vehicle.get('longitude', 'N/A')
+                self.vehiclePositionsTable.setItem(row, 4, QTableWidgetItem(str(longitude)))
+                
+                # Bearing
+                bearing = vehicle.get('bearing', 'N/A')
+                self.vehiclePositionsTable.setItem(row, 5, QTableWidgetItem(str(bearing)))
+                
+                # Speed
+                speed = vehicle.get('speed', 'N/A')
+                self.vehiclePositionsTable.setItem(row, 6, QTableWidgetItem(str(speed)))
+                
+                # Stop ID - show stop name if available
+                stop_display = vehicle.get('stop_name') if vehicle.get('stop_name') else vehicle.get('stop_id', 'N/A')
+                self.vehiclePositionsTable.setItem(row, 7, QTableWidgetItem(str(stop_display)))
+                
+                # Status
+                status = vehicle.get('current_status', 'N/A')
+                self.vehiclePositionsTable.setItem(row, 8, QTableWidgetItem(str(status)))
+            
+            # Resize columns to content
+            self.vehiclePositionsTable.resizeColumnsToContents()
+            
+            # Update status label
+            timestamp = data.get('timestamp', 'Unknown')
+            filters_text = []
+            if route_filter:
+                filters_text.append(f"route={route_filter}")
+            if trip_id_filter:
+                filters_text.append(f"trip_id={trip_id_filter}")
+            filters_str = f" ({', '.join(filters_text)})" if filters_text else ""
+            self.vehiclePositionsStatusLabel.setText(
+                f"Last updated: {timestamp} - Total: {len(vehicles)} vehicles{filters_str}"
+            )
+            self.log_message(f"Fetched {len(vehicles)} vehicle positions", "INFO")
+            
+        except requests.ConnectionError:
+            self.log_message("Cannot connect to server. Is it running?", "ERROR")
+            self.vehiclePositionsStatusLabel.setText("Connection error")
+        except requests.Timeout:
+            self.log_message("Request timed out while fetching vehicle positions", "ERROR")
+            self.vehiclePositionsStatusLabel.setText("Request timed out")
+        except Exception as e:
+            self.log_message(f"Failed to fetch vehicle positions: {str(e)}", "ERROR")
+            self.vehiclePositionsStatusLabel.setText("Error fetching data")
+    
+    def refresh_alerts_data(self):
+        """Refresh service alerts data from the API"""
+        port = self.ui.portSpinBox.value()
+        route_filter = self.alertRouteEdit.text().strip()
+        stop_filter = self.alertStopEdit.text().strip()
+        
+        # Check if server is running
+        if not self.server_thread or not self.server_thread.isRunning():
+            self.log_message("Cannot fetch alerts: Server is not running", "WARNING")
+            self.alertsStatusLabel.setText("Server is not running")
+            return
+        
+        try:
+            # Build query parameters
+            params = {}
+            if route_filter:
+                params['route'] = route_filter
+            if stop_filter:
+                params['stop'] = stop_filter
+            
+            # Fetch data from the API
+            url = f"http://localhost:{port}/alerts"
+            response = requests.get(url, params=params, timeout=10)
+            response.raise_for_status()
+            
+            data = response.json()
+            alerts = data.get('alerts', [])
+            
+            # Clear existing data
+            self.alertsTable.setRowCount(0)
+            
+            # Add new data
+            for alert in alerts:
+                row = self.alertsTable.rowCount()
+                self.alertsTable.insertRow(row)
+                
+                # Alert ID
+                alert_id = alert.get('alert_id', 'N/A')
+                self.alertsTable.setItem(row, 0, QTableWidgetItem(str(alert_id)))
+                
+                # Header text
+                header_text = alert.get('header_text', 'N/A')
+                self.alertsTable.setItem(row, 1, QTableWidgetItem(str(header_text)))
+                
+                # Description text
+                description_text = alert.get('description_text', 'N/A')
+                desc_item = QTableWidgetItem(str(description_text))
+                desc_item.setToolTip(str(description_text))  # Show full text on hover
+                self.alertsTable.setItem(row, 2, desc_item)
+                
+                # Effect
+                effect = alert.get('effect', 'N/A')
+                effect_item = QTableWidgetItem(str(effect))
+                # Color code by effect
+                if effect in ['SIGNIFICANT_DELAYS', 'REDUCED_SERVICE']:
+                    effect_item.setBackground(QColor(255, 200, 200))  # Light red
+                elif effect == 'DETOUR':
+                    effect_item.setBackground(QColor(255, 255, 200))  # Light yellow
+                elif effect == 'MODIFIED_SERVICE':
+                    effect_item.setBackground(QColor(200, 220, 255))  # Light blue
+                self.alertsTable.setItem(row, 3, effect_item)
+                
+                # Informed entities (routes/stops affected)
+                informed_entities = alert.get('informed_entities', [])
+                entities_text = []
+                for entity in informed_entities:
+                    if entity.get('route_id'):
+                        route_name = entity.get('route_name', entity.get('route_id'))
+                        entities_text.append(f"Route: {route_name}")
+                    if entity.get('stop_id'):
+                        stop_name = entity.get('stop_name', entity.get('stop_id'))
+                        entities_text.append(f"Stop: {stop_name}")
+                entities_str = '; '.join(entities_text) if entities_text else 'N/A'
+                entities_item = QTableWidgetItem(entities_str)
+                entities_item.setToolTip(entities_str)  # Show full text on hover
+                self.alertsTable.setItem(row, 4, entities_item)
+            
+            # Resize columns to content
+            self.alertsTable.resizeColumnsToContents()
+            
+            # Update status label
+            timestamp = data.get('timestamp', 'Unknown')
+            filters_text = []
+            if route_filter:
+                filters_text.append(f"route={route_filter}")
+            if stop_filter:
+                filters_text.append(f"stop={stop_filter}")
+            filters_str = f" ({', '.join(filters_text)})" if filters_text else ""
+            self.alertsStatusLabel.setText(
+                f"Last updated: {timestamp} - Total: {len(alerts)} alerts{filters_str}"
+            )
+            self.log_message(f"Fetched {len(alerts)} alerts", "INFO")
+            
+        except requests.ConnectionError:
+            self.log_message("Cannot connect to server. Is it running?", "ERROR")
+            self.alertsStatusLabel.setText("Connection error")
+        except requests.Timeout:
+            self.log_message("Request timed out while fetching alerts", "ERROR")
+            self.alertsStatusLabel.setText("Request timed out")
+        except Exception as e:
+            self.log_message(f"Failed to fetch alerts: {str(e)}", "ERROR")
+            self.alertsStatusLabel.setText("Error fetching data")
+    
     def show_about(self):
         """Show about dialog"""
         QMessageBox.about(
@@ -977,13 +1403,15 @@ class MainWindowController(QMainWindow):
             "<ul>"
             "<li>Server control and configuration</li>"
             "<li>GTFS data management</li>"
-            "<li>Real-time train data visualization</li>"
+            "<li>Real-time train data visualization with filters</li>"
+            "<li>Vehicle positions tracking with filters</li>"
+            "<li>Service alerts monitoring with filters</li>"
             "<li>Stations and routes viewing</li>"
             "<li>Travel assistance (if configured)</li>"
             "<li>API information</li>"
             "<li>Log monitoring</li>"
             "</ul>"
-            "<p>Version 1.0.0</p>"
+            "<p>Version 1.1.0</p>"
         )
     
     def closeEvent(self, event):
