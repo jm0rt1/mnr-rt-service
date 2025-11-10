@@ -20,3 +20,4 @@ build/
 # GTFS download tracking
 .last_download
 .gtfs_temp/
+./config/travel_assist.yml
