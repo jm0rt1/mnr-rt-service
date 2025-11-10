@@ -253,15 +253,45 @@ class MainWindowController(QMainWindow):
         self.travelTab = QWidget()
         self.travelTabLayout = QVBoxLayout(self.travelTab)
         
-        # Travel controls
+        # Travel controls and filters
         travelControlLayout = QHBoxLayout()
-        self.refreshTravelButton = QPushButton("Refresh All Travel Data")
+        
+        # Next train parameters
+        destLabel = QLabel("Destination:")
+        travelControlLayout.addWidget(destLabel)
+        self.travelDestEdit = QLineEdit()
+        self.travelDestEdit.setPlaceholderText("Optional destination station ID")
+        self.travelDestEdit.setMaximumWidth(180)
+        travelControlLayout.addWidget(self.travelDestEdit)
+        
+        routeLabel = QLabel("Route:")
+        travelControlLayout.addWidget(routeLabel)
+        self.travelRouteEdit = QLineEdit()
+        self.travelRouteEdit.setPlaceholderText("Optional route filter")
+        self.travelRouteEdit.setMaximumWidth(120)
+        travelControlLayout.addWidget(self.travelRouteEdit)
+        
+        self.refreshTravelButton = QPushButton("Refresh All")
         self.refreshTravelButton.clicked.connect(self.refresh_travel_data)
         travelControlLayout.addWidget(self.refreshTravelButton)
+        
+        clearTravelButton = QPushButton("Clear Filters")
+        clearTravelButton.clicked.connect(self.clear_travel_filters)
+        travelControlLayout.addWidget(clearTravelButton)
+        
         travelControlLayout.addStretch()
         self.travelStatusLabel = QLabel("Click 'Refresh' to load travel assistance data")
         travelControlLayout.addWidget(self.travelStatusLabel)
         self.travelTabLayout.addLayout(travelControlLayout)
+        
+        # Configuration info label
+        configInfoLabel = QLabel(
+            "<i>Note: Travel assistance requires config/travel_assist.yml to be configured. "
+            "See config/travel_assist.example.yml for reference.</i>"
+        )
+        configInfoLabel.setWordWrap(True)
+        configInfoLabel.setStyleSheet("color: #666; padding: 5px;")
+        self.travelTabLayout.addWidget(configInfoLabel)
         
         # Travel data groups
         # Location
@@ -475,6 +505,14 @@ class MainWindowController(QMainWindow):
         self.trainOriginEdit.clear()
         self.trainDestEdit.clear()
         self.log_message("Cleared train filters", "INFO")
+    
+    def clear_travel_filters(self):
+        """Clear all travel filter fields"""
+        if hasattr(self, 'travelDestEdit'):
+            self.travelDestEdit.clear()
+        if hasattr(self, 'travelRouteEdit'):
+            self.travelRouteEdit.clear()
+        self.log_message("Cleared travel filters", "INFO")
     
     def log_message(self, message, level="INFO"):
         """Add a message to the log display"""
@@ -1067,8 +1105,19 @@ class MainWindowController(QMainWindow):
             
             # Fetch next train data
             try:
+                # Build query parameters
+                params = {}
+                if hasattr(self, 'travelDestEdit'):
+                    dest_filter = self.travelDestEdit.text().strip()
+                    if dest_filter:
+                        params['destination'] = dest_filter
+                if hasattr(self, 'travelRouteEdit'):
+                    route_filter = self.travelRouteEdit.text().strip()
+                    if route_filter:
+                        params['route'] = route_filter
+                
                 url = f"http://localhost:{port}/travel/next-train"
-                response = requests.get(url, timeout=10)
+                response = requests.get(url, params=params, timeout=10)
                 if response.status_code == 200:
                     data = response.json()
                     next_train_text = json.dumps(data, indent=2)
