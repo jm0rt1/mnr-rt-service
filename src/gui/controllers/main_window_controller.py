@@ -383,7 +383,7 @@ class MainWindowController(QMainWindow):
         self.health_check_attempts += 1
         
         # Get the server host and port
-        host = self.ui.hostLineEdit.text()
+        host = self.ui.hostEdit.text()
         if host == "0.0.0.0":
             host = "localhost"
         port = self.ui.portSpinBox.value()
