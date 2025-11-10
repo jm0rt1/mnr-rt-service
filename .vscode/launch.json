@@ -8,7 +8,7 @@
             "name": "Run Main",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/run.py",
+            "program": "${workspaceFolder}/run_gui.py",
             "console": "integratedTerminal",
             "justMyCode": true
         }
