@@ -50,8 +50,11 @@ cd docs/arduino-train-clock
    ```cpp
    #define WIFI_SSID "YourWiFiNetwork"
    #define WIFI_PASSWORD "YourWiFiPassword"
-   #define API_ENDPOINT "http://192.168.1.100:5000/api/trains"
+   #define API_ENDPOINT "http://192.168.1.100:5000/trains?limit=5"
    ```
+   
+   **Note:** The real MNR RT Service API uses `/trains` (not `/api/trains`). 
+   Use `?limit=5` to get just the next 5 trains.
 
 3. **Important**: The `config.h` file is ignored by git to protect your credentials.
 
@@ -70,31 +73,42 @@ from datetime import datetime, timedelta
 
 app = Flask(__name__)
 
-@app.route('/api/trains')
+@app.route('/trains')  # Note: Real API uses /trains not /api/trains
 def get_trains():
-    # Mock data for testing
+    # Mock data matching the real MNR RT Service API format
     now = datetime.now()
-    trains = [
-        {
-            "trip_id": "1234567",
-            "route": "Hudson Line",
-            "destination": "Grand Central Terminal",
-            "track": "5",
-            "arrival_time": (now + timedelta(minutes=5)).strftime("%H:%M:%S"),
-            "status": "On Time",
-            "delay_seconds": 0
-        },
-        {
-            "trip_id": "1234568",
-            "route": "Harlem Line",
-            "destination": "Grand Central Terminal",
-            "track": "7",
-            "arrival_time": (now + timedelta(minutes=12)).strftime("%H:%M:%S"),
-            "status": "Delayed",
-            "delay_seconds": 180
-        }
-    ]
-    return jsonify({"trains": trains})
+    response = {
+        "timestamp": now.isoformat(),
+        "city": "mnr",
+        "total_trains": 2,
+        "trains": [
+            {
+                "trip_id": "1234567",
+                "route_id": "1",
+                "route_name": "Hudson",
+                "trip_headsign": "Poughkeepsie",
+                "current_stop_name": "Yonkers",
+                "next_stop_name": "Ludlow",
+                "track": "5",
+                "eta": (now + timedelta(minutes=5)).isoformat(),
+                "status": "On Time",
+                "delay": 0
+            },
+            {
+                "trip_id": "1234568",
+                "route_id": "2",
+                "route_name": "Harlem",
+                "trip_headsign": "Wassaic",
+                "current_stop_name": "125th Street",
+                "next_stop_name": "Fordham",
+                "track": "7",
+                "eta": (now + timedelta(minutes=12)).isoformat(),
+                "status": "Delayed",
+                "delay": 180
+            }
+        ]
+    }
+    return jsonify(response)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
@@ -106,13 +120,41 @@ pip install flask
 python mock_train_server.py
 ```
 
-#### Option B: Use Real MNR GTFS-RT Service
+#### Option B: Use Real MNR GTFS-RT Service (Recommended)
 
-If you have the `mnr-rt-service` web server running (from another PR or implementation):
+Use the actual MNR Real-Time Service from this repository:
 
-1. Start the web server that processes GTFS-RT data
-2. Use its endpoint URL in your `config.h`
-3. Ensure it returns JSON in the expected format (see below)
+1. Start the web server (from repository root):
+   ```bash
+   python web_server.py --port 5000
+   ```
+
+2. Configure your Arduino to use the real endpoint in `include/config.h`:
+   ```cpp
+   #define API_ENDPOINT "http://192.168.1.100:5000/trains?limit=5"
+   ```
+   Replace `192.168.1.100` with your server's IP address.
+
+3. The real service returns enriched data from MTA GTFS-RT feeds in this format:
+   ```json
+   {
+     "timestamp": "2026-02-17T12:30:00",
+     "city": "mnr",
+     "total_trains": 5,
+     "trains": [
+       {
+         "trip_id": "12345",
+         "route_name": "Hudson",
+         "trip_headsign": "Poughkeepsie",
+         "current_stop_name": "Grand Central",
+         "next_stop_name": "Harlem-125 St",
+         "eta": "2026-02-17T12:45:00",
+         "track": "42",
+         "status": "On Time"
+       }
+     ]
+   }
+   ```
 
 ### 4. Build and Upload
 

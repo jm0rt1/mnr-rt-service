@@ -25,7 +25,7 @@ This document describes the architecture of the Arduino Train Clock system and h
 │  - Transforms to JSON format                                   │
 │  - Serves via HTTP REST API                                    │
 │                                                                 │
-│  Endpoint: http://your-server:5000/api/trains                  │
+│  Endpoint: http://your-server:5000/trains                     │
 └────────────────────────────┬────────────────────────────────────┘
                              │
                              │ JSON over HTTP

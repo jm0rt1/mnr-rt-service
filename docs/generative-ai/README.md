@@ -1,5 +1,11 @@
 # Generative AI Integration Exploration
 
+**⚠️ STATUS: EXPLORATORY / NOT YET IMPLEMENTED**
+
+This documentation explores *potential* integration of Generative AI technologies. **These features are not currently implemented** in the MNR Real-Time Service. This is a design exploration document for future consideration.
+
+---
+
 ## Overview
 
 This document explores the potential integration of Generative AI technologies into the MNR Real-Time Service. Generative AI, particularly Large Language Models (LLMs), could enhance user experience, improve accessibility, and provide intelligent assistance for commuters using the Metro-North Railroad system.

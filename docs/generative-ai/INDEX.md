@@ -1,5 +1,11 @@
 # Generative AI Integration - Documentation Index
 
+**⚠️ IMPORTANT: EXPLORATORY DOCUMENTATION**
+
+These documents explore *potential* future AI integrations. **No AI features are currently implemented.** This is design and planning documentation for future consideration.
+
+---
+
 ## Welcome
 
 This directory contains comprehensive documentation exploring the integration of Generative AI technologies into the MNR Real-Time Service. Whether you're a developer, project manager, or curious about the possibilities, you'll find detailed information about how AI can enhance this train information service.
@@ -380,12 +386,14 @@ This documentation is exploratory and evolving. Contributions welcome:
 
 ## Document Status
 
-| Document | Status | Last Updated | Completeness |
-|----------|--------|--------------|--------------|
-| README.md | ✅ Complete | 2025-11-09 | 100% |
-| USE_CASES.md | ✅ Complete | 2025-11-09 | 100% |
-| IMPLEMENTATION_GUIDE.md | ✅ Complete | 2025-11-09 | 100% |
-| INDEX.md | ✅ Complete | 2025-11-09 | 100% |
+| Document | Status | Last Updated | Implementation Status |
+|----------|--------|--------------|----------------------|
+| README.md | ✅ Documentation Complete | 2025-11-09 | ⚠️ NOT IMPLEMENTED |
+| USE_CASES.md | ✅ Documentation Complete | 2025-11-09 | ⚠️ NOT IMPLEMENTED |
+| IMPLEMENTATION_GUIDE.md | ✅ Documentation Complete | 2025-11-09 | ⚠️ NOT IMPLEMENTED |
+| INDEX.md | ✅ Documentation Complete | 2026-02-17 | ⚠️ NOT IMPLEMENTED |
+
+**Note:** "Complete" status refers to documentation quality, not feature implementation.
 
 ## Version History
 

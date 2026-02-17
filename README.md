@@ -795,11 +795,24 @@ Some MTA APIs require an API key. If you get authentication errors, sign up for 
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+### Development Workstreams
+
+See [WORKSTREAMS.md](WORKSTREAMS.md) for:
+- Active development workstreams
+- How to use GitHub Copilot for development
+- Priority matrix and roadmap
+- Getting started guides for contributors
+
+### Quick Contribution Steps
+
 1. Fork the repository
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+3. Review the appropriate workstream in [WORKSTREAMS.md](WORKSTREAMS.md)
+4. Make your changes following the workstream guidelines
+5. Run tests (`python -m unittest discover tests/`)
+6. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+7. Push to the branch (`git push origin feature/AmazingFeature`)
+8. Open a Pull Request
 
 ## License
 

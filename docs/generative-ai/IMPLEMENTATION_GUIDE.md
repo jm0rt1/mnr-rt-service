@@ -18,19 +18,22 @@ This guide provides step-by-step instructions for implementing generative AI fea
 
 ## Prerequisites
 
+**Note:** These are proposed requirements for future implementation, not current system requirements.
+
 ### Technical Requirements
 
-**Minimum**:
-- Python 3.12+
-- 4GB RAM (for cloud-based LLM APIs)
+**Minimum** (for cloud-based LLM APIs):
+- Python 3.7+ (matching main project requirement)
+- 4GB RAM
 - Internet connection for API access
 - Existing MNR RT Service installation
 
-**Recommended for Local Models**:
+**Recommended for Local Models** (future option):
+- Python 3.10+ (for modern ML libraries)
 - 16GB+ RAM
 - GPU with 8GB+ VRAM (NVIDIA preferred)
 - 50GB+ storage for model files
-- Python 3.12+ with CUDA support
+- CUDA support
 
 ### API Keys (Choose One or More)
 

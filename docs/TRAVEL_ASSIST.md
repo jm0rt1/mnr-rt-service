@@ -71,7 +71,7 @@ src/travel_assist/
 ## Installation
 
 ### Prerequisites
-- Python 3.12 or higher
+- Python 3.7 or higher (3.12+ recommended for newer ML libraries)
 - Network access for API calls
 - MTA API access for train data
 
